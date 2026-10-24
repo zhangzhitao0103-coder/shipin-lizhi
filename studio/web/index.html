@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-sc/900.css">
 <link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/400.css">
 <link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/lxgw-wenkai/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/lxgw-wenkai/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/ma-shan-zheng/400.css">
 <link rel="stylesheet" href="../node_modules/@fontsource/jetbrains-mono/400.css">
 <link rel="stylesheet" href="../node_modules/@fontsource/jetbrains-mono/500.css">
 <link rel="stylesheet" href="../node_modules/@fontsource/jetbrains-mono/700.css">
@@ -32,9 +35,10 @@ window.__setup = async function (epSrcUrl, timeline) {
   const caps = EP.beats.map(b => (b.cap || []).join('')).join('');
   const text = E.plain(caps) + (EP.texts || '') + '有道领世高效学习从开始0123456789.,%℃×→—…：，。？！“”·JSTEMPRNGYCOabcdefghijklmnopqrstuvwxyz';
   const specs = ['700 60px "Noto Serif SC"', '900 60px "Noto Serif SC"', '400 60px "Noto Sans SC"', '500 60px "Noto Sans SC"', '700 60px "Noto Sans SC"', '900 60px "Noto Sans SC"',
-    '400 60px "Playfair Display"', '700 60px "Playfair Display"', '400 60px "JetBrains Mono"', '500 60px "JetBrains Mono"', '700 60px "JetBrains Mono"'];
+    '400 60px "Playfair Display"', '700 60px "Playfair Display"', '400 60px "JetBrains Mono"', '500 60px "JetBrains Mono"', '700 60px "JetBrains Mono"', '500 60px "LXGW WenKai"', '700 60px "LXGW WenKai"', '400 60px "Ma Shan Zheng"'];
   await Promise.all(specs.map(s => document.fonts.load(s, text)));
   await document.fonts.ready;
+  await E.loadAssets();
   return { ok: true, fonts: [...document.fonts].filter(f => f.status === 'loaded').length };
 };
 window.__render = function (t, frame) {
@@ -48,8 +52,8 @@ window.__render = function (t, frame) {
     const alpha = isLast ? 1 : E.clamp((b.e - t) / 0.3);
     E.caption(ctx, def.cap, { theme: TH, y: def.capY || EP.capY || 380, size: def.capSize || EP.capSize || 60, tt: t - b.s - 0.08, alpha });
   }
-  E.vignette(ctx, TH === E.themes.cinema ? 0.7 : 0.5);
-  E.grain(ctx, frame, TH === E.themes.cinema ? 0.05 : 0.03);
+  E.vignette(ctx, TH.vignette ?? 0.5, TH.vigColor || '0,0,0');
+  E.grain(ctx, frame, TH.grain ?? 0.04);
   E.endcard(ctx, t - TL.endcard.s);
 };
 </script>

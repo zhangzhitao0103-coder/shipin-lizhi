@@ -17,12 +17,15 @@ const ENDCARD = 4.2;
 const ep = require(path.join(ROOT, 'episodes', id + '.js'));
 const B = path.join(ROOT, 'build', id);
 fs.mkdirSync(B, { recursive: true });
-const run = (cmd, a) => execFileSync(cmd, a, { stdio: 'inherit' });
+const run = (cmd, a, env = {}) => execFileSync(cmd, a, { stdio: 'inherit', env: { ...process.env, ...env } });
 
 // 1. AI 配音：每个节拍一段
 if (!opt('skip-tts')) {
   fs.writeFileSync(path.join(B, 'beats.json'), JSON.stringify(ep.beats.map(b => ({ id: b.id, voice: b.voice || '' })), null, 1));
-  run(PY, ['-I', path.join(ROOT, 'tools', 'tts.py'), MODELS, B]);
+  // 每集可在脚本里指定音色：voice: { sid, speed }；环境变量优先
+  const v = ep.voice || {};
+  run(PY, ['-I', path.join(ROOT, 'tools', 'tts.py'), MODELS, B], {
+    VOICE_SID: process.env.VOICE_SID || String(v.sid ?? 58), VOICE_SPEED: process.env.VOICE_SPEED || String(v.speed ?? 1.05) });
 }
 const vdur = JSON.parse(fs.readFileSync(path.join(B, 'voice', 'durations.json'), 'utf8'));
 

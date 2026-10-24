@@ -27,17 +27,31 @@
   E.fmt = (n, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 
   // ---------- 主题 ----------
+  // 主题：配色、字体、背景画法。gold=强调色（{xx}），red=警示色（[xx]），glow=发光强度倍数，light=浅色底
+  const SANS = '"Noto Sans SC"', SERIF = '"Noto Serif SC"', MONO = '"JetBrains Mono", "Noto Sans SC"', KAI = '"LXGW WenKai"', BRUSH = '"Ma Shan Zheng"';
   E.themes = {
-    cinema: {
-      bg: '#070709', fg: '#EDE6D6', dim: '#7E786C', faint: '#2A2925',
-      gold: '#F2B65A', goldHi: '#FFD892', red: '#E0604E',
-      cap: '"Noto Serif SC"', capW: 700, num: '"Playfair Display", "Noto Serif SC"', mono: '"JetBrains Mono", "Noto Sans SC"',
-    },
-    info: {
-      bg: '#050505', fg: '#F4F4F4', dim: '#8A8A8A', faint: '#262626',
-      gold: '#F5B83D', goldHi: '#FFD36B', red: '#E5484D',
-      cap: '"Noto Sans SC"', capW: 700, num: '"Noto Sans SC"', mono: '"JetBrains Mono", "Noto Sans SC"',
-    },
+    cinema: { bg: '#070709', fg: '#EDE6D6', dim: '#7E786C', faint: '#2A2925', gold: '#F2B65A', goldHi: '#FFD892', red: '#E0604E',
+      cap: SERIF, capW: 700, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.7, grain: 0.05 },
+    info: { bg: '#050505', fg: '#F4F4F4', dim: '#8A8A8A', faint: '#262626', gold: '#F5B83D', goldHi: '#FFD36B', red: '#E5484D',
+      cap: SANS, capW: 700, num: SANS, mono: MONO, vignette: 0.5, grain: 0.03 },
+    neon: { bg: '#04050D', fg: '#E8F4FF', dim: '#6E7FA3', faint: '#1A2140', gold: '#2EF2FF', goldHi: '#B8FCFF', red: '#FF3D8B',
+      cap: SANS, capW: 700, num: '"JetBrains Mono", "Noto Sans SC"', mono: MONO, vignette: 0.55, grain: 0.04, glow: 1.3 },
+    ink: { bg: '#F0E9DA', fg: '#1E1C19', dim: '#7A7266', faint: '#D8CFBD', gold: '#3F6B4A', goldHi: '#2F5A3A', red: '#B3322A',
+      cap: KAI, capW: 700, num: BRUSH, mono: KAI, vignette: 0.22, vigColor: '70,50,25', grain: 0.06, glow: 0, light: true },
+    ice: { bg: '#030B14', fg: '#E6F3FA', dim: '#6F8A9C', faint: '#14283A', gold: '#7FD8FF', goldHi: '#D6F3FF', red: '#FF7A6B',
+      cap: SERIF, capW: 700, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.7, grain: 0.05 },
+    white: { bg: '#F8F8F5', fg: '#141414', dim: '#8C8C88', faint: '#E3E3DE', gold: '#1F5BFF', goldHi: '#1F5BFF', red: '#E0452F',
+      cap: SANS, capW: 700, num: SANS, mono: MONO, vignette: 0, grain: 0.025, glow: 0, light: true },
+    notebook: { bg: '#F7F2E6', fg: '#1F2A44', dim: '#8B8574', faint: '#D9D2C0', gold: '#2350C8', goldHi: '#2350C8', red: '#D63B2F',
+      cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.15, vigColor: '90,70,30', grain: 0.04, glow: 0, light: true, marker: 'rgba(255,214,64,0.55)' },
+    blueprint: { bg: '#0B3463', fg: '#F2F7FF', dim: '#8FB0D8', faint: '#2A5A8E', gold: '#FFD34D', goldHi: '#FFE89A', red: '#FF6B5B',
+      cap: SANS, capW: 700, num: MONO, mono: MONO, vignette: 0.45, grain: 0.03, glow: 0.4 },
+    magazine: { bg: '#F2EEE5', fg: '#111111', dim: '#7D776C', faint: '#D6D0C3', gold: '#D7262E', goldHi: '#D7262E', red: '#D7262E',
+      cap: SERIF, capW: 900, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.1, vigColor: '60,40,20', grain: 0.04, glow: 0, light: true },
+    chalk: { bg: '#1D2A23', fg: '#ECECE4', dim: '#9AA79D', faint: '#34463B', gold: '#F4D35E', goldHi: '#FBE7A1', red: '#F49A9A',
+      cap: KAI, capW: 700, num: KAI, mono: KAI, vignette: 0.55, grain: 0.07, glow: 0.15, blue: '#9CCBF2' },
+    warm: { bg: '#1E1426', fg: '#FFF4E8', dim: '#C9A896', faint: '#4A3040', gold: '#FFC27A', goldHi: '#FFE2B8', red: '#FF8A7A',
+      cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.5, grain: 0.05, glow: 0.8 },
   };
 
   // ---------- 富文本：{金色} [红色] ----------
@@ -73,7 +87,7 @@
         ctx.globalAlpha = alpha * a;
         ctx.fillStyle = col;
         if (a < 0.999) ctx.filter = `blur(${((1 - a) * 7).toFixed(2)}px)`;
-        const glow = c.style === 'g' ? (o.glow ?? 0.5) : (o.glowAll || 0);
+        const glow = (c.style === 'g' ? (o.glow ?? 0.5) : (o.glowAll || 0)) * (th.glow ?? 1);
         if (glow > 0) { ctx.shadowColor = col; ctx.shadowBlur = size * 0.45 * glow; }
         ctx.fillText(c.ch, cx, y + (1 - a) * size * 0.22);
         ctx.shadowBlur = 0; ctx.filter = 'none';
@@ -120,11 +134,129 @@
     ctx.save(); ctx.globalAlpha = strength; ctx.globalCompositeOperation = 'overlay';
     ctx.drawImage(grainCanvases[frame % 4], 0, 0, W, H); ctx.restore();
   };
-  E.vignette = function (ctx, k = 0.75) {
+  E.vignette = function (ctx, k = 0.75, rgb = '0,0,0') {
+    if (k <= 0) return;
     const g = ctx.createRadialGradient(W / 2, H / 2, H * 0.25, W / 2, H / 2, H * 0.75);
-    g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${k})`);
+    g.addColorStop(0, `rgba(${rgb},0)`); g.addColorStop(1, `rgba(${rgb},${k})`);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   };
+  // 纸张纹理（浅色主题共用）
+  let paperCanvas = null;
+  function paper() {
+    if (paperCanvas) return paperCanvas;
+    const c = document.createElement('canvas'); c.width = 540; c.height = 960;
+    const g = c.getContext('2d'); const img = g.createImageData(540, 960); const r = E.rng(4242);
+    for (let i = 0; i < img.data.length; i += 4) { const v = 200 + Math.floor(r() * 55); img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+    g.putImageData(img, 0, 0);
+    g.globalAlpha = 0.08; g.strokeStyle = '#5a4a30';
+    for (let i = 0; i < 260; i++) { const x = r() * 540, y = r() * 960, l = 6 + r() * 26, a = r() * Math.PI; g.lineWidth = 0.6; g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke(); }
+    paperCanvas = c; return c;
+  }
+  let scanCanvas = null;
+  function scanlines() {
+    if (scanCanvas) return scanCanvas;
+    const c = document.createElement('canvas'); c.width = 4; c.height = 4; const g = c.getContext('2d');
+    g.fillStyle = 'rgba(0,0,0,0.22)'; g.fillRect(0, 0, 4, 1); scanCanvas = c; return c;
+  }
+  const painters = {
+    neon(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      let g = ctx.createRadialGradient(540, 300, 20, 540, 300, 900); g.addColorStop(0, 'rgba(255,61,139,0.16)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      g = ctx.createRadialGradient(540, 1500, 20, 540, 1500, 900); g.addColorStop(0, 'rgba(46,242,255,0.14)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      // 透视网格地面
+      const vy = 1260; ctx.save(); ctx.strokeStyle = 'rgba(46,242,255,0.22)'; ctx.lineWidth = 1.5;
+      for (let i = -12; i <= 12; i++) { ctx.beginPath(); ctx.moveTo(540, vy); ctx.lineTo(540 + i * 180, H); ctx.stroke(); }
+      for (let k = 0; k < 14; k++) { const f = ((k + (t * 0.6) % 1) / 14); const y = vy + Math.pow(f, 2.2) * (H - vy); ctx.globalAlpha = f; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      ctx.restore();
+      ctx.save(); ctx.fillStyle = ctx.createPattern(scanlines(), 'repeat'); ctx.fillRect(0, 0, W, H); ctx.restore();
+      E.dust(ctx, t, '120,240,255', 30);
+    },
+    ink(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.28; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      const r = E.rng(808);
+      for (let i = 0; i < 6; i++) { const x = r() * W, y = r() * H, rr = 200 + r() * 360; const g = ctx.createRadialGradient(x, y, 0, x, y, rr); g.addColorStop(0, 'rgba(60,55,45,0.06)'); g.addColorStop(1, 'rgba(60,55,45,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+    },
+    ice(ctx, th, t) { E.background(ctx, th, t, { glow: 'rgba(70,150,215,0.30)', dustColor: '200,235,255', dustCount: 50 }); },
+    white(ctx, th) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      const g = ctx.createRadialGradient(540, 900, 300, 540, 900, 1400); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,0.035)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    },
+    notebook(ctx, th) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.22; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      ctx.save(); ctx.strokeStyle = 'rgba(70,120,200,0.16)'; ctx.lineWidth = 1.5;
+      for (let x = 27; x < W; x += 54) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 27; y < H; y += 54) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      ctx.strokeStyle = 'rgba(214,59,47,0.45)'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(96, 0); ctx.lineTo(96, H); ctx.stroke(); ctx.restore();
+    },
+    blueprint(ctx, th) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      const g = ctx.createRadialGradient(540, 960, 100, 540, 960, 1200); g.addColorStop(0, 'rgba(40,110,190,0.45)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.strokeStyle = 'rgba(200,225,255,0.07)'; ctx.lineWidth = 1;
+      for (let x = 0; x <= W; x += 27) { ctx.beginPath(); ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, H); ctx.stroke(); }
+      for (let y = 0; y <= H; y += 27) { ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(W, y + 0.5); ctx.stroke(); }
+      ctx.strokeStyle = 'rgba(200,225,255,0.16)'; ctx.lineWidth = 1.5;
+      for (let x = 0; x <= W; x += 135) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+      for (let y = 0; y <= H; y += 135) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+      ctx.restore();
+    },
+    magazine(ctx, th) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.2; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+    },
+    chalk(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      const r = E.rng(515);
+      for (let i = 0; i < 14; i++) { const x = r() * W, y = r() * H, rr = 120 + r() * 320; const g = ctx.createRadialGradient(x, y, 0, x, y, rr); g.addColorStop(0, `rgba(230,240,230,${(0.025 + r() * 0.035).toFixed(3)})`); g.addColorStop(1, 'rgba(230,240,230,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+      ctx.save(); ctx.strokeStyle = '#6B4A2E'; ctx.lineWidth = 26; ctx.strokeRect(13, 13, W - 26, H - 26);
+      ctx.strokeStyle = 'rgba(0,0,0,0.35)'; ctx.lineWidth = 4; ctx.strokeRect(28, 28, W - 56, H - 56); ctx.restore();
+    },
+    warm(ctx, th, t) {
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#1C1226'); g.addColorStop(0.5, '#3B1E31'); g.addColorStop(0.82, '#7A3638'); g.addColorStop(1, '#C0613F');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const r = E.rng(321);
+      for (let i = 0; i < 18; i++) {
+        const x = r() * W, y0 = r() * H, rr = 30 + r() * 90, sp = 4 + r() * 8, ph = r() * 6.28;
+        const y = ((y0 - sp * t) % H + H) % H; const a = 0.05 + 0.05 * Math.sin(t * 0.8 + ph);
+        const gg = ctx.createRadialGradient(x, y, 0, x, y, rr); gg.addColorStop(0, `rgba(255,190,120,${a.toFixed(3)})`); gg.addColorStop(1, 'rgba(255,190,120,0)');
+        ctx.fillStyle = gg; ctx.fillRect(x - rr, y - rr, rr * 2, rr * 2);
+      }
+    },
+  };
+  // 统一入口：按主题名画背景
+  E.paint = function (ctx, th, t, o = {}) {
+    const p = painters[th.name];
+    if (p) p(ctx, th, t, o); else E.background(ctx, th, t, o);
+  };
+  Object.keys(E.themes).forEach(k => { E.themes[k].name = k; });
+
+  // 粉笔线：多次抖动描边
+  E.chalkLine = function (ctx, pts, color, width, seed = 1, prog = 1) {
+    const r = E.rng(seed); ctx.save(); ctx.strokeStyle = color; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    let total = 0; const seg = [];
+    for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); total += d; }
+    for (let pass = 0; pass < 3; pass++) {
+      ctx.globalAlpha = 0.45 + 0.25 * r(); ctx.lineWidth = width * (0.6 + 0.5 * r());
+      ctx.beginPath(); let acc = 0;
+      for (let i = 0; i < pts.length; i++) {
+        if (i > 0) { if (acc >= total * prog) break; const f = Math.min(1, (total * prog - acc) / seg[i - 1]); acc += seg[i - 1];
+          const x = pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * f, y = pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * f;
+          ctx.lineTo(x + (r() - 0.5) * 2.2, y + (r() - 0.5) * 2.2);
+        } else ctx.moveTo(pts[0][0] + (r() - 0.5) * 2, pts[0][1] + (r() - 0.5) * 2);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  };
+  // 手账荧光笔
+  E.marker = function (ctx, x, y, w, h, color, prog = 1) {
+    if (prog <= 0) return;
+    ctx.save(); ctx.fillStyle = color; ctx.beginPath();
+    ctx.moveTo(x, y + 4); ctx.lineTo(x + w * prog, y); ctx.lineTo(x + w * prog - 6, y + h); ctx.lineTo(x + 4, y + h - 3); ctx.closePath(); ctx.fill(); ctx.restore();
+  };
+
   E.background = function (ctx, th, t, o = {}) {
     ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
     const glow = ctx.createRadialGradient(W / 2, o.cy || H * 0.52, 50, W / 2, o.cy || H * 0.52, H * 0.6);
@@ -164,15 +296,20 @@
     const grd = ctx.createLinearGradient(0, y - (o.size || 220) * 0.8, 0, y);
     grd.addColorStop(0, o.top || th.goldHi); grd.addColorStop(1, col);
     ctx.fillStyle = o.flat ? col : grd;
-    ctx.shadowColor = col; ctx.shadowBlur = o.blur ?? 60;
+    ctx.shadowColor = col; ctx.shadowBlur = (o.blur ?? 60) * (th.glow ?? 1);
     if (o.scale && o.scale !== 1) { ctx.translate(x, y); ctx.scale(o.scale, o.scale); ctx.fillText(text, 0, 0); }
     else ctx.fillText(text, x, y);
     ctx.restore();
   };
 
-  // ---------- 片尾：有道领世 ----------
-  const BRAND = { bg: '#F7F3E8', line: '#EFA43C', word: '#2F3234', tag: '#1D3C8F' };
-  // 图标中心线（原截图放大 4 倍后的坐标系）
+  // ---------- 片尾：有道领世（官方 logo：web/assets/logo_youdao_lingshi.png，533×108 透明底） ----------
+  const BRAND = { bg: '#F7F3E8', line: '#EFA43C', tag: '#1D3C8F' };
+  const LOGO = { S: 1.08, L: 253.8, T: 904.6, icon: [0, 162], chars: [[164, 254], [256, 345], [345, 438], [439, 527]] };
+  let logoImg = null, iconCanvas = null;
+  E.loadAssets = async function (base = '') {
+    logoImg = new Image(); logoImg.src = base + 'assets/logo_youdao_lingshi.png'; await logoImg.decode();
+  };
+  // 图标中心线（用作描边生长的遮罩），坐标映射到官方 logo 的图标区域
   function iconPath() {
     const p = new Path2D();
     p.moveTo(254, 248); p.lineTo(165, 248);
@@ -181,26 +318,17 @@
     return p;
   }
   function drawIcon(ctx, prog) {
-    const p = iconPath(), L = 1700;
-    ctx.save();
-    ctx.translate(249.53, 901.63); ctx.scale(0.22275, 0.22275);
-    ctx.lineWidth = 70; ctx.lineJoin = 'miter'; ctx.miterLimit = 12; ctx.lineCap = 'butt';
-    const dash = () => { if (prog < 1) { ctx.setLineDash([L * prog, L]); } else ctx.setLineDash([]); };
-    let g = ctx.createLinearGradient(120, 40, 520, 520);
-    g.addColorStop(0, '#4C8EFF'); g.addColorStop(1, '#2B58E6');
-    dash(); ctx.strokeStyle = g; ctx.stroke(p);
-    ctx.save(); ctx.beginPath();
-    ctx.moveTo(528, 660); ctx.lineTo(528, 420); ctx.lineTo(600, 185); ctx.lineTo(560, -40); ctx.lineTo(860, -40); ctx.lineTo(860, 660); ctx.closePath(); ctx.clip();
-    g = ctx.createLinearGradient(520, 520, 740, 50);
-    g.addColorStop(0, '#3A60F0'); g.addColorStop(0.3, '#7E86EE'); g.addColorStop(0.47, '#D6A3CF');
-    g.addColorStop(0.64, '#F4A458'); g.addColorStop(1, '#F07510');
-    dash(); ctx.strokeStyle = g; ctx.stroke(p); ctx.restore();
-    ctx.save(); ctx.beginPath();
-    ctx.moveTo(370, -40); ctx.lineTo(370, 270); ctx.lineTo(660, 200); ctx.lineTo(720, -40); ctx.closePath(); ctx.clip();
-    g = ctx.createLinearGradient(410, 180, 700, 100);
-    g.addColorStop(0, '#F8C84A'); g.addColorStop(0.55, '#F4A033'); g.addColorStop(1, 'rgba(240,120,18,0)');
-    dash(); ctx.strokeStyle = g; ctx.stroke(p); ctx.restore();
-    ctx.restore();
+    const { S, L, T, icon } = LOGO, w = icon[1] * S, h = 108 * S;
+    if (prog >= 1) { ctx.drawImage(logoImg, 0, 0, icon[1], 108, L, T, w, h); return; }
+    if (!iconCanvas) { iconCanvas = document.createElement('canvas'); iconCanvas.width = Math.ceil(w); iconCanvas.height = Math.ceil(h); }
+    const g = iconCanvas.getContext('2d');
+    g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-over'; g.clearRect(0, 0, iconCanvas.width, iconCanvas.height);
+    g.setTransform(S * 0.2088, 0, 0, S * 0.2047, S * (7 - 47 * 0.2088), S * (3 - 42 * 0.2047));
+    g.lineWidth = 118; g.lineJoin = 'miter'; g.miterLimit = 12; g.lineCap = 'butt';
+    g.setLineDash([1700 * prog, 1700]); g.strokeStyle = '#000'; g.stroke(iconPath());
+    g.setTransform(1, 0, 0, 1, 0, 0); g.globalCompositeOperation = 'source-in';
+    g.imageSmoothingQuality = 'high'; g.drawImage(logoImg, 0, 0, icon[1], 108, 0, 0, w, h);
+    ctx.drawImage(iconCanvas, L, T);
   }
   E.ENDCARD_DUR = 4.2;
   E.endcard = function (ctx, lt) {
@@ -208,6 +336,7 @@
     const R = 1300;
     const r = E.ease.inOut(E.seg(lt, 0, 0.75)) * R;
     ctx.save();
+    ctx.imageSmoothingQuality = 'high';
     ctx.fillStyle = BRAND.bg;
     if (r >= R) ctx.fillRect(0, 0, W, H); else { ctx.beginPath(); ctx.arc(W / 2, 960, r, 0, Math.PI * 2); ctx.fill(); }
     // 顶部橙色短线
@@ -216,21 +345,15 @@
     // 图标描边生长
     const ip = E.ease.inOut(E.seg(lt, 0.75, 1.75));
     if (ip > 0) drawIcon(ctx, ip);
-    // 文字标：有道领世
-    ctx.font = `500 100px "Noto Sans SC"`; ctx.textBaseline = 'middle';
-    const word = '有道领世'; const ww = ctx.measureText(word).width; const k = 388 / ww;
-    ctx.font = `500 ${(100 * k).toFixed(1)}px "Noto Sans SC"`;
-    let x = 427.7;
-    [...word].forEach((ch, i) => {
-      const a = E.ease.out(E.seg(lt, 1.05 + i * 0.09, 1.55 + i * 0.09));
-      const w = ctx.measureText(ch).width;
-      if (a > 0) {
-        ctx.globalAlpha = a; ctx.fillStyle = BRAND.word;
-        ctx.fillText(ch, x - (1 - a) * 18, 968);
-      }
-      x += w;
+    // 文字标：有道领世，逐字滑入
+    LOGO.chars.forEach(([a, b], i) => {
+      const al = E.ease.out(E.seg(lt, 1.05 + i * 0.09, 1.55 + i * 0.09));
+      if (al <= 0) return;
+      ctx.globalAlpha = al;
+      ctx.drawImage(logoImg, a, 0, b - a, 108, LOGO.L + a * LOGO.S - (1 - al) * 18, LOGO.T, (b - a) * LOGO.S, 108 * LOGO.S);
     });
     ctx.globalAlpha = 1;
+    ctx.textBaseline = 'middle';
     // 标语：字距由宽到窄收拢
     const tp = E.ease.out(E.seg(lt, 1.7, 2.6));
     if (tp > 0) {

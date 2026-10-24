@@ -11,8 +11,12 @@
 ## 规格
 - 竖版 1080×1920，30fps，H.264 + AAC，响度约 -16 LUFS
 - 字幕放在顶部安全区（y≈360），超宽自动缩字号（最大 920px）；底部 1700px 以下不放关键信息
-- 片尾 4.2 秒：有道领世 logo + 标语「高效学习 从有道领世开始」（`web/engine.js` 的 `E.endcard`）
-- 两套风格：`cinema` 暗金电影风（思源宋体）、`info` 信息图风（思源黑体）
+- 片尾 4.2 秒：有道领世官方 logo（`web/assets/logo_youdao_lingshi.png`，描边遮罩生长 + 逐字滑入）+ 标语「高效学习 从有道领世开始」（`E.endcard`）
+- 风格主题（`E.themes`，剧集里 `theme: 'xxx'`，背景用 `E.paint`）：
+  `cinema` 暗金电影 · `info` 信息图 · `neon` 霓虹科技 · `ink` 新中式水墨 · `ice` 冷蓝电影 · `white` 极简白 ·
+  `notebook` 手账笔记 · `blueprint` 蓝图工程 · `magazine` 杂志排版 · `chalk` 黑板粉笔 · `warm` 暖色温情
+- 字体：思源宋体/黑体、霞鹜文楷、马善政毛笔楷书、Playfair Display、JetBrains Mono（均为开源可商用授权）
+- 音色：剧集里 `voice: { sid, speed }`。1 号男声沉稳 58、2 号男声清亮 100、3 号男声温和 90、4 号女声温柔 50、5 号女声明亮 40、6 号女声知性 30
 
 ## 构建
 ```bash
