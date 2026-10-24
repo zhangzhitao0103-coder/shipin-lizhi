@@ -1,0 +1,15 @@
+{
+  "name": "shipin-studio",
+  "private": true,
+  "type": "commonjs",
+  "description": "代码生成的高中励志短视频渲染工程",
+  "scripts": {
+    "build": "node tools/build.js"
+  },
+  "dependencies": {
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "@fontsource/noto-sans-sc": "5.3.1",
+    "@fontsource/noto-serif-sc": "5.3.1",
+    "@fontsource/playfair-display": "5.3.0"
+  }
+}
