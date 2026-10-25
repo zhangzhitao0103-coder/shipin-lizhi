@@ -23,9 +23,11 @@ def _gradient(w, h, top, bottom):
 
 
 def draw_logo(height=110):
-    """返回 RGBA 的 logo（透明底，深色文字），高度为 height。"""
+    """返回 RGBA 的 logo（透明底，深色文字），高度为 height；height=None 时返回原图原尺寸。"""
     if os.path.exists(LOGO_FILE):
         im = Image.open(LOGO_FILE).convert("RGBA")
+        if height is None or height == im.height:
+            return im  # 官方原图：原尺寸、原像素，不做任何改动
         return im.resize((int(im.width * height / im.height), height), Image.LANCZOS)
 
     s = 4  # 超采样抗锯齿

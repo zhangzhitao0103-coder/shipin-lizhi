@@ -596,11 +596,11 @@ LOGO_T = 32.75
 def logo_card():
     key = ("logo",)
     if key not in _sprites:
-        lg = draw_logo(118)
+        lg = draw_logo(None)
         w, h = lg.width + 120, lg.height + 84
         im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
         ImageDraw.Draw(im).rounded_rectangle([0, 0, w - 1, h - 1], radius=40, fill=(255, 255, 255, 255))
-        im.alpha_composite(lg, (60, 42))
+        im.alpha_composite(lg, (60, (h - lg.height) // 2))
         _sprites[key] = im
     return _sprites[key]
 
@@ -623,12 +623,13 @@ def scene_end(img, d, t):
         txt(img, "高一高二，就是拉开差距的时候", 50, WHITE, 540, 1160 + up, 0.92 * ease(lin(t, 32.0, 32.4)) * out)
 
     # 第二屏：logo + 品牌口号
-    k = back_out(lin(t, LOGO_T, LOGO_T + 0.45))
+    k = ease_out(lin(t, LOGO_T, LOGO_T + 0.45))
     a = ease(lin(t, LOGO_T, LOGO_T + 0.3))
     if a > 0:
         card = logo_card()
-        blit(img, glow_sprite(card, 30), 540, 860, 0.35 * a, 0.85 + 0.15 * k)
-        blit(img, card, 540, 860, a, 0.85 + 0.15 * k)
+        # logo 卡片只做淡入和轻微上移，不缩放，保证官方 logo 像素不变
+        blit(img, glow_sprite(card, 30), 540, 860, 0.35 * a)
+        blit(img, card, 540, int(860 + 20 * (1 - k)), a)
         k3 = ease_out(lin(t, LOGO_T + 0.35, LOGO_T + 0.8))
         segs = [("高效学习，从", WHITE), ("有道领世", GOLD), ("开始", WHITE)]
         blit(img, rich_sprite(segs, 68, None, 2), 540, 1085 + 24 * (1 - k3), k3)
