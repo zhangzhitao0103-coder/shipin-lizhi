@@ -52,6 +52,12 @@
       cap: KAI, capW: 700, num: KAI, mono: KAI, vignette: 0.55, grain: 0.07, glow: 0.15, blue: '#9CCBF2' },
     warm: { bg: '#1E1426', fg: '#FFF4E8', dim: '#C9A896', faint: '#4A3040', gold: '#FFC27A', goldHi: '#FFE2B8', red: '#FF8A7A',
       cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.5, grain: 0.05, glow: 0.8 },
+    winter: { bg: '#0B1C36', fg: '#F4F8FF', dim: '#9DB3D1', faint: '#2A4468', gold: '#FFD27A', goldHi: '#FFE9B8', red: '#FF6A5C',
+      cap: SERIF, capW: 700, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.45, grain: 0.04, glow: 0.7 },
+    pixel: { bg: '#17142B', fg: '#F7F3FF', dim: '#8E86B5', faint: '#2E2952', gold: '#FFD23F', goldHi: '#FFF09A', red: '#FF4D6D', green: '#3DDC97', blue: '#4CC9F0',
+      cap: SANS, capW: 900, num: MONO, mono: MONO, vignette: 0.35, grain: 0, glow: 0, pixel: 4 },
+    glass: { bg: '#1A1438', fg: '#FFFFFF', dim: '#C9C2EE', faint: 'rgba(255,255,255,0.18)', gold: '#FFE08A', goldHi: '#FFF2C7', red: '#FF8FA3',
+      cap: SANS, capW: 700, num: SANS, mono: MONO, vignette: 0.3, grain: 0.03, glow: 0.5 },
   };
 
   // ---------- 富文本：{金色} [红色] ----------
@@ -224,6 +230,75 @@
         ctx.fillStyle = gg; ctx.fillRect(x - rr, y - rr, rr * 2, rr * 2);
       }
     },
+    winter(ctx, th, t) {
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#081629'); g.addColorStop(0.55, '#16345C'); g.addColorStop(1, '#4C77A8');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      // 远处雪丘
+      ctx.save();
+      ctx.fillStyle = 'rgba(214,230,250,0.10)'; ctx.beginPath(); ctx.moveTo(0, 1720);
+      for (let x = 0; x <= W; x += 40) ctx.lineTo(x, 1700 - 40 * Math.sin(x / 210 + 1));
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+      ctx.fillStyle = 'rgba(235,243,255,0.18)'; ctx.beginPath(); ctx.moveTo(0, 1800);
+      for (let x = 0; x <= W; x += 40) ctx.lineTo(x, 1790 - 30 * Math.sin(x / 160 + 3));
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.fill();
+      ctx.restore();
+      E.snow(ctx, t);
+    },
+    pixel(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.fillStyle = 'rgba(255,255,255,0.035)';
+      for (let y = 0; y < H; y += 8) ctx.fillRect(0, y, W, 2);
+      const r = E.rng(64);
+      for (let i = 0; i < 60; i++) {
+        const x = Math.floor(r() * W / 8) * 8, y = Math.floor(r() * H / 8) * 8, tw = Math.sin(t * 3 + i) > 0.6 ? 1 : 0.35;
+        ctx.fillStyle = `rgba(255,255,255,${(0.25 * tw).toFixed(2)})`; ctx.fillRect(x, y, 8, 8);
+      }
+      ctx.restore();
+    },
+    glass(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      const blobs = [['#7B5CFF', 300, 500, 520], ['#FF6FB1', 820, 760, 460], ['#3FC1FF', 420, 1350, 560], ['#FFB86B', 900, 1650, 380]];
+      ctx.save(); ctx.globalCompositeOperation = 'lighter';
+      blobs.forEach(([c, x, y, r], i) => {
+        const xx = x + Math.sin(t * 0.25 + i * 1.7) * 90, yy = y + Math.cos(t * 0.2 + i) * 110;
+        const g = ctx.createRadialGradient(xx, yy, 0, xx, yy, r);
+        g.addColorStop(0, c + '88'); g.addColorStop(1, c + '00');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      });
+      ctx.restore();
+    },
+  };
+  // 飘雪：确定性的雪花
+  E.snow = function (ctx, t, n = 90, alpha = 0.8) {
+    const r = E.rng(1225); ctx.save();
+    for (let i = 0; i < n; i++) {
+      const x0 = r() * W, y0 = r() * H, sp = 30 + r() * 70, sz = 1.5 + r() * 4, ph = r() * 6.28;
+      const y = (y0 + sp * t) % H, x = x0 + Math.sin(t * 0.7 + ph) * 26;
+      ctx.globalAlpha = alpha * (0.35 + 0.65 * (sz / 5.5));
+      ctx.fillStyle = '#FFFFFF'; ctx.beginPath(); ctx.arc(x, y, sz, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  };
+  // 毛玻璃卡片
+  E.glassCard = function (ctx, x, y, w, h, a = 1, r = 36) {
+    ctx.save(); ctx.globalAlpha = a;
+    ctx.fillStyle = 'rgba(255,255,255,0.14)'; ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth = 2;
+    ctx.shadowColor = 'rgba(20,10,60,0.35)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 12;
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); ctx.shadowBlur = 0; ctx.shadowOffsetY = 0; ctx.stroke();
+    ctx.restore();
+  };
+  // 像素化：先在 1/px 分辨率的画布上画，再无平滑放大
+  const pixCanvases = {};
+  E.pixelate = function (ctx, px, fn) {
+    const k = px;
+    let c = pixCanvases[k];
+    if (!c) { c = document.createElement('canvas'); c.width = Math.ceil(W / k); c.height = Math.ceil(H / k); pixCanvases[k] = c; }
+    const g = c.getContext('2d');
+    g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, c.width, c.height);
+    g.setTransform(1 / k, 0, 0, 1 / k, 0, 0); g.imageSmoothingEnabled = false;
+    fn(g);
+    ctx.save(); ctx.imageSmoothingEnabled = false; ctx.drawImage(c, 0, 0, W, H); ctx.restore();
   };
   // 统一入口：按主题名画背景
   E.paint = function (ctx, th, t, o = {}) {

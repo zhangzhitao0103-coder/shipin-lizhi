@@ -50,7 +50,8 @@ window.__render = function (t, frame) {
     if (!def.cap || t < b.s || t >= b.e) continue;
     const isLast = id === TL.order[TL.order.length - 1];
     const alpha = isLast ? 1 : E.clamp((b.e - t) / 0.3);
-    E.caption(ctx, def.cap, { theme: TH, y: def.capY || EP.capY || 380, size: def.capSize || EP.capSize || 60, tt: t - b.s - 0.08, alpha });
+    const draw = g => E.caption(g, def.cap, { theme: TH, y: def.capY || EP.capY || 380, size: def.capSize || EP.capSize || 60, tt: t - b.s - 0.08, alpha });
+    if (TH.pixel) E.pixelate(ctx, TH.pixel, draw); else draw(ctx);
   }
   E.vignette(ctx, TH.vignette ?? 0.5, TH.vigColor || '0,0,0');
   E.grain(ctx, frame, TH.grain ?? 0.04);
