@@ -20,7 +20,7 @@
       { id: 'compare', min: 3.6, cap: ['一个学期的数学课，', '加起来大约只有 81 小时。'], voice: '一个学期的数学课，加起来大约只有八十一小时。', mood: 0.6 },
       { id: 'ratio', min: 3.0, cap: ['一个寒假，相当于', '{1.7} 个学期的数学课。'], voice: '一个寒假，相当于一点七个学期的数学课。', mood: 0.9, sfx: [{ at: 0.2, type: 'boom' }] },
       { id: 'flip', min: 3.6, cap: ['这么多时间，', '用来[补觉刷剧]，还是用来{超车}？'], voice: '这么多时间，用来补觉刷剧，还是用来超车？', mood: 0.5 },
-      { id: 'action', min: 3.2, cap: null, voice: '寒假不长，但足够拉开一个学期。', mood: 1.0, sfx: [{ at: 0.1, type: 'swell' }] },
+      { id: 'action', min: 3.2, cap: null, voice: '寒假很短，但足够拉开一个学期。', mood: 1.0, sfx: [{ at: 0.1, type: 'swell' }] },
     ],
     texts: '寒假天小时春节走亲访友剩一学期数学课约以计不学每周节分钟估算补觉刷剧超车长但足够拉开个相当于0123456789.×=≈',
   };
@@ -106,7 +106,7 @@
 
     const ac = b('action');
     if (t > ac.s) {
-      E.rich(ctx, '寒假不长，', 540, 880, { theme: th, size: 88, tt: t - ac.s - 0.1 });
+      E.rich(ctx, '寒假很短，', 540, 880, { theme: th, size: 88, tt: t - ac.s - 0.1 });
       E.rich(ctx, '但足够{拉开一个学期}。', 540, 1030, { theme: th, size: 92, tt: t - ac.s - 0.6, glow: 1.0 });
     }
   };

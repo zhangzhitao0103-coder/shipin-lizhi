@@ -14,7 +14,7 @@
     beats: [
       { id: 'hook', min: 3.0, cap: ['寒假第一天，', '你打算{先休息一下}？'], voice: '寒假第一天，你打算先休息一下？', mood: 0.3 },
       { id: 'push', min: 3.6, cap: ['推一个静止的箱子：', '推力从 0 开始，慢慢加大——'], voice: '推一个静止的箱子，推力从零开始，慢慢加大。', mood: 0.45, sfx: [{ at: 0.3, type: 'riser', dur: 3.0 }] },
-      { id: 'max', min: 3.0, cap: ['加到 {50 N}，', '箱子才终于动了。'], voice: '加到五十牛，箱子才终于动了。', mood: 0.8, sfx: [{ at: 0.4, type: 'boom' }] },
+      { id: 'max', min: 3.4, cap: ['加到 {50 N}，', '箱子才终于动了。'], voice: '加到五十牛，箱子才终于动了。', mood: 0.8, sfx: [{ at: 1.6, type: 'boom' }] },
       { id: 'moving', min: 3.4, cap: ['动起来以后，', '只要 {30 N} 就能让它继续走。'], voice: '动起来以后，只要三十牛，就能让它继续走。', mood: 0.6 },
       { id: 'why', min: 3.2, cap: ['因为：最大静摩擦力，', '比滑动摩擦力{更大}。'], voice: '因为，最大静摩擦力，比滑动摩擦力更大。', mood: 0.5 },
       { id: 'flip', min: 3.0, cap: ['学习也一样：', '停下来再启动，[最费力]。'], voice: '学习也一样，停下来再启动，最费力。', mood: 0.55 },
@@ -30,8 +30,8 @@
     const p0 = b('push').s, m0 = b('max').s, v0 = b('moving').s;
     let F = 0, f = 0, x = 0, slip = false;
     if (t >= p0 && t < m0) { F = 45 * E.seg(t, p0 + 0.3, b('push').e); f = F; }
-    else if (t >= m0 && t < m0 + 0.5) { F = 45 + 5 * E.seg(t, m0, m0 + 0.5); f = F; }
-    else if (t >= m0 + 0.5) { slip = true; F = E.lerp(FMAX, FK, E.ease.out(E.seg(t, m0 + 0.5, m0 + 0.9))); f = FK; x = (t - (m0 + 0.5)) * 60; }
+    else if (t >= m0 && t < m0 + 1.6) { F = 45 + 5 * E.seg(t, m0, m0 + 0.5); f = F; }
+    else if (t >= m0 + 1.6) { slip = true; F = E.lerp(FMAX, FK, E.ease.out(E.seg(t, m0 + 1.6, m0 + 2.0))); f = FK; x = (t - (m0 + 1.6)) * 60; }
     return { F, f, x: Math.min(x, 300), slip };
   }
 
@@ -82,7 +82,7 @@
       const wy = E.seg(t, b('why').s + 0.3, b('why').s + 0.8);
       if (wy > 0) {
         ctx.globalAlpha = sceneA * wy; ctx.fillStyle = th.red; ctx.font = `700 32px "Noto Sans SC"`; ctx.textAlign = 'center';
-        const px = X(b('max').s + 0.5);
+        const px = X(b('max').s + 1.0);
         ctx.fillText('最大静摩擦力', px, Y(FMAX) - 26); ctx.fillStyle = th.goldHi; ctx.fillText('滑动摩擦力', (px + GX1) / 2 + 40, Y(FK) - 22);
       }
       ctx.globalAlpha = sceneA * 0.8; ctx.fillStyle = th.dim; ctx.font = `400 21px "Noto Sans SC"`; ctx.textAlign = 'center'; ctx.fillText('数值为示意：最大静摩擦力略大于滑动摩擦力', 540, 1560);

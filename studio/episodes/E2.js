@@ -76,6 +76,16 @@
     const gr = grids(E);
     const endDim = 1 - 0.85 * E.seg(t, b('flip').s - 0.1, b('flip').s + 0.4);
 
+    // 开头：四个科目
+    const hA = E.seg(t, 0.2, 0.7) * (1 - E.seg(t, b('rule').s - 0.2, b('rule').s + 0.3));
+    if (hA > 0) {
+      ['语文', '数学', '英语', '物理'].forEach((s, i) => {
+        const a = hA * E.ease.out(E.seg(t, 0.3 + i * 0.25, 0.7 + i * 0.25));
+        const x = 300 + (i % 2) * 480, y = 860 + Math.floor(i / 2) * 260;
+        ctx.save(); ctx.globalAlpha = a; ctx.strokeStyle = th.faint; ctx.lineWidth = 2; ctx.strokeRect(x - 170, y - 110, 340, 200);
+        ctx.fillStyle = th.fg; ctx.font = `700 80px ${th.cap}`; ctx.textAlign = 'center'; ctx.fillText(s, x, y + 28); ctx.restore();
+      });
+    }
     // 规则演示用大网格（开头 + 1 张 60%）
     const bigA = (E.seg(t, b('rule').s, b('rule').s + 0.6) * (1 - E.seg(t, b('four').s - 0.2, b('four').s + 0.3)) + E.seg(t, b('one').s, b('one').s + 0.5)) * endDim * (1 - E.seg(t, b('action').s - 0.1, b('action').s + 0.3));
     if (bigA > 0) {
