@@ -58,6 +58,10 @@
       cap: SANS, capW: 900, num: MONO, mono: MONO, vignette: 0.35, grain: 0, glow: 0, pixel: 4 },
     glass: { bg: '#1A1438', fg: '#FFFFFF', dim: '#C9C2EE', faint: 'rgba(255,255,255,0.18)', gold: '#FFE08A', goldHi: '#FFF2C7', red: '#FF8FA3',
       cap: SANS, capW: 700, num: SANS, mono: MONO, vignette: 0.3, grain: 0.03, glow: 0.5 },
+    paper: { bg: '#F6EFE6', fg: '#3A2E2A', dim: '#9A8B80', faint: '#E6D9CB', gold: '#E07A5F', goldHi: '#E07A5F', red: '#C0392B', teal: '#3D8B83',
+      cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.12, vigColor: '120,80,50', grain: 0.03, glow: 0, light: true },
+    sunrise: { bg: '#1B1F4B', fg: '#FFFFFF', dim: '#C9CBEA', faint: 'rgba(255,255,255,0.2)', gold: '#FFD166', goldHi: '#FFE7A3', red: '#FF7B6B',
+      cap: SANS, capW: 700, num: SANS, mono: MONO, vignette: 0.3, grain: 0.03, glow: 0.6 },
   };
 
   // ---------- 富文本：{金色} [红色] ----------
@@ -267,6 +271,34 @@
         ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       });
       ctx.restore();
+    },
+    paper(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.18; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      // 层叠纸片：底部几层波浪，带投影
+      const layers = [['#F2D7C4', 1600, 50, 0.6], ['#E9C1A8', 1700, 40, 1.4], ['#9FC9C2', 1790, 34, 2.3], ['#6FAEA5', 1860, 26, 3.1]];
+      layers.forEach(([c, y0, amp, ph]) => {
+        ctx.save(); ctx.fillStyle = c; ctx.shadowColor = 'rgba(80,50,30,0.22)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = -6;
+        ctx.beginPath(); ctx.moveTo(0, H);
+        for (let x = 0; x <= W; x += 30) ctx.lineTo(x, y0 + amp * Math.sin(x / 170 + ph + t * 0.15));
+        ctx.lineTo(W, H); ctx.closePath(); ctx.fill(); ctx.restore();
+      });
+      // 顶部一片纸云
+      ctx.save(); ctx.fillStyle = '#FBF6F0'; ctx.shadowColor = 'rgba(80,50,30,0.18)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 8;
+      ctx.beginPath(); ctx.ellipse(880 + Math.sin(t * 0.2) * 20, 250, 120, 50, 0, 0, Math.PI * 2); ctx.ellipse(800 + Math.sin(t * 0.2) * 20, 270, 90, 40, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    },
+    sunrise(ctx, th, t) {
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#141A45'); g.addColorStop(0.45, '#3B3A7A'); g.addColorStop(0.72, '#C0607A'); g.addColorStop(0.88, '#F29E5C'); g.addColorStop(1, '#FFD27F');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      const sy = 1760 - 60 * Math.min(1, t / 20);
+      const sg = ctx.createRadialGradient(540, sy, 20, 540, sy, 520); sg.addColorStop(0, 'rgba(255,236,170,0.9)'); sg.addColorStop(0.2, 'rgba(255,200,120,0.45)'); sg.addColorStop(1, 'rgba(255,170,100,0)');
+      ctx.fillStyle = sg; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#FFE9B0'; ctx.beginPath(); ctx.arc(540, sy, 90, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(30,24,60,0.9)'; ctx.beginPath(); ctx.moveTo(0, H);
+      for (let x = 0; x <= W; x += 40) ctx.lineTo(x, 1800 - 50 * Math.sin(x / 260 + 0.6) - 25 * Math.sin(x / 90));
+      ctx.lineTo(W, H); ctx.fill();
+      E.dust(ctx, t, '255,240,210', 24);
     },
   };
   // 飘雪：确定性的雪花
