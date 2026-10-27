@@ -72,6 +72,10 @@
       cap: SANS, capW: 900, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.12, vigColor: '60,30,60', grain: 0.09, glow: 0, light: true },
     watercolor: { bg: '#FBF7EF', fg: '#2C3A47', dim: '#8A96A0', faint: '#E3DDD1', gold: '#2F7FB8', goldHi: '#2F7FB8', red: '#D9584A',
       cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.12, vigColor: '90,70,40', grain: 0.04, glow: 0, light: true },
+    parchment: { bg: '#EADBB8', fg: '#3B2A1A', dim: '#8A7355', faint: '#CDB98F', gold: '#8B3A1A', goldHi: '#8B3A1A', red: '#9E2B25',
+      cap: SERIF, capW: 700, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.45, vigColor: '90,60,20', grain: 0.07, glow: 0, light: true },
+    terminal: { bg: '#030A04', fg: '#B8FFB0', dim: '#4F8F4A', faint: '#123318', gold: '#7CFF6B', goldHi: '#D4FFC9', red: '#FF5F56',
+      cap: MONO, capW: 700, num: MONO, mono: MONO, vignette: 0.6, grain: 0.05, glow: 1.0 },
   };
 
   // ---------- 富文本：{金色} [红色] ----------
@@ -356,6 +360,23 @@
       E.wash(ctx, 820, 220, 330, '120,170,220', 11, 0.9);
       E.wash(ctx, 180, 1760, 380, '240,170,130', 12, 0.9);
       E.wash(ctx, 980, 1650, 240, '150,200,170', 13, 0.7);
+    },
+    parchment(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.4; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      // 水渍与边缘焦黄
+      const r = E.rng(1676);
+      for (let i = 0; i < 7; i++) { const x = r() * W, y = r() * H, rr = 80 + r() * 220; const g = ctx.createRadialGradient(x, y, rr * 0.6, x, y, rr); g.addColorStop(0, 'rgba(120,80,30,0)'); g.addColorStop(0.9, 'rgba(120,80,30,0.06)'); g.addColorStop(1, 'rgba(120,80,30,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+      // 双线边框
+      ctx.save(); ctx.strokeStyle = 'rgba(59,42,26,0.55)'; ctx.lineWidth = 3; ctx.strokeRect(46, 46, W - 92, H - 92); ctx.lineWidth = 1.2; ctx.strokeRect(60, 60, W - 120, H - 120); ctx.restore();
+    },
+    terminal(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      const g = ctx.createRadialGradient(540, 960, 100, 540, 960, 1100); g.addColorStop(0, 'rgba(40,120,40,0.20)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.fillStyle = ctx.createPattern(scanlines(), 'repeat'); ctx.fillRect(0, 0, W, H); ctx.restore();
+      ctx.save(); ctx.fillStyle = th.dim; ctx.font = `500 24px ${th.mono}`; ctx.textAlign = 'left';
+      ctx.fillText('student@gaozhong:~$', 70, 200); ctx.fillRect(70, 216, 940, 2);
+      ctx.globalAlpha = 0.04 + 0.02 * Math.sin(t * 37); ctx.fillStyle = th.fg; ctx.fillRect(0, 0, W, H); ctx.restore();
     },
   };
   // 网点：圆形区域内按网格排点，越靠中心越大

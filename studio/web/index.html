@@ -33,7 +33,7 @@ window.__setup = async function (epSrcUrl, timeline) {
   ctx = document.getElementById('c').getContext('2d');
   // 预加载所有用到的字形
   const caps = EP.beats.map(b => (b.cap || []).join('')).join('');
-  const text = E.plain(caps) + (EP.texts || '') + '有道领世高效学习从开始0123456789.,%℃×→—…：，。？！“”·JSTEMPRNGYCOabcdefghijklmnopqrstuvwxyz';
+  const text = E.plain(caps) + (EP.texts || '') + EP.draw.toString().replace(/[\x00-\x7F]/g, '') + '有道领世高效学习从开始0123456789.,%℃×→—…：，。？！“”·JSTEMPRNGYCOabcdefghijklmnopqrstuvwxyz';
   const specs = ['700 60px "Noto Serif SC"', '900 60px "Noto Serif SC"', '400 60px "Noto Sans SC"', '500 60px "Noto Sans SC"', '700 60px "Noto Sans SC"', '900 60px "Noto Sans SC"',
     '400 60px "Playfair Display"', '700 60px "Playfair Display"', '400 60px "JetBrains Mono"', '500 60px "JetBrains Mono"', '700 60px "JetBrains Mono"', '500 60px "LXGW WenKai"', '700 60px "LXGW WenKai"', '400 60px "Ma Shan Zheng"'];
   await Promise.all(specs.map(s => document.fonts.load(s, text)));
