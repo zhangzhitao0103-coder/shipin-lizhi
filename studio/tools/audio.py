@@ -159,7 +159,7 @@ def music():
         step = 1.25 - 0.75 * s["mood"] if style == "cinema" else 60 / m.get("bpm", 96) / 2
         tt0 = s["s"] + 0.05
         j = 0
-        while tt0 < s["e"]:
+        while style in ("cinema", "pulse") and tt0 < s["e"]:
             note = pool[(j * 2 + r.integers(0, 2)) % len(pool)] if style == "cinema" else pool[[0, 1, 2, 3, 2, 1][j % 6]]
             vel = 0.5 + 0.5 * r.random()
             if style == "cinema":
@@ -177,6 +177,38 @@ def music():
                 hat = highpass(rng.standard_normal(int(0.05 * SR)).astype(np.float32), 7000) * np.exp(-np.arange(int(0.05 * SR)) / SR * 80)
                 add(out, hat * 0.03 * s["mood"], k0 + beat / 2, pan=0.3)
                 k0 += beat
+        # lo-fi：慢速摇摆鼓 + 柔和电钢和弦
+        if style == "lofi":
+            beat = 60 / m.get("bpm", 80)
+            k0 = np.ceil(s["s"] / beat) * beat
+            while k0 < s["e"]:
+                bi = int(round(k0 / beat)) % 4
+                if bi in (0, 2):
+                    for x in [48 + root, 55 + root, 60 + root + iv[1], 62 + root]:  # 根音、五度、三度、九度
+                        add(out, lowpass(piano(hz(x), 1.6, 0.55), 1800) * 0.07, k0 + 0.012 * r.random())
+                if s["mood"] > 0.25:
+                    if bi in (0, 2): add(out, lowpass(kick(), 900) * 0.16, k0)
+                    if bi in (1, 3):
+                        sn = bandpass(rng.standard_normal(int(0.12 * SR)).astype(np.float32), 900, 4000) * np.exp(-np.arange(int(0.12 * SR)) / SR * 30)
+                        add(out, sn * 0.035, k0, pan=-0.1)
+                    hat = highpass(rng.standard_normal(int(0.03 * SR)).astype(np.float32), 6000) * np.exp(-np.arange(int(0.03 * SR)) / SR * 120)
+                    add(out, hat * 0.02, k0, pan=0.25); add(out, hat * 0.014, k0 + beat * 0.62, pan=0.25)
+                k0 += beat
+        # 八音盒：高音铃声分解和弦
+        if style == "bell":
+            step = 60 / m.get("bpm", 90) / 2
+            tt0, j = s["s"] + 0.05, 0
+            while tt0 < s["e"]:
+                note = 72 + root + [0, iv[1], iv[2], 12, iv[2], iv[1]][j % 6]
+                tb = np.arange(int(1.6 * SR)) / SR
+                bl = sum(a * np.exp(-tb * d) * np.sin(2 * np.pi * hz(note) * p * tb) for p, a, d in [(1, 1, 3.0), (3.0, 0.25, 6), (5.2, 0.08, 9)])
+                add(out, bl.astype(np.float32) * 0.05 * (0.6 + 0.4 * r.random()), tt0, pan=(r.random() - 0.5) * 0.5)
+                tt0 += step; j += 1
+    if style == "lofi":
+        # 黑胶底噪
+        crack = np.zeros(N, np.float32); idx = rng.integers(0, N, int(TL["total"] * 9)); crack[idx] = rng.uniform(-1, 1, len(idx)).astype(np.float32)
+        hiss = lowpass(rng.standard_normal(N).astype(np.float32), 4000) * 0.004
+        add(out, lowpass(crack, 3000) * 0.05 + hiss, 0)
     out *= (0.55 + 0.6 * mood)[:, None]
     out = reverb(out, 0.38, 3.2)
     # 收尾淡出

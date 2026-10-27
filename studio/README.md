@@ -5,7 +5,7 @@
 1. **AI 配音**：`tools/tts.py`，离线 Kokoro 中文模型，每个节拍生成一段旁白
 2. **时间轴**：节拍时长 = max(最短时长, 旁白时长 + 留白)，无配音版与配音版共用同一套画面
 3. **逐帧渲染**：`web/index.html` + `web/engine.js`，Chromium 无头浏览器按 30fps 截帧（画面是时间的纯函数，可并行）
-4. **配乐与音效**：`tools/audio.py`，钢琴、铺底、低音、节奏和音效全部由代码合成，无版权风险
+4. **配乐与音效**：`tools/audio.py`，钢琴、铺底、低音、节奏和音效全部由代码合成，无版权风险。配乐风格（剧集里 `music.style`）：`cinema` 电影钢琴 · `pulse` 节奏拨弦 · `lofi` 慢摇电钢 + 黑胶底噪 · `bell` 八音盒
 5. **合成输出**：`out/` 下生成 `*_无配音.mp4`、`*_AI配音.mp4`、`*_封面.jpg`
 
 ## 规格
@@ -15,7 +15,8 @@
 - 风格主题（`E.themes`，剧集里 `theme: 'xxx'`，背景用 `E.paint`）：
   `cinema` 暗金电影 · `info` 信息图 · `neon` 霓虹科技 · `ink` 新中式水墨 · `ice` 冷蓝电影 · `white` 极简白 ·
   `notebook` 手账笔记 · `blueprint` 蓝图工程 · `magazine` 杂志排版 · `chalk` 黑板粉笔 · `warm` 暖色温情 ·
-  `winter` 冬日雪景 · `pixel` 像素游戏 · `glass` 玻璃拟态 · `paper` 纸雕 · `sunrise` 晨光 · `newsprint` 复古报纸 · `space` 深空
+  `winter` 冬日雪景 · `pixel` 像素游戏 · `glass` 玻璃拟态 · `paper` 纸雕 · `sunrise` 晨光 · `newsprint` 复古报纸 · `space` 深空 ·
+  `bauhaus` 包豪斯几何 · `riso` 孔版印刷 · `watercolor` 水彩
 - 字体：思源宋体/黑体、霞鹜文楷、马善政毛笔楷书、Playfair Display、JetBrains Mono（均为开源可商用授权）
 - 音色：剧集里 `voice: { sid, speed }`。1 号男声沉稳 58、2 号男声清亮 100、3 号男声温和 90、4 号女声温柔 50、5 号女声明亮 40、6 号女声知性 30
 

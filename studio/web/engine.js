@@ -66,6 +66,12 @@
       cap: SERIF, capW: 900, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.25, vigColor: '80,60,30', grain: 0.07, glow: 0, light: true },
     space: { bg: '#02030A', fg: '#EEF3FF', dim: '#7F8BB0', faint: '#1A2140', gold: '#7CE7FF', goldHi: '#D2F6FF', red: '#FF8A5C',
       cap: SANS, capW: 700, num: '"JetBrains Mono", "Noto Sans SC"', mono: MONO, vignette: 0.5, grain: 0.03, glow: 1.0 },
+    bauhaus: { bg: '#F1EBDD', fg: '#1B1B1B', dim: '#7A746A', faint: '#D9D1C0', gold: '#1F4E9C', goldHi: '#1F4E9C', red: '#E63B2E', yellow: '#F2B701',
+      cap: SANS, capW: 900, num: SANS, mono: MONO, vignette: 0.1, vigColor: '60,40,20', grain: 0.04, glow: 0, light: true },
+    riso: { bg: '#F4EFE6', fg: '#1D2B6B', dim: '#7D7F9C', faint: '#DCD6E6', gold: '#FF3EA5', goldHi: '#FF3EA5', red: '#FF6A2B',
+      cap: SANS, capW: 900, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.12, vigColor: '60,30,60', grain: 0.09, glow: 0, light: true },
+    watercolor: { bg: '#FBF7EF', fg: '#2C3A47', dim: '#8A96A0', faint: '#E3DDD1', gold: '#2F7FB8', goldHi: '#2F7FB8', red: '#D9584A',
+      cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.12, vigColor: '90,70,40', grain: 0.04, glow: 0, light: true },
   };
 
   // ---------- 富文本：{金色} [红色] ----------
@@ -326,6 +332,51 @@
       }
       ctx.restore();
     },
+    bauhaus(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.16; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      // 角落的几何形：黄圆、蓝四分之一圆、红三角，缓慢转动
+      ctx.save(); ctx.globalAlpha = 0.9;
+      ctx.fillStyle = th.yellow; ctx.beginPath(); ctx.arc(1010, 150, 150, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = th.gold; ctx.beginPath(); ctx.moveTo(0, H); ctx.arc(0, H, 240, -Math.PI / 2, 0); ctx.closePath(); ctx.fill();
+      ctx.translate(1000, 1800); ctx.rotate(t * 0.15); ctx.fillStyle = th.red; ctx.beginPath(); ctx.moveTo(0, -70); ctx.lineTo(61, 35); ctx.lineTo(-61, 35); ctx.closePath(); ctx.fill();
+      ctx.restore();
+      ctx.save(); ctx.fillStyle = th.fg; ctx.fillRect(60, 214, 300, 10); ctx.fillRect(60, 1716, 960, 3); ctx.restore();
+    },
+    riso(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.25; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      // 两色网点：右上粉、左下蓝，轻微错版
+      E.halftone(ctx, 860, 260, 360, 'rgba(255,62,165,0.55)', 18);
+      E.halftone(ctx, 120, 1840, 360, 'rgba(29,43,107,0.35)', 18);
+    },
+    watercolor(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.22; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      E.wash(ctx, 820, 220, 330, '120,170,220', 11, 0.9);
+      E.wash(ctx, 180, 1760, 380, '240,170,130', 12, 0.9);
+      E.wash(ctx, 980, 1650, 240, '150,200,170', 13, 0.7);
+    },
+  };
+  // 网点：圆形区域内按网格排点，越靠中心越大
+  E.halftone = function (ctx, cx, cy, R, color, step = 18) {
+    ctx.save(); ctx.fillStyle = color;
+    for (let y = cy - R; y <= cy + R; y += step) for (let x = cx - R; x <= cx + R; x += step) {
+      const d = Math.hypot(x - cx, y - cy) / R; if (d >= 1) continue;
+      ctx.beginPath(); ctx.arc(x, y, step * 0.48 * (1 - d), 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
+  };
+  // 水彩晕染：许多半透明的不规则圆叠在一起，边缘更深
+  E.wash = function (ctx, cx, cy, R, rgb, seed = 1, a = 1) {
+    const r = E.rng(seed); ctx.save(); ctx.globalAlpha = a;
+    for (let i = 0; i < 26; i++) {
+      const x = cx + (r() - 0.5) * R * 0.7, y = cy + (r() - 0.5) * R * 0.7, rr = R * (0.35 + r() * 0.5);
+      const g = ctx.createRadialGradient(x, y, rr * 0.2, x, y, rr);
+      g.addColorStop(0, `rgba(${rgb},0.035)`); g.addColorStop(0.85, `rgba(${rgb},0.07)`); g.addColorStop(1, `rgba(${rgb},0)`);
+      ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(x, y, rr, rr * (0.75 + r() * 0.4), r() * 3, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
   };
   // 飘雪：确定性的雪花
   E.snow = function (ctx, t, n = 90, alpha = 0.8) {
