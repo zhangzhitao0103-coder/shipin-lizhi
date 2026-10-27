@@ -62,6 +62,10 @@
       cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.12, vigColor: '120,80,50', grain: 0.03, glow: 0, light: true },
     sunrise: { bg: '#1B1F4B', fg: '#FFFFFF', dim: '#C9CBEA', faint: 'rgba(255,255,255,0.2)', gold: '#FFD166', goldHi: '#FFE7A3', red: '#FF7B6B',
       cap: SANS, capW: 700, num: SANS, mono: MONO, vignette: 0.3, grain: 0.03, glow: 0.6 },
+    newsprint: { bg: '#EAE2D0', fg: '#1A1A1A', dim: '#6E665A', faint: '#C9BFAa', gold: '#B5121B', goldHi: '#B5121B', red: '#B5121B',
+      cap: SERIF, capW: 900, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.25, vigColor: '80,60,30', grain: 0.07, glow: 0, light: true },
+    space: { bg: '#02030A', fg: '#EEF3FF', dim: '#7F8BB0', faint: '#1A2140', gold: '#7CE7FF', goldHi: '#D2F6FF', red: '#FF8A5C',
+      cap: SANS, capW: 700, num: '"JetBrains Mono", "Noto Sans SC"', mono: MONO, vignette: 0.5, grain: 0.03, glow: 1.0 },
   };
 
   // ---------- 富文本：{金色} [红色] ----------
@@ -300,6 +304,28 @@
       ctx.lineTo(W, H); ctx.fill();
       E.dust(ctx, t, '255,240,210', 24);
     },
+    newsprint(ctx, th) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.32; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      // 报头与栏线
+      ctx.save(); ctx.fillStyle = th.fg; ctx.fillRect(60, 196, 960, 5); ctx.fillRect(60, 206, 960, 1.5);
+      ctx.font = `900 34px ${th.cap}`; ctx.textAlign = 'left'; ctx.fillText('高中周报', 60, 180);
+      ctx.font = `500 20px ${th.mono}`; ctx.textAlign = 'right'; ctx.fillText('THE HIGH SCHOOL WEEKLY', 1020, 180);
+      ctx.globalAlpha = 0.5; ctx.fillRect(60, 1720, 960, 1.5); ctx.restore();
+    },
+    space(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      [['rgba(110,60,200,0.20)', 250, 500, 600], ['rgba(40,120,220,0.18)', 850, 900, 650]].forEach(([c, x, y, r]) => {
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, c); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      });
+      const r = E.rng(2024); ctx.save();
+      for (let i = 0; i < 220; i++) {
+        const x = r() * W, y = r() * H, s = r() * 1.8 + 0.4, ph = r() * 6.28;
+        ctx.globalAlpha = 0.35 + 0.65 * Math.abs(Math.sin(t * (0.5 + r()) + ph));
+        ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y, s, s);
+      }
+      ctx.restore();
+    },
   };
   // 飘雪：确定性的雪花
   E.snow = function (ctx, t, n = 90, alpha = 0.8) {
@@ -341,11 +367,11 @@
 
   // 粉笔线：多次抖动描边
   E.chalkLine = function (ctx, pts, color, width, seed = 1, prog = 1) {
-    const r = E.rng(seed); ctx.save(); ctx.strokeStyle = color; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const r = E.rng(seed), base = ctx.globalAlpha; ctx.save(); ctx.strokeStyle = color; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     let total = 0; const seg = [];
     for (let i = 1; i < pts.length; i++) { const d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); seg.push(d); total += d; }
     for (let pass = 0; pass < 3; pass++) {
-      ctx.globalAlpha = 0.45 + 0.25 * r(); ctx.lineWidth = width * (0.6 + 0.5 * r());
+      ctx.globalAlpha = base * (0.45 + 0.25 * r()); ctx.lineWidth = width * (0.6 + 0.5 * r());
       ctx.beginPath(); let acc = 0;
       for (let i = 0; i < pts.length; i++) {
         if (i > 0) { if (acc >= total * prog) break; const f = Math.min(1, (total * prog - acc) / seg[i - 1]); acc += seg[i - 1];

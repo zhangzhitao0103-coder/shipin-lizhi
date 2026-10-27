@@ -112,5 +112,7 @@ async function render(times, outName) {
   const cb = beats[ep.cover] || beats[order[0]];
   const cf = Math.round((cb.s + Math.min(1.8, cb.d * 0.7)) * FPS);
   fs.copyFileSync(path.join(FR, `${String(cf).padStart(5, '0')}.jpg`), path.join(OUT, `${name}_封面.jpg`));
+  // 逐帧图片约占 300 MB/条，成片和封面导出后即删除（--keep-frames 可保留）
+  if (!opt('keep-frames')) fs.rmSync(FR, { recursive: true, force: true });
   console.log('完成：', path.join(OUT, name + '_*.mp4'));
 })().catch(e => { console.error(e); process.exit(1); });
