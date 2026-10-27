@@ -16,7 +16,7 @@
   `cinema` 暗金电影 · `info` 信息图 · `neon` 霓虹科技 · `ink` 新中式水墨 · `ice` 冷蓝电影 · `white` 极简白 ·
   `notebook` 手账笔记 · `blueprint` 蓝图工程 · `magazine` 杂志排版 · `chalk` 黑板粉笔 · `warm` 暖色温情 ·
   `winter` 冬日雪景 · `pixel` 像素游戏 · `glass` 玻璃拟态 · `paper` 纸雕 · `sunrise` 晨光 · `newsprint` 复古报纸 · `space` 深空 ·
-  `bauhaus` 包豪斯几何 · `riso` 孔版印刷 · `watercolor` 水彩 · `parchment` 羊皮纸手稿 · `terminal` 终端代码
+  `bauhaus` 包豪斯几何 · `riso` 孔版印刷 · `watercolor` 水彩 · `parchment` 羊皮纸手稿 · `terminal` 终端代码 · `exampaper` 试卷 · `corkboard` 软木板
 - 字体：思源宋体/黑体、霞鹜文楷、马善政毛笔楷书、Playfair Display、JetBrains Mono（均为开源可商用授权）
 - 音色：剧集里 `voice: { sid, speed }`。1 号男声沉稳 58、2 号男声清亮 100、3 号男声温和 90、4 号女声温柔 50、5 号女声明亮 40、6 号女声知性 30
 

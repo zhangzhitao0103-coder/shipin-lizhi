@@ -76,6 +76,10 @@
       cap: SERIF, capW: 700, num: '"Playfair Display", "Noto Serif SC"', mono: MONO, vignette: 0.45, vigColor: '90,60,20', grain: 0.07, glow: 0, light: true },
     terminal: { bg: '#030A04', fg: '#B8FFB0', dim: '#4F8F4A', faint: '#123318', gold: '#7CFF6B', goldHi: '#D4FFC9', red: '#FF5F56',
       cap: MONO, capW: 700, num: MONO, mono: MONO, vignette: 0.6, grain: 0.05, glow: 1.0 },
+    exampaper: { bg: '#FAF8F2', fg: '#1E1E1E', dim: '#8A867C', faint: '#DCD7CB', gold: '#D7261E', goldHi: '#D7261E', red: '#D7261E', blue: '#1A4FB5',
+      cap: SERIF, capW: 700, num: SERIF, mono: MONO, vignette: 0.08, vigColor: '60,50,30', grain: 0.04, glow: 0, light: true },
+    corkboard: { bg: '#B98B5E', fg: '#2B2118', dim: '#6E5A45', faint: 'rgba(43,33,24,0.25)', gold: '#C2410C', goldHi: '#C2410C', red: '#B91C1C', blue: '#1D4ED8',
+      cap: KAI, capW: 700, num: KAI, mono: MONO, vignette: 0.35, vigColor: '60,35,15', grain: 0.06, glow: 0, light: true },
   };
 
   // ---------- 富文本：{金色} [红色] ----------
@@ -378,6 +382,47 @@
       ctx.fillText('student@gaozhong:~$', 70, 200); ctx.fillRect(70, 216, 940, 2);
       ctx.globalAlpha = 0.04 + 0.02 * Math.sin(t * 37); ctx.fillStyle = th.fg; ctx.fillRect(0, 0, W, H); ctx.restore();
     },
+    exampaper(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.14; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      ctx.save();
+      // 卷头、密封线、得分栏
+      ctx.fillStyle = th.fg; ctx.font = `700 26px ${th.cap}`; ctx.textAlign = 'center'; ctx.fillText('期末考试 · 试卷', 540, 180);
+      ctx.fillStyle = th.dim; ctx.fillRect(130, 200, 820, 1.5);
+      ctx.setLineDash([10, 8]); ctx.strokeStyle = th.dim; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(84, 120); ctx.lineTo(84, H - 120); ctx.stroke(); ctx.setLineDash([]);
+      ctx.font = `500 20px ${th.cap}`; ctx.fillStyle = th.dim; ctx.textAlign = 'center';
+      '密封线内不要答题'.split('').forEach((c, i) => ctx.fillText(c, 56, 760 + i * 56));
+      ctx.strokeStyle = th.red; ctx.lineWidth = 2; ctx.strokeRect(880, 120, 110, 64); ctx.fillStyle = th.red; ctx.font = `700 20px ${th.cap}`; ctx.fillText('得分', 910, 142);
+      ctx.restore();
+    },
+    corkboard(ctx, th, t) {
+      ctx.fillStyle = th.bg; ctx.fillRect(0, 0, W, H);
+      ctx.save(); ctx.globalAlpha = 0.5; ctx.globalCompositeOperation = 'multiply'; ctx.drawImage(paper(), 0, 0, W, H); ctx.restore();
+      const r = E.rng(311); ctx.save();
+      for (let i = 0; i < 900; i++) { ctx.fillStyle = r() > 0.5 ? 'rgba(90,55,25,0.18)' : 'rgba(235,200,150,0.16)'; ctx.fillRect(r() * W, r() * H, 2 + r() * 4, 2 + r() * 3); }
+      // 木框
+      ctx.strokeStyle = '#6B4423'; ctx.lineWidth = 36; ctx.strokeRect(18, 18, W - 36, H - 36);
+      ctx.restore();
+      // 字幕用的白卡片
+      E.note(ctx, 80, 250, 920, 230, '#FFFDF6', -0.006, null);
+      [[118, 272], [962, 266]].forEach(([x, y]) => {   // 两角各一颗图钉，避开字幕
+        ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.arc(x + 3, y + 4, 13, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#C2410C'; ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.beginPath(); ctx.arc(x - 4, y - 4, 4, 0, Math.PI * 2); ctx.fill();
+      });
+    },
+  };
+  // 便签 / 卡片：带阴影、轻微旋转、图钉
+  E.note = function (ctx, x, y, w, h, color, rot = 0, pin = null, a = 1) {
+    ctx.save(); ctx.globalAlpha *= a; ctx.translate(x + w / 2, y + h / 2); ctx.rotate(rot);
+    ctx.shadowColor = 'rgba(40,20,5,0.35)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 8;
+    ctx.fillStyle = color; ctx.fillRect(-w / 2, -h / 2, w, h); ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+    if (pin) {
+      ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.beginPath(); ctx.arc(3, -h / 2 + 22, 13, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = pin; ctx.beginPath(); ctx.arc(0, -h / 2 + 18, 13, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.beginPath(); ctx.arc(-4, -h / 2 + 14, 4, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.restore();
   };
   // 网点：圆形区域内按网格排点，越靠中心越大
   E.halftone = function (ctx, cx, cy, R, color, step = 18) {
