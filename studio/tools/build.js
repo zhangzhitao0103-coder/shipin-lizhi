@@ -21,26 +21,32 @@ const run = (cmd, a, env = {}) => execFileSync(cmd, a, { stdio: 'inherit', env: 
 
 // 1. AI 配音：每个节拍一段
 if (!opt('skip-tts')) {
-  fs.writeFileSync(path.join(B, 'beats.json'), JSON.stringify(ep.beats.map(b => ({ id: b.id, voice: b.voice || '', sid: b.sid, speed: b.speed })), null, 1));
+  fs.writeFileSync(path.join(B, 'beats.json'), JSON.stringify(ep.beats.map(b => ({ id: b.id, voice: b.voice || '', sid: b.sid, speed: b.speed, prompt: b.prompt })), null, 1));
   // 每集可在脚本里指定音色：voice: { sid, speed }；环境变量优先
   const v = ep.voice || {};
   run(PY, ['-I', path.join(ROOT, 'tools', 'tts.py'), MODELS, B], {
-    VOICE_SID: process.env.VOICE_SID || String(v.sid ?? 58), VOICE_SPEED: process.env.VOICE_SPEED || String(v.speed ?? 1.05) });
+    VOICE_SID: process.env.VOICE_SID || String(v.sid ?? 58), VOICE_SPEED: process.env.VOICE_SPEED || String(v.speed ?? 1.05),
+    VOICE_ENGINE: process.env.VOICE_ENGINE || v.engine || 'kokoro', VOICE_PROMPT: process.env.VOICE_PROMPT || v.prompt || 'male' });
 }
 const vdur = JSON.parse(fs.readFileSync(path.join(B, 'voice', 'durations.json'), 'utf8'));
 
 // 2. 时间轴：节拍时长 = max(最短时长, 配音时长 + 前后留白)
-const VOICE_DELAY = 0.2, TAIL = 0.42;
-let t = 0;
-const beats = {}, order = [], sfx = [], voice = [];
+// 剧集可设 tempo（如 1.5）：画面按"设计时长"绘制，再按实际时长等比压缩播放（动画、字幕、音效位置一起加快）
+const TEMPO = ep.tempo || 1;
+const VOICE_DELAY = TEMPO > 1 ? 0.1 : 0.2, TAIL = TEMPO > 1 ? 0.22 : 0.42;
+let t = 0, td = 0;
+const beats = {}, design = {}, order = [], sfx = [], voice = [];
 for (const b of ep.beats) {
   const vd = vdur[b.id] || 0;
-  const d = Math.max(b.min || 2, vd ? vd + VOICE_DELAY + TAIL : 0);
+  const d = Math.max((b.min || 2) / TEMPO, vd ? vd + VOICE_DELAY + TAIL + (b.pad || 0) : 0);   // pad：配音后额外留白（秒）
+  const dd = TEMPO > 1 ? Math.max(b.min || 2, d * TEMPO) : d;
   beats[b.id] = { s: +t.toFixed(3), e: +(t + d).toFixed(3), d: +d.toFixed(3) };
+  design[b.id] = { s: +td.toFixed(3), e: +(td + dd).toFixed(3), d: +dd.toFixed(3) };
   order.push(b.id);
   if (vd) voice.push({ id: b.id, at: +(t + VOICE_DELAY).toFixed(3) });
-  for (const s of b.sfx || []) sfx.push({ ...s, at: +(t + s.at).toFixed(3), beat: b.id });
-  t += d;
+  // 音效位置：at 为设计时间（随 tempo 压缩）；atFrac 为占本节拍的比例（与配音同步）
+  for (const s of b.sfx || []) sfx.push({ ...s, at: +(t + (s.atFrac != null ? s.atFrac * d : s.at * (d / dd))).toFixed(3), beat: b.id });
+  t += d; td += dd;
 }
 // 音效时长：'beat' = 到本节拍结束；'until:xxx' = 到指定节拍结束
 for (const s of sfx) {
@@ -52,6 +58,7 @@ sfx.push({ type: 'brand', at: +(t + 0.75).toFixed(3) });
 const total = +(t + ENDCARD).toFixed(3);
 const timeline = {
   id, title: ep.title, fps: FPS, total, beats, order, endcard, sfx, voice,
+  ...(TEMPO > 1 ? { design: { beats: design, endcard: { s: +td.toFixed(3), d: ENDCARD } } } : {}),
   music: { ...ep.music, sections: order.map(k => { const d = ep.beats.find(x => x.id === k); return { id: k, s: beats[k].s, e: beats[k].e, mood: d.mood ?? 0.5, gain: d.musicGain ?? 1, hush: d.hush || 0 }; }) },
 };
 fs.writeFileSync(path.join(B, 'timeline.json'), JSON.stringify(timeline, null, 1));

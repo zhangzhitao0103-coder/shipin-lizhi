@@ -23,13 +23,16 @@
 <script src="engine.js"></script>
 <script>
 // 由构建脚本注入：剧集脚本 + 时间轴
-let EP, TL, TH, ctx;
+let EP, TL, TLD, TH, ctx;
 window.__setup = async function (epSrcUrl, timeline) {
   await new Promise((res, rej) => { const s = document.createElement('script'); s.src = epSrcUrl; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
   EP = Object.values(window.EPISODES)[0];
   TH = E.themes[EP.theme];
   TL = timeline;
   TL.b = id => { const x = TL.beats[id]; if (!x) throw new Error('no beat ' + id); return x; };
+  // tempo 模式：画面在"设计时间轴"上绘制，播放时按每个节拍的实际时长等比映射
+  TLD = TL.design ? { ...TL, beats: TL.design.beats, endcard: TL.design.endcard } : TL;
+  TLD.b = id => { const x = TLD.beats[id]; if (!x) throw new Error('no beat ' + id); return x; };
   ctx = document.getElementById('c').getContext('2d');
   // 预加载所有用到的字形
   const caps = EP.beats.map(b => (b.cap || []).join('')).join('');
@@ -41,7 +44,14 @@ window.__setup = async function (epSrcUrl, timeline) {
   await E.loadAssets();
   return { ok: true, fonts: [...document.fonts].filter(f => f.status === 'loaded').length };
 };
-window.__render = function (t, frame) {
+function designTime(t) {
+  if (TLD === TL) return t;
+  if (t >= TL.endcard.s) return TLD.endcard.s + (t - TL.endcard.s);
+  for (const id of TL.order) { const r = TL.beats[id], d = TLD.beats[id]; if (t < r.e) return d.s + (t - r.s) * (d.d / r.d); }
+  return TLD.endcard.s;
+}
+window.__render = function (tReal, frame) {
+  const t = designTime(tReal), TL = TLD;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
   EP.draw(ctx, t, TL, TH, E);

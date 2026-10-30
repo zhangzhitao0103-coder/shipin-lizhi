@@ -2,34 +2,35 @@
 // 不含具体日期与天数，整个冬季都可发布。情绪曲线：冷 → 压 → 静（女声、几乎无乐）→ 燃（停一拍后鼓点砸下）→ 暖
 // 画面主线：雪夜里唯一亮着的窗 → 冬三月 → 知识塔 → 路线图 → 雪下扎根的种子 → 冰裂 → 四张卡片 → 日出破土 → 百日冲刺 → 毛笔金句
 (function (root) {
-  const M = 58, F = 50;  // 1 号男声沉稳、4 号女声温柔
+  // 配音：ZipVoice（零样本，参考音色由开源模型合成）。主线男声，低谷两句女声
   const EP = {
     id: 'W1',
     title: '潜心奋战冬三月',
     theme: 'winter',
-    voice: { sid: M },
+    voice: { engine: 'zipvoice', prompt: 'male' },
+    tempo: 1.5,   // 画面整体按 1.5 倍节奏播放
     capY: 360, capSize: 62,
     music: { style: 'epic', bpm: 112, chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Bb', 'Gm', 'A', 'Dm', 'Bb', 'F', 'C', 'A', 'D', 'G', 'D', 'A', 'D'] },
     cover: 'motto2',
     beats: [
-      { id: 'cold', min: 2.8, cap: ['冬天来了。'], voice: '冬天来了。', speed: 0.9, mood: 0.2, sfx: [{ at: 0, type: 'wind', dur: 'until:diff' }] },
-      { id: 'diff', min: 3.6, cap: ['高三的冬天，', '和别人的{不一样}。'], voice: '高三的冬天，和别人的不一样。', speed: 0.95, mood: 0.3 },
-      { id: 'three', min: 3.6, cap: ['冬天的这三个月，', '是{一轮复习的攻坚期}。'], voice: '冬天的这三个月，是一轮复习的攻坚期。', speed: 1.0, mood: 0.5, sfx: [{ at: 0.4, type: 'taiko', vel: 0.5 }, { at: 0.75, type: 'taiko', vel: 0.5 }, { at: 1.1, type: 'taiko', vel: 0.7 }] },
-      { id: 'build', min: 3.8, cap: ['夯实基础，全面复习，', '把知识{搭成体系}。'], voice: '夯实基础，全面复习，把知识搭成体系。', speed: 1.0, mood: 0.6, sfx: [{ at: 0.4, type: 'ticks', n: 9, gap: 0.22 }] },
-      { id: 'map', min: 4.4, cap: ['二轮复习、一模、重要联考，', '都{站在它的肩膀上}。'], voice: '二轮复习，一模，重要联考，都站在它的肩膀上。', speed: 1.0, mood: 0.68, sfx: [{ at: 0.6, type: 'whoosh' }] },
-      { id: 'loose', min: 4.0, cap: ['可是冬天，天最冷，夜最长，', '也[最容易松]。'], voice: '可是冬天，天最冷，夜最长，也最容易松。', speed: 0.95, mood: 0.4, sfx: [{ at: 0.2, type: 'wind', dur: 'beat' }] },
-      { id: 'doubt', min: 4.4, cap: ['也许你会累，会怀疑：', '我这么努力，{真的有用吗}？'], voice: '也许你会累，会怀疑，我这么努力，真的有用吗？', sid: F, speed: 0.9, mood: 0.12, musicGain: 0.7 },
-      { id: 'seed', min: 4.4, cap: ['其实每一个冬天，', '种子都在土里，{悄悄扎根}。'], voice: '其实每一个冬天，种子都在土里，悄悄扎根。', sid: F, speed: 0.9, mood: 0.2, musicGain: 0.8, hush: 0.7 },
-      { id: 'break', min: 2.8, cap: ['冬天，{不会白过}。'], capY: 960, capSize: 96, voice: '冬天，不会白过。', speed: 0.95, mood: 1.0, sfx: [{ at: 0, type: 'crack' }, { at: 0.05, type: 'taiko', vel: 1.2 }, { at: 0.05, type: 'boom' }] },
-      { id: 'plan', min: 2.8, cap: ['{做好规划}：', '每一天，都有清单。'], voice: '做好规划，每一天都有清单。', speed: 1.1, mood: 0.85, sfx: [{ at: 0.05, type: 'taiko', vel: 1.0 }] },
-      { id: 'method', min: 2.8, cap: ['{掌握方法}：', '错题，变成得分。'], voice: '掌握方法，错题变成得分。', speed: 1.1, mood: 0.9, sfx: [{ at: 0.05, type: 'taiko', vel: 1.0 }] },
-      { id: 'teacher', min: 2.8, cap: ['{选对老师}：', '少走弯路，直击考点。'], voice: '选对老师，少走弯路，直击考点。', speed: 1.1, mood: 0.95, sfx: [{ at: 0.05, type: 'taiko', vel: 1.0 }] },
-      { id: 'persist', min: 2.8, cap: ['{咬住坚持}：', '一天一天，攒成实力。'], voice: '咬住坚持，一天一天，攒成实力。', speed: 1.1, mood: 1.0, sfx: [{ at: 0.05, type: 'taiko', vel: 1.1 }] },
-      { id: 'thaw', min: 2.6, cap: ['当冬天过去——'], voice: '当冬天过去。', speed: 1.0, mood: 0.75, sfx: [{ at: 0.1, type: 'riser', dur: 'beat' }] },
-      { id: 'spring', min: 4.0, cap: ['春天来时，你会站在{更高的起点}，', '迎接百日冲刺。'], voice: '春天来时，你会站在更高的起点，迎接百日冲刺。', speed: 1.05, mood: 0.9, sfx: [{ at: 0.05, type: 'boom' }, { at: 1.6, type: 'swell' }] },
-      { id: 'motto1', min: 3.4, cap: null, voice: '潜心，奋战，冬三月。', speed: 0.92, mood: 1.0, sfx: [{ at: 0.25, type: 'taiko', vel: 1.1 }, { at: 0.89, type: 'taiko', vel: 0.9 }, { at: 1.53, type: 'taiko', vel: 0.9 }, { at: 2.17, type: 'taiko', vel: 1.2 }] },
-      { id: 'motto2', min: 3.6, cap: null, voice: '夯基，提能，胜百天！', speed: 0.92, mood: 1.0, sfx: [{ at: 0.25, type: 'taiko', vel: 1.1 }, { at: 0.89, type: 'taiko', vel: 0.9 }, { at: 1.53, type: 'taiko', vel: 0.9 }, { at: 2.17, type: 'taiko', vel: 1.3 }, { at: 2.9, type: 'boom' }] },
-      { id: 'dream', min: 3.6, cap: null, voice: '二零二七，愿你圆梦理想大学。', speed: 1.0, mood: 0.6, sfx: [{ at: 0.1, type: 'swell' }] },
+      { id: 'cold', min: 2.8, cap: ['冬天来了。'], voice: '冬天来了。', speed: 1.1, mood: 0.2, sfx: [{ at: 0, type: 'wind', dur: 'until:diff' }] },
+      { id: 'diff', min: 3.6, cap: ['高三的冬天，', '和别人的{不一样}。'], voice: '高三的冬天，和别人的不一样。', speed: 1.2, mood: 0.3 },
+      { id: 'three', min: 3.6, cap: ['冬天的这三个月，', '是{一轮复习的攻坚期}。'], voice: '冬天的这三个月，是一轮复习的攻坚期。', speed: 1.3, mood: 0.5, sfx: [{ at: 0.4, type: 'taiko', vel: 0.5 }, { at: 0.75, type: 'taiko', vel: 0.5 }, { at: 1.1, type: 'taiko', vel: 0.7 }] },
+      { id: 'build', min: 3.8, cap: ['夯实基础，全面复习，', '把知识{搭成体系}。'], voice: '夯实基础，全面复习，把知识搭成体系。', speed: 1.3, mood: 0.6, sfx: [{ at: 0.4, type: 'ticks', n: 9, gap: 0.22 }] },
+      { id: 'map', min: 4.4, cap: ['二轮复习、一模、重要联考，', '都{站在它的肩膀上}。'], voice: '二轮复习，一模，重要联考，都站在它的肩膀上。', speed: 1.3, mood: 0.68, sfx: [{ at: 0.6, type: 'whoosh' }] },
+      { id: 'loose', min: 4.0, cap: ['可是冬天，天最冷，夜最长，', '也[最容易松]。'], voice: '可是冬天，天最冷，夜最长，也最容易松。', speed: 1.25, mood: 0.4, sfx: [{ at: 0.2, type: 'wind', dur: 'beat' }] },
+      { id: 'doubt', min: 4.4, cap: ['也许你会累，会怀疑：', '我这么努力，{真的有用吗}？'], voice: '也许你会累，会怀疑，我这么努力，真的有用吗？', prompt: 'female', speed: 1.15, mood: 0.12, musicGain: 0.7 },
+      { id: 'seed', min: 4.4, cap: ['其实每一个冬天，', '种子都在土里，{悄悄扎根}。'], voice: '其实每一个冬天，种子都在土里，悄悄扎根。', prompt: 'female', speed: 1.15, mood: 0.2, musicGain: 0.8, hush: 0.55, pad: 0.45 },
+      { id: 'break', min: 2.8, cap: ['冬天，{不会白过}。'], capY: 960, capSize: 96, voice: '冬天，不会白过。', speed: 1.1, mood: 1.0, sfx: [{ at: 0, type: 'crack' }, { at: 0.05, type: 'taiko', vel: 1.2 }, { at: 0.05, type: 'boom' }] },
+      { id: 'plan', min: 2.8, cap: ['{做好规划}：', '每一天，都有清单。'], voice: '做好规划，每一天都有清单。', speed: 1.35, mood: 0.85, sfx: [{ at: 0.05, type: 'taiko', vel: 1.0 }] },
+      { id: 'method', min: 2.8, cap: ['{掌握方法}：', '错题，变成得分。'], voice: '掌握方法，错题变成得分。', speed: 1.35, mood: 0.9, sfx: [{ at: 0.05, type: 'taiko', vel: 1.0 }] },
+      { id: 'teacher', min: 2.8, cap: ['{选对老师}：', '少走弯路，直击考点。'], voice: '选对老师，少走弯路，直击考点。', speed: 1.35, mood: 0.95, sfx: [{ at: 0.05, type: 'taiko', vel: 1.0 }] },
+      { id: 'persist', min: 2.8, cap: ['{咬住坚持}：', '一天一天，攒成实力。'], voice: '咬住坚持，一天一天，攒成实力。', speed: 1.35, mood: 1.0, sfx: [{ at: 0.05, type: 'taiko', vel: 1.1 }] },
+      { id: 'thaw', min: 2.6, cap: ['当冬天过去——'], voice: '当冬天过去。', speed: 1.2, mood: 0.75, sfx: [{ at: 0.1, type: 'riser', dur: 'beat' }] },
+      { id: 'spring', min: 4.0, cap: ['春天来时，你会站在{更高的起点}，', '迎接百日冲刺。'], voice: '春天来时，你会站在更高的起点，迎接百日冲刺。', speed: 1.35, mood: 0.9, sfx: [{ at: 0.05, type: 'boom' }, { at: 1.6, type: 'swell' }] },
+      { id: 'motto1', min: 3.4, cap: null, voice: '潜心，奋战，冬三月。', speed: 1.0, mood: 1.0, sfx: [{ atFrac: 0.12, type: 'taiko', vel: 1.1 }, { atFrac: 0.34, type: 'taiko', vel: 0.9 }, { atFrac: 0.56, type: 'taiko', vel: 0.9 }, { atFrac: 0.78, type: 'taiko', vel: 1.2 }] },
+      { id: 'motto2', min: 3.6, cap: null, voice: '夯基，提能，胜百天！', speed: 1.0, mood: 1.0, sfx: [{ atFrac: 0.12, type: 'taiko', vel: 1.1 }, { atFrac: 0.34, type: 'taiko', vel: 0.9 }, { atFrac: 0.56, type: 'taiko', vel: 0.9 }, { atFrac: 0.78, type: 'taiko', vel: 1.3 }, { atFrac: 0.9, type: 'boom' }] },
+      { id: 'dream', min: 3.6, cap: null, voice: '二零二七，愿你圆梦理想大学。', speed: 1.2, mood: 0.6, sfx: [{ at: 0.1, type: 'swell' }] },
     ],
     texts: '冬三月一轮复习攻坚期夯实基础全面复习搭建体系二轮一模联考百日冲刺高考白昼做好规划掌握方法选对老师咬住坚持分数示意潜心奋战夯基提能胜百天圆梦理想大学愿你2027',
   };
@@ -270,7 +271,7 @@
       [m1, m2].forEach((bt, line) => {
         const y = line ? 1170 : 860;
         [...MOTTO[line]].forEach((ch, i) => {
-          const t0 = bt.s + 0.25 + Math.floor(i / 2) * 0.64 + (i % 2) * 0.16, k = E.seg(t, t0, t0 + 0.28);
+          const t0 = bt.s + bt.d * (0.12 + Math.floor(i / 2) * 0.22 + (i % 2) * 0.06), k = E.seg(t, t0, t0 + 0.28);
           if (k <= 0) return;
           const x = 540 + (i - 3) * 138, s = E.lerp(1.8, 1, E.ease.out(k));
           ctx.save(); ctx.globalAlpha = ink * k;
@@ -283,7 +284,7 @@
         });
       });
       // 红色印章
-      const st = E.seg(t, m2.s + 2.8, m2.s + 3.0);
+      const st = E.seg(t, m2.s + m2.d * 0.88, m2.s + m2.d * 0.88 + 0.2);
       if (st > 0) {
         const s = E.lerp(2.2, 1, E.ease.out(st));
         ctx.save(); ctx.globalAlpha = ink * st; ctx.translate(880, 1400); ctx.scale(s, s); ctx.rotate(-0.08);

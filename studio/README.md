@@ -18,7 +18,9 @@
   `winter` 冬日雪景 · `pixel` 像素游戏 · `glass` 玻璃拟态 · `paper` 纸雕 · `sunrise` 晨光 · `newsprint` 复古报纸 · `space` 深空 ·
   `bauhaus` 包豪斯几何 · `riso` 孔版印刷 · `watercolor` 水彩 · `parchment` 羊皮纸手稿 · `terminal` 终端代码 · `exampaper` 试卷 · `corkboard` 软木板
 - 字体：思源宋体/黑体、霞鹜文楷、马善政毛笔楷书、Playfair Display、JetBrains Mono（均为开源可商用授权）
-- 节拍级参数：`sid` / `speed` 单独指定这一句的音色和语速；`musicGain` 设这一段配乐音量；`hush` 让这一段末尾静音若干秒（停一拍再爆发）
+- 配音引擎：剧集 `voice: { engine: 'zipvoice', prompt: 'male' | 'female' }` 改用 ZipVoice（k2-fsa 开源零样本模型，韵律更自然；参考音色由开源模型合成）。语速 >1 时先按 1.0 生成再用 ffmpeg atempo 不变调加速（直接加速会丢字）。模型：`sherpa-onnx-zipvoice-distill-int8-zh-en-emilia` + `vocos_24khz.onnx`（sherpa-onnx GitHub releases）
+- 整体提速：剧集 `tempo: 1.5`，画面按设计时长绘制、再按每节拍实际时长等比压缩播放；音效 `atFrac` 按节拍比例定位（与配音同步），节拍 `pad` 在配音后额外留白
+- 节拍级参数：`sid` / `speed` / `prompt` 单独指定这一句的音色和语速；`musicGain` 设这一段配乐音量；`hush` 让这一段末尾静音若干秒（停一拍再爆发）
 - 音效：tick / ticks / ding / boom / riser / whoosh / swell / boil / taiko（太鼓）/ crack（冰裂）/ wind（风声）
 - 音色：剧集里 `voice: { sid, speed }`。1 号男声沉稳 58、2 号男声清亮 100、3 号男声温和 90、4 号女声温柔 50、5 号女声明亮 40、6 号女声知性 30
 
