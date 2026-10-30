@@ -5,7 +5,7 @@
 1. **AI 配音**：`tools/tts.py`，离线 Kokoro 中文模型，每个节拍生成一段旁白
 2. **时间轴**：节拍时长 = max(最短时长, 旁白时长 + 留白)，无配音版与配音版共用同一套画面
 3. **逐帧渲染**：`web/index.html` + `web/engine.js`，Chromium 无头浏览器按 30fps 截帧（画面是时间的纯函数，可并行）
-4. **配乐与音效**：`tools/audio.py`，钢琴、铺底、低音、节奏和音效全部由代码合成，无版权风险。配乐风格（剧集里 `music.style`）：`cinema` 电影钢琴 · `pulse` 节奏拨弦 · `lofi` 慢摇电钢 + 黑胶底噪 · `bell` 八音盒
+4. **配乐与音效**：`tools/audio.py`，钢琴、铺底、低音、节奏和音效全部由代码合成，无版权风险。配乐风格（剧集里 `music.style`）：`cinema` 电影钢琴 · `pulse` 节奏拨弦 · `lofi` 慢摇电钢 + 黑胶底噪 · `bell` 八音盒 · `epic` 史诗（钢琴 → 弦乐八分音符 → 太鼓）
 5. **合成输出**：`out/` 下生成 `*_无配音.mp4`、`*_AI配音.mp4`、`*_封面.jpg`
 
 ## 规格
@@ -18,6 +18,8 @@
   `winter` 冬日雪景 · `pixel` 像素游戏 · `glass` 玻璃拟态 · `paper` 纸雕 · `sunrise` 晨光 · `newsprint` 复古报纸 · `space` 深空 ·
   `bauhaus` 包豪斯几何 · `riso` 孔版印刷 · `watercolor` 水彩 · `parchment` 羊皮纸手稿 · `terminal` 终端代码 · `exampaper` 试卷 · `corkboard` 软木板
 - 字体：思源宋体/黑体、霞鹜文楷、马善政毛笔楷书、Playfair Display、JetBrains Mono（均为开源可商用授权）
+- 节拍级参数：`sid` / `speed` 单独指定这一句的音色和语速；`musicGain` 设这一段配乐音量；`hush` 让这一段末尾静音若干秒（停一拍再爆发）
+- 音效：tick / ticks / ding / boom / riser / whoosh / swell / boil / taiko（太鼓）/ crack（冰裂）/ wind（风声）
 - 音色：剧集里 `voice: { sid, speed }`。1 号男声沉稳 58、2 号男声清亮 100、3 号男声温和 90、4 号女声温柔 50、5 号女声明亮 40、6 号女声知性 30
 
 ## 构建

@@ -1,5 +1,6 @@
 """AI 配音：sherpa-onnx + Kokoro v1.1-zh，离线生成每个节拍的旁白。
 用法：python tts.py <模型目录> <构建目录>    环境变量 VOICE_SID（默认 58，男声）、VOICE_SPEED（默认 1.05）
+节拍里可单独指定 sid / speed，覆盖整集的音色和语速
 """
 import hashlib
 import json
@@ -56,10 +57,11 @@ for b in beats:
     text = b["voice"].strip()
     if not text:
         continue
-    key = hashlib.md5(f"{SID}|{SPEED}|{text}".encode()).hexdigest()
+    sid, speed = int(b.get("sid") or SID), float(b.get("speed") or SPEED)
+    key = hashlib.md5(f"{sid}|{speed}|{text}".encode()).hexdigest()
     out = os.path.join(vd, b["id"] + ".wav")
     if manifest.get(b["id"]) != key or not os.path.exists(out):
-        g = engine().generate(text, sid=SID, speed=SPEED)
+        g = engine().generate(text, sid=sid, speed=speed)
         a = trim(np.array(g.samples, dtype=np.float32), g.sample_rate)
         a = ss.resample_poly(a, SR, g.sample_rate).astype(np.float32)
         a = a / (np.max(np.abs(a)) + 1e-9) * 0.7

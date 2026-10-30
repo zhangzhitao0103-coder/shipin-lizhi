@@ -21,7 +21,7 @@ const run = (cmd, a, env = {}) => execFileSync(cmd, a, { stdio: 'inherit', env: 
 
 // 1. AI 配音：每个节拍一段
 if (!opt('skip-tts')) {
-  fs.writeFileSync(path.join(B, 'beats.json'), JSON.stringify(ep.beats.map(b => ({ id: b.id, voice: b.voice || '' })), null, 1));
+  fs.writeFileSync(path.join(B, 'beats.json'), JSON.stringify(ep.beats.map(b => ({ id: b.id, voice: b.voice || '', sid: b.sid, speed: b.speed })), null, 1));
   // 每集可在脚本里指定音色：voice: { sid, speed }；环境变量优先
   const v = ep.voice || {};
   run(PY, ['-I', path.join(ROOT, 'tools', 'tts.py'), MODELS, B], {
@@ -52,7 +52,7 @@ sfx.push({ type: 'brand', at: +(t + 0.75).toFixed(3) });
 const total = +(t + ENDCARD).toFixed(3);
 const timeline = {
   id, title: ep.title, fps: FPS, total, beats, order, endcard, sfx, voice,
-  music: { ...ep.music, sections: order.map(k => ({ id: k, s: beats[k].s, e: beats[k].e, mood: ep.beats.find(x => x.id === k).mood ?? 0.5 })) },
+  music: { ...ep.music, sections: order.map(k => { const d = ep.beats.find(x => x.id === k); return { id: k, s: beats[k].s, e: beats[k].e, mood: d.mood ?? 0.5, gain: d.musicGain ?? 1, hush: d.hush || 0 }; }) },
 };
 fs.writeFileSync(path.join(B, 'timeline.json'), JSON.stringify(timeline, null, 1));
 console.log(`[${id}] 总时长 ${total.toFixed(1)}s，节拍 ${order.length} 个`);

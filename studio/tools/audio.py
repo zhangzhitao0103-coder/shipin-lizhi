@@ -204,6 +204,27 @@ def music():
                 bl = sum(a * np.exp(-tb * d) * np.sin(2 * np.pi * hz(note) * p * tb) for p, a, d in [(1, 1, 3.0), (3.0, 0.25, 6), (5.2, 0.08, 9)])
                 add(out, bl.astype(np.float32) * 0.05 * (0.6 + 0.4 * r.random()), tt0, pan=(r.random() - 0.5) * 0.5)
                 tt0 += step; j += 1
+        # 史诗：安静段钢琴，推进段弦乐八分音符，高潮段太鼓 + 军鼓
+        if style == "epic":
+            if s["mood"] < 0.55:
+                tt0, j = s["s"] + 0.1, 0
+                while tt0 < s["e"]:
+                    add(out, piano(hz(pool[(j * 2 + r.integers(0, 2)) % len(pool)]), 3.0, 0.45 + 0.4 * r.random()) * 0.10, tt0, pan=(r.random() - 0.5) * 0.5)
+                    tt0 += 1.3 - 0.6 * s["mood"]; j += 1
+            else:
+                beat = 60 / m.get("bpm", 112)
+                k0, j = np.ceil(s["s"] / (beat / 2)) * (beat / 2), 0
+                while k0 < s["e"]:
+                    note = [36 + root, 43 + root][j % 2] + 12
+                    st = lowpass(pad_note(hz(note), beat * 0.45, 0.8), 2400) * env_ar(int(beat * 0.45 * SR), 0.005, 0.12)
+                    add(out, st * 0.10 * (0.7 + 0.6 * s["mood"]), k0, pan=0.15 if j % 2 else -0.15)
+                    bi = int(round(k0 / (beat / 2))) % 8
+                    if s["mood"] >= 0.7 and bi in (0, 3, 4):
+                        add(out, sfx_taiko(0.5 if bi else 0.8) * (0.5 + 0.5 * s["mood"]), k0)
+                    if s["mood"] >= 0.85 and bi in (2, 6):
+                        sn = bandpass(rng.standard_normal(int(0.18 * SR)).astype(np.float32), 600, 5000) * np.exp(-np.arange(int(0.18 * SR)) / SR * 22)
+                        add(out, sn * 0.09, k0, pan=0.05)
+                    k0 += beat / 2; j += 1
     if style == "lofi":
         # 黑胶底噪
         crack = np.zeros(N, np.float32); idx = rng.integers(0, N, int(TL["total"] * 9)); crack[idx] = rng.uniform(-1, 1, len(idx)).astype(np.float32)
@@ -211,6 +232,15 @@ def music():
         add(out, lowpass(crack, 3000) * 0.05 + hiss, 0)
     out *= (0.55 + 0.6 * mood)[:, None]
     out = reverb(out, 0.38, 3.2)
+    # 分段音量：gain 为该段配乐音量，hush 为段尾静音秒数（制造"停一拍"再爆发）
+    g = np.ones(N, np.float32)
+    for s in secs:
+        a, z = int(s["s"] * SR), int(s["e"] * SR)
+        g[a:z] = s.get("gain", 1)
+        if s.get("hush"): g[max(a, z - int(s["hush"] * SR)):z] = 0
+    sm = int(0.12 * SR)
+    g = np.convolve(g, np.ones(sm) / sm, mode="same").astype(np.float32)
+    out *= g[:, None]
     # 收尾淡出
     fe = int(TL["total"] * SR)
     out[fe - SR:fe] *= np.linspace(1, 0, SR)[:, None]
@@ -219,6 +249,14 @@ def music():
 
 
 # ---------- 音效 ----------
+def sfx_taiko(vel=1.0):
+    n = int(1.6 * SR); t = np.arange(n) / SR
+    f = 48 + 70 * np.exp(-t * 18)
+    body = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 3.2)
+    skin = lowpass(rng.standard_normal(n).astype(np.float32), 1200) * np.exp(-t * 28) * 0.5
+    return ((body + skin) * vel).astype(np.float32) * 0.5
+
+
 def sfx_sig(s):
     typ = s["type"]
     if typ == "tick":
@@ -260,6 +298,21 @@ def sfx_sig(s):
             p = piano(hz(m), 2.6, 0.8)
             y[int(i * 0.09 * SR): int(i * 0.09 * SR) + len(p)] += p[: len(y) - int(i * 0.09 * SR)]
         return y * 0.16
+    if typ == "taiko":
+        return sfx_taiko(s.get("vel", 1.0)) * 1.3
+    if typ == "crack":   # 冰裂：几声高频脆响 + 一记低频
+        n = int(1.2 * SR); y = np.zeros(n, np.float32)
+        for k, (dt, a) in enumerate([(0, 1), (0.05, 0.7), (0.11, 0.8), (0.2, 0.5), (0.34, 0.4)]):
+            m = int(0.04 * SR); b = highpass(rng.standard_normal(m).astype(np.float32), 2500) * np.exp(-np.arange(m) / SR * 90) * a
+            i = int(dt * SR); y[i:i + m] += b
+        tt = np.arange(n) / SR
+        y += np.sin(2 * np.pi * np.cumsum(60 + 40 * np.exp(-tt * 10)) / SR) * np.exp(-tt * 4) * 0.6
+        return y * 0.5
+    if typ == "wind":
+        d = s.get("dur") or 4.0; n = int(d * SR); t = np.arange(n) / SR
+        x = lowpass(rng.standard_normal(n).astype(np.float32), 700)
+        mod = 0.55 + 0.45 * np.sin(2 * np.pi * 0.23 * t + 1) * np.sin(2 * np.pi * 0.11 * t)
+        return x * mod * env_ar(n, 1.2, 1.5) * 0.10
     if typ == "boil":
         d = s.get("dur") or 3.0; n = int(d * SR); t = np.arange(n) / SR
         x = lowpass(rng.standard_normal(n).astype(np.float32), 900)
