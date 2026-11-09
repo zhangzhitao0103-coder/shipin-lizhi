@@ -9,10 +9,13 @@
     id: 'G3',
     title: '差距是按平方拉大的',
     theme: 'info',
-    voice: { sid: 58 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '快一点点',   // 开头钩子大字
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 100, chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G'] },
     cover: 'm10',
+    coverTitle: '差距，是按平方拉大的',
     beats: [
       { id: 'hook', min: 3.4, cap: ['两个人，起点一样，', '一个人的进步，每周{快一点点}。'], voice: '两个人，起点一样，一个人的进步，每周都快一点点。', mood: 0.3 },
       { id: 'phys', min: 4.2, cap: ['物理课学过：匀加速运动的位移，', '和时间的{平方}成正比。'], voice: '物理课学过，匀加速运动的位移，和时间的平方成正比。', mood: 0.45 },

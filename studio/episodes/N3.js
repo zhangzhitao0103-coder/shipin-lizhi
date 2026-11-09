@@ -12,10 +12,12 @@
     id: 'N3',
     title: '寒假30天按三段排',
     theme: 'corkboard',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 60,
     music: { style: 'pulse', bpm: 96, chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Am', 'F', 'G'] },
     cover: 'p1',
+    coverTitle: '寒假 30 天，按三段排',
     beats: [
       { id: 'hook', min: 3.6, cap: ['寒假 30 天，', '春节正好在{第 15 天}。'], voice: '寒假三十天，春节正好在第十五天。', mood: 0.35, sfx: [{ at: 0.6, type: 'ticks', n: 15, gap: 0.08 }] },
       { id: 'split', min: 3.6, cap: ['所以别按"30 天"排，', '按{三段}排。'], voice: '所以别按三十天排，按三段排。', mood: 0.45 },

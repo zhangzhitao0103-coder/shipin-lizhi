@@ -7,10 +7,13 @@
     id: 'M3',
     title: '期末最后4周怎么排',
     theme: 'notebook',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '4 周',   // 开头钩子大字
     capY: 360, capSize: 62,
     music: { style: 'lofi', bpm: 82, chords: ['F', 'C', 'Dm', 'Bb', 'F', 'C', 'Bb', 'C', 'F', 'Am', 'Bb', 'C'] },
     cover: 'w3',
+    coverTitle: '期末最后 4 周，怎么排',
     beats: [
       { id: 'hook', min: 3.2, cap: ['离期末还有 4 周，', '{怎么排}最有效？'], voice: '离期末还有四周，怎么排最有效？', mood: 0.3 },
       { id: 'w1', min: 3.6, cap: ['第 1 周：{回归课本}，', '把错题本从头翻一遍。'], voice: '第一周，回归课本，把错题本从头翻一遍。', mood: 0.45, sfx: [{ at: 0.4, type: 'tick' }] },

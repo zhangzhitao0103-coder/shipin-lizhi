@@ -5,7 +5,7 @@
 1. **AI 配音**：`tools/tts.py`，离线 Kokoro 中文模型，每个节拍生成一段旁白
 2. **时间轴**：节拍时长 = max(最短时长, 旁白时长 + 留白)，无配音版与配音版共用同一套画面
 3. **逐帧渲染**：`web/index.html` + `web/engine.js`，Chromium 无头浏览器按 30fps 截帧（画面是时间的纯函数，可并行）
-4. **配乐与音效**：`tools/audio.py`，钢琴、铺底、低音、节奏和音效全部由代码合成，无版权风险。配乐风格（剧集里 `music.style`）：`cinema` 电影钢琴 · `pulse` 节奏拨弦 · `lofi` 慢摇电钢 + 黑胶底噪 · `bell` 八音盒 · `epic` 史诗（钢琴 → 弦乐八分音符 → 太鼓）
+4. **配乐与音效**：默认用 `tools/score.py` 把每段的和弦、情绪编配成 MIDI，再用 FluidSynth + FluidR3 GM 音色库（MIT 许可，`apt install fluidsynth fluid-soundfont-gm`）渲染成真实乐器（钢琴、弦乐、大提琴、圆号、合唱、定音鼓、太鼓、鼓组）；剧集设 `music.engine: 'synth'` 或缺少 FluidSynth 时退回代码合成。以下为代码合成版本说明：`tools/audio.py`，钢琴、铺底、低音、节奏和音效全部由代码合成，无版权风险。配乐风格（剧集里 `music.style`）：`cinema` 电影钢琴 · `pulse` 节奏拨弦 · `lofi` 慢摇电钢 + 黑胶底噪 · `bell` 八音盒 · `epic` 史诗（钢琴 → 弦乐八分音符 → 太鼓）
 5. **合成输出**：`out/` 下生成 `*_无配音.mp4`、`*_AI配音.mp4`、`*_封面.jpg`
 
 ## 规格
@@ -20,6 +20,9 @@
 - 字体：思源宋体/黑体、霞鹜文楷、马善政毛笔楷书、Playfair Display、JetBrains Mono（均为开源可商用授权）
 - 配音引擎：剧集 `voice: { engine: 'zipvoice', prompt: 'male' | 'female' }` 改用 ZipVoice（k2-fsa 开源零样本模型，韵律更自然；参考音色由开源模型合成）。语速 >1 时先按 1.0 生成再用 ffmpeg atempo 不变调加速（直接加速会丢字）。模型：`sherpa-onnx-zipvoice-distill-int8-zh-en-emilia` + `vocos_24khz.onnx`（sherpa-onnx GitHub releases）
 - 整体提速：剧集 `tempo: 1.5`，画面按设计时长绘制、再按每节拍实际时长等比压缩播放；音效 `atFrac` 按节拍比例定位（与配音同步），节拍 `pad` 在配音后额外留白
+- 画面通用增强（所有剧集自动生效）：镜头缓慢呼吸式推拉；boom / crack / taiko 音效处自动推镜加震屏（剧集设 `camera: false` 关闭）；{金色}/[红色] 重音字从 1.5 倍大小砸下；剧集设 `hook: '58%'` 会在第一句里把这几个字作为大字砸进画面中央
+- 统一封面：分类标签（按编号首字母）+ 两行大标题（`coverTitle`，缺省用 `title`）+ logo
+- 配音参考音色 `prompt: 'aishell'`：AISHELL-1 开源语料中的匿名真人女声（Apache 2.0，见 `assets/voice/README.md`），音色最接近真人
 - 节拍级参数：`sid` / `speed` / `prompt` 单独指定这一句的音色和语速；`musicGain` 设这一段配乐音量；`hush` 让这一段末尾静音若干秒（停一拍再爆发）
 - 音效：tick / ticks / ding / boom / riser / whoosh / swell / boil / taiko（太鼓）/ crack（冰裂）/ wind（风声）
 - 音色：剧集里 `voice: { sid, speed }`。1 号男声沉稳 58、2 号男声清亮 100、3 号男声温和 90、4 号女声温柔 50、5 号女声明亮 40、6 号女声知性 30

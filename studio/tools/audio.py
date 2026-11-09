@@ -128,6 +128,38 @@ def pluck(f, dur=1.2):
 
 # ---------- 配乐 ----------
 def music():
+    """优先用真实乐器（FluidSynth + FluidR3 GM）渲染；不可用或剧集设 music.engine='synth' 时用代码合成"""
+    m = TL["music"]
+    if m.get("engine", "gm") == "gm":
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import score
+        wav = os.path.join(B, "music_gm.wav")
+        if score.render(TL, wav, B):
+            x, sr = sf.read(wav, dtype="float32")
+            if x.ndim == 1: x = np.stack([x, x], 1)
+            out = np.zeros((N, 2), np.float32); n = min(N, len(x)); out[:n] = x[:n]
+            out *= 0.16 / (np.sqrt(np.mean(out[: int(TL["total"] * SR)] ** 2)) + 1e-9)   # 统一配乐响度
+            return shape(out, m["sections"])
+    return music_synth()
+
+
+def shape(out, secs):
+    """分段音量（gain）、段尾静音（hush）、结尾淡出"""
+    g = np.ones(N, np.float32)
+    for s in secs:
+        a, z = int(s["s"] * SR), int(s["e"] * SR)
+        g[a:z] = s.get("gain", 1)
+        if s.get("hush"): g[max(a, z - int(s["hush"] * SR)):z] = 0
+    sm = int(0.12 * SR)
+    g = np.convolve(g, np.ones(sm) / sm, mode="same").astype(np.float32)
+    out = out * g[:, None]
+    fe = int(TL["total"] * SR)
+    out[fe - SR:fe] *= np.linspace(1, 0, SR)[:, None]
+    out[fe:] = 0
+    return out
+
+
+def music_synth():
     m = TL["music"]
     secs = m["sections"]
     out = np.zeros((N, 2), np.float32)
@@ -360,10 +392,13 @@ def finish(x, path):
 
 
 mus, fx, vo = music(), sfx_bus(), voice_bus()
-venv = np.abs(vo).max(1)
-w = int(0.25 * SR)
-venv = np.convolve(venv > 0.01, np.ones(w) / w, mode="same").astype(np.float32)
-duck = 1 - 0.5 * np.clip(venv * 1.5, 0, 1)
+# 人声闪避：有人声时配乐压低约 7 dB，起音 80 毫秒、释放 450 毫秒，避免忽大忽小
+act = (np.convolve(np.abs(vo).max(1) > 0.01, np.ones(int(0.05 * SR)) / int(0.05 * SR), mode="same") > 0.2).astype(np.float32)
+env = np.zeros_like(act); a_up, a_dn = 1 - np.exp(-1 / (0.08 * SR)), 1 - np.exp(-1 / (0.45 * SR))
+lv = 0.0
+for i in range(0, len(act), 240):   # 每 5 毫秒更新一次
+    tgt = act[i]; lv += (tgt - lv) * (1 - (1 - (a_up if tgt > lv else a_dn)) ** 240); env[i:i + 240] = lv
+duck = 1 - 0.55 * env
 finish(mus * 0.9 + fx, os.path.join(B, "mix_silent.wav"))
 finish(mus * duck[:, None] * 0.75 + fx * 0.85 + vo, os.path.join(B, "mix_voice.wav"))
 print("  混音完成")

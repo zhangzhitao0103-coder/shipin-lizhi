@@ -2,7 +2,8 @@
 用法：python tts.py <模型目录> <构建目录>    环境变量 VOICE_SID（默认 58，男声）、VOICE_SPEED（默认 1.05）
 节拍里可单独指定 sid / speed，覆盖整集的音色和语速
 VOICE_ENGINE=zipvoice 时改用 ZipVoice（k2-fsa，零样本，韵律更自然）：VOICE_PROMPT=male/female 选参考音色，节拍里可用 prompt 覆盖。
-参考音色由开源模型合成（male：Kokoro 男声，female：Matcha 标贝女声），不使用任何真人录音
+参考音色：aishell = AISHELL-1 开源语料中的匿名女声真人录音（Apache 2.0，见 assets/voice/README.md），音色最接近真人；
+male / female = 开源模型合成的参考音（Kokoro 男声 / Matcha 女声）
 """
 import hashlib
 import json
@@ -75,14 +76,21 @@ def other(kind):
     return _zv
 
 
+HUMAN = {"aishell": ("aishell1_BAC009S0724W0121.wav", "广州市房地产中介协会分析")}
+
+
 def prompt_audio(kind):
-    """参考音色：用开源模型合成一段固定的话，缓存到模型目录"""
+    """参考音色：真人录音（HUMAN）直接读取；其余用开源模型合成一段固定的话，缓存到模型目录。返回 (音频, 采样率, 文本)"""
+    if kind in HUMAN:
+        f, text = HUMAN[kind]
+        a, sr = sf.read(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "voice", f), dtype="float32")
+        return a, sr, text
     p = os.path.join(M, f"zv_prompt_{kind}.wav")
     if not os.path.exists(p):
         g = engine().generate(PROMPT_TEXT, sid=58, speed=1.0) if kind == "male" else other("matcha").generate(PROMPT_TEXT, sid=0, speed=1.0)
         sf.write(p, np.array(g.samples, dtype=np.float32), g.sample_rate)
     a, sr = sf.read(p, dtype="float32")
-    return a, sr
+    return a, sr, PROMPT_TEXT
 
 
 class Audio:
@@ -101,8 +109,8 @@ def stretch(a, sr, speed):
 
 def synth(text, sid, speed, prompt):
     if ENGINE == "zipvoice":
-        a, sr = prompt_audio(prompt)
-        g = other("zipvoice").generate(text, PROMPT_TEXT, a.tolist(), sr, 1.0, 4)
+        a, sr, ptext = prompt_audio(prompt)
+        g = other("zipvoice").generate(text, ptext, a.tolist(), sr, 1.0, 8)
         x = np.array(g.samples, dtype=np.float32)
         return Audio(stretch(x, g.sample_rate, speed) if abs(speed - 1) > 0.01 else x, g.sample_rate)
     return engine().generate(text, sid=sid, speed=speed)
@@ -115,7 +123,7 @@ for b in beats:
         continue
     sid, speed = int(b.get("sid") or SID), float(b.get("speed") or SPEED)
     prompt = b.get("prompt") or PROMPT
-    key = hashlib.md5((f"{sid}|{speed}|{text}" if ENGINE == "kokoro" else f"{ENGINE}2|{prompt}|{speed}|{text}").encode()).hexdigest()
+    key = hashlib.md5((f"{sid}|{speed}|{text}" if ENGINE == "kokoro" else f"{ENGINE}3|{prompt}|{speed}|{text}").encode()).hexdigest()
     out = os.path.join(vd, b["id"] + ".wav")
     if manifest.get(b["id"]) != key or not os.path.exists(out):
         g = synth(text, sid, speed, prompt)

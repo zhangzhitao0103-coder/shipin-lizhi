@@ -6,10 +6,13 @@
     id: 'N4',
     title: '寒假在家试试番茄钟',
     theme: 'riso',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '8 小时？',   // 开头钩子大字
     capY: 360, capSize: 62,
     music: { style: 'lofi', bpm: 80, chords: ['C', 'Am', 'F', 'G', 'C', 'Am', 'Dm', 'G', 'C', 'Am', 'F', 'G'] },
     cover: 'day',
+    coverTitle: '寒假在家，试试番茄钟',
     beats: [
       { id: 'hook', min: 3.4, cap: ['寒假在家坐了一天，', '真正学进去的{有多少}？'], voice: '寒假在家坐了一天，真正学进去的，有多少？', mood: 0.3 },
       { id: 'tomato', min: 4.4, cap: ['试试"番茄钟"：专心 {25 分钟}，', '休息 {5 分钟}，算一个番茄。'], voice: '试试番茄钟，专心二十五分钟，休息五分钟，算一个番茄。', mood: 0.45, sfx: [{ at: 2.6, type: 'ding' }] },

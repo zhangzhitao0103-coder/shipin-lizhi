@@ -12,7 +12,9 @@
     id: 'F4',
     title: '站在巨人的肩膀上',
     theme: 'parchment',
-    voice: { sid: 58 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '? 年',   // 开头钩子大字
     capY: 370, capSize: 62,
     music: { style: 'cinema', chords: ['D', 'Bm', 'G', 'A', 'D', 'Bm', 'Em', 'A', 'D', 'G', 'A', 'D'] },
     cover: 'line',

@@ -36,7 +36,7 @@ window.__setup = async function (epSrcUrl, timeline) {
   ctx = document.getElementById('c').getContext('2d');
   // 预加载所有用到的字形
   const caps = EP.beats.map(b => (b.cap || []).join('')).join('');
-  const text = E.plain(caps) + (EP.texts || '') + EP.draw.toString().replace(/[\x00-\x7F]/g, '') + '有道领世高效学习从开始0123456789.,%℃×→—…：，。？！“”·JSTEMPRNGYCOabcdefghijklmnopqrstuvwxyz';
+  const text = E.plain(caps) + (EP.texts || '') + (EP.hook || '') + (EP.coverTitle || '') + EP.title + Object.values(E.CATS).join('') + EP.draw.toString().replace(/[\x00-\x7F]/g, '') + '有道领世高效学习从开始0123456789.,%℃×→—…：，。？！“”·JSTEMPRNGYCOabcdefghijklmnopqrstuvwxyz';
   const specs = ['700 60px "Noto Serif SC"', '900 60px "Noto Serif SC"', '400 60px "Noto Sans SC"', '500 60px "Noto Sans SC"', '700 60px "Noto Sans SC"', '900 60px "Noto Sans SC"',
     '400 60px "Playfair Display"', '700 60px "Playfair Display"', '400 60px "JetBrains Mono"', '500 60px "JetBrains Mono"', '700 60px "JetBrains Mono"', '500 60px "LXGW WenKai"', '700 60px "LXGW WenKai"', '400 60px "Ma Shan Zheng"'];
   await Promise.all(specs.map(s => document.fonts.load(s, text)));
@@ -44,6 +44,8 @@ window.__setup = async function (epSrcUrl, timeline) {
   await E.loadAssets();
   return { ok: true, fonts: [...document.fonts].filter(f => f.status === 'loaded').length };
 };
+const realTL = () => TL;   // 实际播放时间轴（音效时间点在这里）
+window.__cover = function (tReal) { window.__render(tReal, 0); E.coverOverlay(ctx, EP); };
 function designTime(t) {
   if (TLD === TL) return t;
   if (t >= TL.endcard.s) return TLD.endcard.s + (t - TL.endcard.s);
@@ -51,10 +53,34 @@ function designTime(t) {
   return TLD.endcard.s;
 }
 window.__render = function (tReal, frame) {
-  const t = designTime(tReal), TL = TLD;
+  const t = designTime(tReal), TLR = realTL(), TL = TLD;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.filter = 'none';
+  // 镜头：缓慢呼吸式推拉 + 冲击音效处的推镜与震屏（字幕、片尾不受影响）
+  let zoom = 1, dx = 0, dy = 0;
+  if (EP.camera !== false && tReal < TLR.endcard.s) {
+    zoom = 1.012 + 0.012 * Math.sin((2 * Math.PI * tReal) / 9);
+    for (const s of TLR.sfx || []) {
+      const dt = tReal - s.at, amp = s.type === 'boom' ? 14 : s.type === 'crack' ? 12 : s.type === 'taiko' ? 7 * (s.vel || 1) : 0;
+      if (!amp || dt < 0 || dt > 0.5) continue;
+      const k = Math.exp(-dt / 0.11);
+      dx += amp * k * Math.sin(dt * 95 + s.at); dy += amp * k * Math.cos(dt * 83 + s.at * 1.7);
+      zoom += (s.type === 'taiko' ? 0.008 : 0.02) * Math.exp(-dt / 0.16);
+    }
+  }
+  ctx.save(); ctx.translate(540 + dx, 1000 + dy); ctx.scale(zoom, zoom); ctx.translate(-540, -1000);
   EP.draw(ctx, t, TL, TH, E);
+  if (EP.hook) {
+    const b0 = TL.beats[TL.order[0]], k = E.seg(t, 0.12, 0.42), a = k * (1 - E.seg(t, b0.e - 0.35, b0.e));
+    if (a > 0) {
+      ctx.save(); ctx.globalAlpha = a; ctx.textAlign = 'center';
+      let size = 190; ctx.font = `900 ${size}px "Noto Sans SC"`; const w = ctx.measureText(EP.hook).width; if (w > 900) size = Math.floor(size * 900 / w);
+      ctx.translate(540, 1080); const s = 1 + 0.6 * (1 - E.ease.outBack(k)); ctx.scale(s, s);
+      ctx.font = `900 ${size}px "Noto Sans SC"`; ctx.fillStyle = TH.gold; ctx.shadowColor = TH.gold; ctx.shadowBlur = 40 * (TH.glow ?? 1);
+      ctx.fillText(EP.hook, 0, size * 0.35); ctx.restore();
+    }
+  }
+  ctx.restore();
   for (const id of TL.order) {
     const b = TL.beats[id], def = EP.beats.find(x => x.id === id);
     if (!def.cap || t < b.s || t >= b.e) continue;

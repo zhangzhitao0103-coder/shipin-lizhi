@@ -8,10 +8,12 @@
     id: 'N1',
     title: '寒假计划为什么总完不成',
     theme: 'corkboard',
-    voice: { sid: 30 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 60,
     music: { style: 'lofi', bpm: 78, chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Bb', 'Gm', 'A', 'Dm', 'Bb', 'F', 'C'] },
     cover: 'real',
+    coverTitle: '寒假计划，为什么总完不成',
     beats: [
       { id: 'hook', min: 3.4, cap: ['寒假计划写得满满的，', '为什么{总是完不成}？'], voice: '寒假计划写得满满的，为什么总是完不成？', mood: 0.3 },
       { id: 'exp', min: 4.4, cap: ['心理学家问 37 个大学生：', '你的毕业论文，{多少天}能写完？'], voice: '心理学家问了三十七个大学生，你的毕业论文，多少天能写完？', mood: 0.4, sfx: [{ at: 1.0, type: 'ticks', n: 12, gap: 0.08 }] },

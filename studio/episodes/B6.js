@@ -5,10 +5,13 @@
     id: 'B6',
     title: '0乘以任何数都是0',
     theme: 'terminal',
-    voice: { sid: 58 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '100 × 0 = ?',   // 开头钩子大字
     capY: 360, capSize: 60,
     music: { style: 'pulse', bpm: 104, chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G'] },
     cover: 'calc',
+    coverTitle: '0 乘以任何数，都是 0',
     beats: [
       { id: 'hook', min: 3.6, cap: ['计划做得再完美，', '{不动手}，结果是多少？'], voice: '计划做得再完美，不动手，结果是多少？', mood: 0.3, sfx: [{ at: 0.5, type: 'ticks', n: 16, gap: 0.08 }] },
       { id: 'calc', min: 4.4, cap: ['计划 100 分 × 行动 0', '= [0]。'], voice: '计划一百分，乘以行动零，等于零。', mood: 0.5, sfx: [{ at: 0.4, type: 'ticks', n: 24, gap: 0.05 }, { at: 2.8, type: 'boom' }] },

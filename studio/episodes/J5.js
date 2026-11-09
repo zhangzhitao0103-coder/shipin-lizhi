@@ -9,10 +9,13 @@
     id: 'J5',
     title: '每个高手都从摔倒开始',
     theme: 'paper',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '摔了 ? 次',   // 开头钩子大字
     capY: 370, capSize: 62,
     music: { style: 'bell', bpm: 92, chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Am', 'F', 'G'] },
     cover: 'data',
+    coverTitle: '每个高手，都从摔倒开始',
     beats: [
       { id: 'hook', min: 3.0, cap: ['你学走路的时候，', '{摔了多少次}？'], voice: '你学走路的时候，摔了多少次？', mood: 0.3 },
       { id: 'data', min: 5.0, cap: ['研究记录：刚学走路的宝宝，', '平均每小时走 {2368 步}，[摔倒 17 次]。'], voice: '研究记录，刚学走路的宝宝，平均每小时走两千三百六十八步，摔倒十七次。', mood: 0.55, sfx: [{ at: 0.6, type: 'ticks', n: 17, gap: 0.16 }] },

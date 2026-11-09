@@ -21,10 +21,13 @@
     id: 'L3',
     title: '一次考砸只是一个点',
     theme: 'ice',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '88 分',   // 开头钩子大字
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'B', 'G', 'D', 'C', 'G'] },
     cover: 'many',
+    coverTitle: '一次考砸，只是一个点',
     beats: [
       { id: 'hook', min: 3.0, cap: ['期中考砸了？', '先别急着{否定自己}。'], voice: '期中考砸了？先别急着否定自己。', mood: 0.3 },
       { id: 'point', min: 2.8, cap: ['一次考试，', '只是图上的{一个点}。'], voice: '一次考试，只是图上的一个点。', mood: 0.35, sfx: [{ at: 0.6, type: 'tick' }] },

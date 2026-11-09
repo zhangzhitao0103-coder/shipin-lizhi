@@ -116,8 +116,12 @@
         ctx.fillStyle = col;
         if (a < 0.999) ctx.filter = `blur(${((1 - a) * 7).toFixed(2)}px)`;
         const glow = (c.style === 'g' ? (o.glow ?? 0.5) : (o.glowAll || 0)) * (th.glow ?? 1);
-        if (glow > 0) { ctx.shadowColor = col; ctx.shadowBlur = size * 0.45 * glow; }
-        ctx.fillText(c.ch, cx, y + (1 - a) * size * 0.22);
+        if (glow > 0) { ctx.shadowColor = col; ctx.shadowBlur = size * 0.45 * glow * (1 + 1.5 * (1 - a)); }
+        if (c.style !== 'n' && a < 0.999 && o.punch !== false) {
+          // 重音：从 1.5 倍大小砸下来
+          const s = 1 + 0.5 * (1 - E.ease.out(a)), w = adv[i] - ls;
+          ctx.save(); ctx.translate(cx + w / 2, y - size * 0.35); ctx.scale(s, s); ctx.fillText(c.ch, -w / 2, size * 0.35); ctx.restore();
+        } else ctx.fillText(c.ch, cx, y + (1 - a) * size * 0.22);
         ctx.shadowBlur = 0; ctx.filter = 'none';
       }
       cx += adv[i];
@@ -549,6 +553,42 @@
     ctx.shadowColor = col; ctx.shadowBlur = (o.blur ?? 60) * (th.glow ?? 1);
     if (o.scale && o.scale !== 1) { ctx.translate(x, y); ctx.scale(o.scale, o.scale); ctx.fillText(text, 0, 0); }
     else ctx.fillText(text, x, y);
+    ctx.restore();
+  };
+
+  // ---------- 统一封面：分类标签 + 两行大标题 + logo ----------
+  E.CATS = { A: '时间的力量', B: '迈出第一步', C: '坚持到临界点', D: '每天一点点', E: '集中力量', F: '方法与借力', G: '差距与竞争', H: '短板决定上限',
+    I: '关键窗口期', J: '你也可以', K: '家长专属', L: '心态与抗压', M: '期末冲刺', N: '寒假规划', W: '致高三' };
+  const CAT_COLOR = k => ('AGHI'.includes(k) ? '#E5484D' : 'BCD'.includes(k) ? '#F5A524' : k === 'W' ? '#C8102E' : '#3B82F6');
+  function splitTitle(s) {
+    const c = s.indexOf('，');
+    if (c > 0) return [s.slice(0, c), s.slice(c + 1)];   // 有逗号就在逗号处换行
+    if (s.length <= 8) return [s];
+    let best = Math.ceil(s.length / 2);
+    for (const p of ['，', '：', '？']) { const i = s.indexOf(p); if (i > 2 && Math.abs(i + 1 - s.length / 2) < 4) best = i + 1; }
+    return [s.slice(0, best).replace(/[，：]$/, ''), s.slice(best)];
+  }
+  E.coverOverlay = function (ctx, ep) {
+    const k = ep.id[0], col = CAT_COLOR(k), lines = splitTitle(ep.coverTitle || ep.title);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+    let g = ctx.createLinearGradient(0, 1050, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.45, 'rgba(0,0,0,0.72)'); g.addColorStop(1, 'rgba(0,0,0,0.9)');
+    ctx.fillStyle = g; ctx.fillRect(0, 1050, W, H - 1050);
+    g = ctx.createLinearGradient(0, 0, 0, 330); g.addColorStop(0, 'rgba(0,0,0,0.55)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, 330);
+    // 分类标签
+    ctx.font = `900 44px "Noto Sans SC"`; const tw = ctx.measureText(E.CATS[k] || '').width;
+    ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(64, 120, tw + 56, 76, 38); ctx.fill();
+    ctx.fillStyle = '#FFFFFF'; ctx.textAlign = 'left'; ctx.fillText(E.CATS[k] || '', 92, 174);
+    // logo
+    if (logoImg) { ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.beginPath(); ctx.roundRect(W - 64 - 300, 120, 300, 76, 38); ctx.fill(); ctx.drawImage(logoImg, W - 64 - 280, 128, 260, 260 * 108 / 533); }
+    // 标题
+    const size = Math.min(150, Math.floor(920 / Math.max(...lines.map(l => l.length))));
+    ctx.font = `900 ${size}px "Noto Sans SC"`; ctx.textAlign = 'left'; ctx.lineJoin = 'round';
+    lines.forEach((l, i) => {
+      const y = 1560 - (lines.length - 1 - i) * size * 1.18;
+      ctx.lineWidth = size * 0.12; ctx.strokeStyle = 'rgba(0,0,0,0.85)'; ctx.strokeText(l, 70, y);
+      ctx.fillStyle = i === lines.length - 1 ? '#FFE08A' : '#FFFFFF'; ctx.fillText(l, 70, y);
+    });
+    ctx.fillStyle = col; ctx.fillRect(70, 1610, 180, 14);
     ctx.restore();
   };
 

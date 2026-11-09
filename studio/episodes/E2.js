@@ -36,10 +36,12 @@
     id: 'E2',
     title: '寒假别想全科都补',
     theme: 'cinema',
-    voice: { sid: 58 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'cinema', chords: ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'B', 'Em', 'C', 'G', 'D'] },
     cover: 'pass',
+    coverTitle: '寒假别想，全科都补',
     beats: [
       { id: 'hook', min: 3.4, cap: ['寒假想把 4 科都补一补？', '先看一个{实验}。'], voice: '寒假想把四科都补一补？先看一个实验。', mood: 0.3 },
       { id: 'rule', min: 4.0, cap: ['一张网格，每格要么亮，要么暗；', '光只能传给{相邻}的亮格。'], voice: '一张网格，每格要么亮，要么暗。光只能传给相邻的亮格。', mood: 0.35 },

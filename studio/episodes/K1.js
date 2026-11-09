@@ -8,10 +8,12 @@
     id: 'K1',
     title: '孩子还能在家吃几顿晚饭',
     theme: 'warm',
-    voice: { sid: 50 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'cinema', chords: ['F', 'C', 'Dm', 'Bb', 'F', 'C', 'Bb', 'C', 'F', 'Am', 'Bb', 'C'] },
     cover: 'compare',
+    coverTitle: '孩子还能在家，吃几顿晚饭',
     beats: [
       { id: 'hook', min: 3.4, cap: ['孩子上高中后，', '你们还能一起吃{几顿晚饭}？'], voice: '孩子上高中后，你们还能一起吃几顿晚饭？', mood: 0.3 },
       { id: 'calc', min: 3.6, cap: ['上学的日子，每周 5 顿；', '寒暑假，每天都在家。'], voice: '上学的日子，每周五顿。寒暑假，每天都在家。', mood: 0.35 },

@@ -1,4 +1,4 @@
-// 用法：node tools/build.js C1 [--preview 1.2,5,9.5] [--skip-tts] [--skip-frames] [--workers 3]
+// 用法：node tools/build.js C1 [--preview 1.2,5,9.5] [--skip-tts] [--skip-frames] [--cover-only] [--workers 3]
 // 环境变量：PY（带 sherpa-onnx 的 python）、MODELS（语音模型目录）
 const fs = require('fs');
 const path = require('path');
@@ -91,6 +91,7 @@ async function render(times, outName) {
 }
 
 (async () => {
+  if (opt('cover-only')) { await cover(); return; }   // 只重做封面
   const pv = opt('preview');
   if (pv) {
     const ts = (pv === true ? ep.beats.map(b => beats[b.id].s + beats[b.id].d * 0.7) : String(pv).split(',').map(Number));
@@ -115,11 +116,24 @@ async function render(times, outName) {
     run('ffmpeg', ['-v', 'error', '-y', '-i', path.join(B, 'video.mp4'), '-i', path.join(B, mix),
       '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', path.join(OUT, `${name}_${suffix}.mp4`)]);
   }
-  // 封面：取指定节拍的中段画面
-  const cb = beats[ep.cover] || beats[order[0]];
-  const cf = Math.round((cb.s + Math.min(1.8, cb.d * 0.7)) * FPS);
-  fs.copyFileSync(path.join(FR, `${String(cf).padStart(5, '0')}.jpg`), path.join(OUT, `${name}_封面.jpg`));
+  // 封面：取指定节拍的中段画面，叠加统一封面模板（分类标签 + 大标题 + logo）
+  await cover();
   // 逐帧图片约占 300 MB/条，成片和封面导出后即删除（--keep-frames 可保留）
   if (!opt('keep-frames')) fs.rmSync(FR, { recursive: true, force: true });
   console.log('完成：', path.join(OUT, name + '_*.mp4'));
 })().catch(e => { console.error(e); process.exit(1); });
+
+async function cover() {
+  const OUT = path.join(ROOT, 'out'), name = `${id}_${ep.title}`;
+  const cb = beats[ep.cover] || beats[order[0]];
+  const ct = cb.s + Math.min(1.8, cb.d * 0.7);
+  {
+    const browser = await chromium.launch({ args: ['--allow-file-access-from-files', '--disable-web-security'] });
+    const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
+    await page.goto('file://' + path.join(ROOT, 'web', 'index.html'));
+    await page.evaluate(([u, tl]) => window.__setup(u, tl), ['file://' + path.join(ROOT, 'episodes', id + '.js'), timeline]);
+    await page.evaluate(tt => window.__cover(tt), ct);
+    fs.writeFileSync(path.join(OUT, `${name}_封面.jpg`), await page.screenshot({ type: 'jpeg', quality: 94 }));
+    await browser.close();
+  }
+}

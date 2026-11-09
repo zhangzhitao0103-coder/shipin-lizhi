@@ -15,7 +15,9 @@
     id: 'D2',
     title: '把纸对折42次',
     theme: 'paper',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '对折 42 次',   // 开头钩子大字
     capY: 370, capSize: 62,
     music: { style: 'cinema', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Am', 'F', 'G'] },
     cover: 'f42',

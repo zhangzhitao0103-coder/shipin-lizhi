@@ -6,10 +6,13 @@
     id: 'F6',
     title: '新学期目标拆小了才能完成',
     theme: 'notebook',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '42 页',   // 开头钩子大字
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 90, chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'C', 'D', 'G', 'Em', 'C', 'D'] },
     cover: 'result',
+    coverTitle: '新学期目标，拆小了才能完成',
     beats: [
       { id: 'hook', min: 3.0, cap: ['新学期立了个大目标？', '先看一个{实验}。'], voice: '新学期立了个大目标？先看一个实验。', mood: 0.3 },
       { id: 'study', min: 4.2, cap: ['心理学家班杜拉和申克，', '让一群孩子自学 42 页数学练习。'], voice: '心理学家班杜拉和申克，让一群孩子，自学四十二页数学练习。', mood: 0.4 },

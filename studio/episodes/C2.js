@@ -9,10 +9,12 @@
     id: 'C2',
     title: '成绩不涨不代表你没进步',
     theme: 'ice',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'cinema', chords: ['Bm', 'G', 'D', 'A', 'Bm', 'G', 'Em', 'F#', 'Bm', 'G', 'D', 'A'] },
     cover: 'number',
+    coverTitle: '成绩不涨，不代表你没进步',
     beats: [
       { id: 'hook', min: 3.0, cap: ['一块 -10℃ 的冰，', '放在火上加热。'], voice: '一块零下十度的冰，放在火上加热。', mood: 0.3 },
       { id: 'heat', min: 3.4, cap: ['-10℃，-5℃，0℃……', '温度，涨得很快。'], voice: '零下十度，零下五度，零度，温度涨得很快。', mood: 0.45 },

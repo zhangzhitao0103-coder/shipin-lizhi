@@ -52,10 +52,13 @@
     id: 'C6',
     title: '学霸也在58%停留过',
     theme: 'ice',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
+    hook: '58%',   // 开头钩子大字
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G', 'F', 'G', 'Am'] },
     cover: 'pass',
+    coverTitle: '学霸也在，58% 停留过',
     beats: [
       { id: 'hook', min: 3.6, cap: ['你有没有过这种感觉：', '{一直在学}，成绩却[一动不动]？'], voice: '你有没有过这种感觉，一直在学，成绩却一动不动？', mood: 0.3 },
       { id: 'grid', min: 4.0, cap: ['把你学会的每个知识点，', '看成网格里一个{亮起来的格子}。'], voice: '把你学会的每个知识点，看成网格里一个亮起来的格子。', mood: 0.35 },
