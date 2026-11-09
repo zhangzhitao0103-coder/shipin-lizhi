@@ -106,7 +106,7 @@ async function render(times, outName) {
     const n = Math.round(total * FPS);
     await render(Array.from({ length: n }, (_, f) => [f / FPS, f]), i => path.join(FR, `${String(i).padStart(5, '0')}.jpg`));
     run('ffmpeg', ['-v', 'error', '-y', '-framerate', String(FPS), '-i', path.join(FR, '%05d.jpg'),
-      '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', path.join(B, 'video.mp4')]);
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '20', '-maxrate', '6M', '-bufsize', '12M', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', path.join(B, 'video.mp4')]);
   }
   // 3. 音乐 + 音效 + 配音混音
   run(PY, ['-I', path.join(ROOT, 'tools', 'audio.py'), B]);
