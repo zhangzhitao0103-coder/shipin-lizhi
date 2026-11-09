@@ -5,10 +5,12 @@
     id: 'B5',
     title: '不动的东西会一直不动',
     theme: 'pixel',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 112, chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Am', 'F', 'G'] },
     cover: 'push',
+    coverTitle: '不动的东西，会一直不动',
     beats: [
       { id: 'hook', min: 3.4, cap: ['为什么"等我想学了再学"，', '那一天{总也不来}？'], voice: '为什么等我想学了再学，那一天，总也不来？', mood: 0.3, sfx: [{ at: 0.6, type: 'ticks', n: 20, gap: 0.12 }] },
       { id: 'law', min: 4.2, cap: ['牛顿第一定律：没有外力，', '静止的物体，会{一直静止}。'], voice: '牛顿第一定律，没有外力，静止的物体，会一直静止。', mood: 0.4 },

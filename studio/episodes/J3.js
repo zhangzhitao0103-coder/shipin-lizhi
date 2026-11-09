@@ -7,10 +7,12 @@
     id: 'J3',
     title: '寒假是压弹簧的时候',
     theme: 'neon',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'pulse', bpm: 104, chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G'] },
     cover: 'x3',
+    coverTitle: '寒假，是压弹簧的时候',
     beats: [
       { id: 'hook', min: 3.0, cap: ['为什么有的人，', '一开学就{突飞猛进}？'], voice: '为什么有的人，一开学就突飞猛进？', mood: 0.35 },
       { id: 'spring', min: 3.4, cap: ['物理课学过：', '弹性势能 {E = ½kx²}。'], voice: '物理课学过，弹簧的弹性势能，跟压缩量的平方成正比。', mood: 0.4 },

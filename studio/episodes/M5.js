@@ -8,10 +8,12 @@
     id: 'M5',
     title: '考前10分钟把担心写下来',
     theme: 'watercolor',
-    voice: { sid: 50 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'bell', bpm: 80, chords: ['C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G', 'C', 'Em', 'F', 'G'] },
     cover: 'exp',
+    coverTitle: '考前10分钟，把担心写下来',
     beats: [
       { id: 'hook', min: 3.4, cap: ['考试前，脑子里{全是担心}：', '万一考砸了怎么办？'], voice: '考试前，脑子里全是担心，万一考砸了怎么办？', mood: 0.35, sfx: [{ at: 0.6, type: 'ticks', n: 5, gap: 0.35 }] },
       { id: 'why', min: 4.4, cap: ['担心会{占用}你的工作记忆，', '就像手机后台开了[太多程序]。'], voice: '担心会占用你的工作记忆，就像手机后台，开了太多程序。', mood: 0.4 },

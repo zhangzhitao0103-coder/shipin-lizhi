@@ -15,10 +15,12 @@
     id: 'J2',
     title: '过山车在最低点速度最快',
     theme: 'watercolor',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['D', 'A', 'Bm', 'G', 'D', 'A', 'G', 'A', 'D', 'F#m', 'G', 'A'] },
     cover: 'drop',
+    coverTitle: '过山车在最低点，速度最快',
     beats: [
       { id: 'hook', min: 3.0, cap: ['过山车在哪里，', '{跑得最快}？'], voice: '过山车在哪里，跑得最快？', mood: 0.3 },
       { id: 'top', min: 3.0, cap: ['在最高点，', '它几乎{停了下来}。'], voice: '在最高点，它几乎停了下来。', mood: 0.35, sfx: [{ at: 0.5, type: 'tick' }, { at: 1.3, type: 'tick' }] },

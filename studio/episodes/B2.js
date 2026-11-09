@@ -8,6 +8,8 @@
     id: 'B2',
     title: '晚30天开始',
     theme: 'info',
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360,
     capSize: 64,
     music: { style: 'pulse', bpm: 96, chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'C', 'G', 'Dm', 'F', 'C', 'G'] },

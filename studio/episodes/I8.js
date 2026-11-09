@@ -5,10 +5,12 @@
     id: 'I8',
     title: '期中之后还有9周',
     theme: 'sunrise',
-    voice: { sid: 50 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 96, chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Am', 'F', 'G'] },
     cover: 'left',
+    coverTitle: '期中之后，还有9周',
     beats: [
       { id: 'hook', min: 3.0, cap: ['期中考完了，', '这学期{还剩多少时间}？'], voice: '期中考完了，这学期还剩多少时间？', mood: 0.3 },
       { id: 'left', min: 3.6, cap: ['18 周的学期，期中在第 9 周：', '后面还有 {9 周}。'], voice: '十八周的学期，期中在第九周，后面还有九周。', mood: 0.5, sfx: [{ at: 0.6, type: 'ticks', n: 9, gap: 0.12 }] },

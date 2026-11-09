@@ -6,10 +6,12 @@
     id: 'E6',
     title: '学习时手机放哪',
     theme: 'neon',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 104, chords: ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'B', 'Em', 'C', 'G', 'D'] },
     cover: 'result',
+    coverTitle: '学习时，手机放哪',
     beats: [
       { id: 'hook', min: 3.0, cap: ['开学了，手机放哪？', '{静音扣在桌上}，行不行？'], voice: '开学了，手机放哪？静音扣在桌上，行不行？', mood: 0.35 },
       { id: 'study', min: 3.8, cap: ['德州大学的一项研究，', '让近 800 人做{专注力测试}。'], voice: '德州大学的一项研究，让近八百人做专注力测试。', mood: 0.45 },

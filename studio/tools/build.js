@@ -45,7 +45,11 @@ for (const b of ep.beats) {
   order.push(b.id);
   if (vd) voice.push({ id: b.id, at: +(t + VOICE_DELAY).toFixed(3) });
   // 音效位置：at 为设计时间（随 tempo 压缩）；atFrac 为占本节拍的比例（与配音同步）
-  for (const s of b.sfx || []) sfx.push({ ...s, at: +(t + (s.atFrac != null ? s.atFrac * d : s.at * (d / dd))).toFixed(3), beat: b.id });
+  for (const s of b.sfx || []) {
+    const x = { ...s, at: +(t + (s.atFrac != null ? s.atFrac * d : s.at * (d / dd))).toFixed(3), beat: b.id };
+    if (dd !== d) { if (x.gap) x.gap *= d / dd; if (typeof x.dur === 'number') x.dur *= d / dd; }   // 提速时连击间隔、音效时长同比缩短
+    sfx.push(x);
+  }
   t += d; td += dd;
 }
 // 音效时长：'beat' = 到本节拍结束；'until:xxx' = 到指定节拍结束

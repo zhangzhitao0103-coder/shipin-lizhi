@@ -5,10 +5,12 @@
     id: 'K2',
     title: '寒假在家为什么越催越顶',
     theme: 'warm',
-    voice: { sid: 50 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'cinema', chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Bb', 'Gm', 'A', 'F', 'C', 'Bb', 'C'] },
     cover: 'flip',
+    coverTitle: '寒假在家，为什么越催越顶',
     beats: [
       { id: 'hook', min: 3.0, cap: ['寒假在家，', '为什么{越催，孩子越顶}？'], voice: '寒假在家，为什么越催，孩子越顶？', mood: 0.3 },
       { id: 'law', min: 4.0, cap: ['物理课本里写着：作用力与反作用力，', '{大小相等、方向相反}。'], voice: '物理课本里写着，作用力与反作用力，大小相等，方向相反。', mood: 0.4 },

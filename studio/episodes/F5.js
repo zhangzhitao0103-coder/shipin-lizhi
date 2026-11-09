@@ -9,10 +9,12 @@
     id: 'F5',
     title: 'AI是靠犯错学会的',
     theme: 'neon',
-    voice: { sid: 58 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 108, chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G'] },
     cover: 'repeat',
+    coverTitle: 'AI是靠犯错，学会的',
     beats: [
       { id: 'hook', min: 2.6, cap: ['AI 是怎么{学会}的？'], voice: '人工智能，是怎么学会的？', mood: 0.35 },
       { id: 'guess', min: 3.2, cap: ['先随便猜一个答案，', '算出{错了多少}。'], voice: '先随便猜一个答案，算出错了多少。', mood: 0.45, sfx: [{ at: 0.5, type: 'tick' }] },

@@ -18,10 +18,12 @@
     id: 'H4',
     title: '串联电路里的最弱一环',
     theme: 'neon',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 108, chords: ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'B', 'Em', 'C', 'G', 'D'] },
     cover: 'series',
+    coverTitle: '串联电路里的，最弱一环',
     beats: [
       { id: 'hook', min: 3.2, cap: ['一串彩灯，', '为什么坏一个，[全都不亮]？'], voice: '一串彩灯，为什么坏一个，全都不亮？', mood: 0.3 },
       { id: 'series', min: 4.2, cap: ['串联电路只有{一条路}：', '电流要依次经过每一个灯。'], voice: '串联电路只有一条路，电流要依次经过每一个灯。', mood: 0.6 },

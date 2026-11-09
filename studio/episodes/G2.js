@@ -5,10 +5,12 @@
     id: 'G2',
     title: '寒假你进步了名次为什么没变',
     theme: 'chalk',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 100, chords: ['G', 'Em', 'C', 'D', 'G', 'Em', 'Am', 'D', 'G', 'C', 'D', 'G'] },
     cover: 'same',
+    coverTitle: '寒假你进步了，名次为什么没变',
     beats: [
       { id: 'hook', min: 3.0, cap: ['寒假你明明进步了，', '开学名次却{没变}？'], voice: '寒假你明明进步了，开学名次却没变？', mood: 0.35 },
       { id: 'frame', min: 2.8, cap: ['物理课学过：', '运动是{相对}的。'], voice: '物理课学过，运动是相对的。', mood: 0.4 },

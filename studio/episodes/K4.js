@@ -7,10 +7,12 @@
     id: 'K4',
     title: '别把孩子的弹簧拉坏了',
     theme: 'white',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G'] },
     cover: 'over',
+    coverTitle: '别把孩子的弹簧，拉坏了',
     beats: [
       { id: 'hook', min: 3.0, cap: ['逼得越紧，', '孩子就越{能扛}吗？'], voice: '逼得越紧，孩子就越能扛吗？', mood: 0.3 },
       { id: 'law', min: 3.8, cap: ['物理课学过胡克定律：', '弹簧伸长多少，和拉力{成正比}。'], voice: '物理课学过胡克定律，弹簧伸长多少，和拉力成正比。', mood: 0.4 },

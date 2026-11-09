@@ -8,10 +8,12 @@
     id: 'I1',
     title: '一个寒假其实有多少小时',
     theme: 'winter',
-    voice: { sid: 30 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'cinema', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Em', 'F', 'G'] },
     cover: 'ratio',
+    coverTitle: '一个寒假，其实有多少小时',
     beats: [
       { id: 'hook', min: 2.8, cap: ['30 天的寒假，', '到底有{多少时间}？'], voice: '三十天的寒假，到底有多少时间？', mood: 0.3 },
       { id: 'total', min: 3.0, cap: ['30 天 × 24 小时，', '一共 {720} 小时。'], voice: '三十天乘二十四小时，一共七百二十小时。', mood: 0.4, sfx: [{ at: 0.4, type: 'ticks', n: 6, gap: 0.1 }] },

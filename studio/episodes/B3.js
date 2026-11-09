@@ -11,10 +11,12 @@
     id: 'B3',
     title: '一块骨牌推倒一座大楼',
     theme: 'bauhaus',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 104, chords: ['C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G', 'C', 'Em', 'F', 'G'] },
     cover: 'n30',
+    coverTitle: '一块骨牌，推倒一座大楼',
     beats: [
       { id: 'hook', min: 3.2, cap: ['一块 5 毫米的骨牌，', '能推倒{多大}的骨牌？'], voice: '一块五毫米的骨牌，能推倒多大的骨牌？', mood: 0.3 },
       { id: 'rule', min: 4.4, cap: ['物理实验发现：每一块骨牌，', '能推倒比它大 {1.5 倍} 的下一块。'], voice: '物理实验发现，每一块骨牌，能推倒比它大一点五倍的下一块。', mood: 0.45, sfx: [{ at: 2.0, type: 'tick' }] },

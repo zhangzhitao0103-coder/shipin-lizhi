@@ -24,10 +24,12 @@
     id: 'C4',
     title: '差一点就飞不出地球',
     theme: 'space',
-    voice: { sid: 100 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Bb', 'Gm', 'A', 'F', 'C', 'Bb', 'C'] },
     cover: 'orbit',
+    coverTitle: '差一点，就飞不出地球',
     beats: [
       { id: 'hook', min: 3.4, cap: ['从山顶水平打出一颗炮弹，', '要多快，才{不会掉下来}？'], voice: '从山顶水平打出一颗炮弹，要多快，才不会掉下来？', mood: 0.35 },
       { id: 'slow', min: 3.0, cap: ['3 公里每秒：', '飞一段，就[掉回地面]。'], voice: '三公里每秒，飞一段，就掉回地面。', mood: 0.45, sfx: [{ at: 0.3, type: 'whoosh' }, { at: 1.5, type: 'boom' }] },

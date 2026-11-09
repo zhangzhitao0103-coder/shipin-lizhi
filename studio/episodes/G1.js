@@ -11,10 +11,12 @@
     id: 'G1',
     title: '1分能压倒多少人',
     theme: 'info',
-    voice: { sid: 58 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'pulse', bpm: 100, chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G'] },
     cover: 'mid',
+    coverTitle: '1分，能压倒多少人',
     beats: [
       { id: 'hook', min: 2.8, cap: ['高考 1 分，', '能压倒{多少人}？'], voice: '高考一分，能压倒多少人？', mood: 0.35 },
       { id: 'setup', min: 4.0, cap: ['假设一个省有 30 万考生，', '分数呈{正态分布}。'], voice: '假设一个省有三十万考生，分数呈正态分布。', mood: 0.5, sfx: [{ at: 0.4, type: 'riser', dur: 2.2 }] },

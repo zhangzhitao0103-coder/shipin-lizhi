@@ -7,10 +7,12 @@
     id: 'I7',
     title: '新学期其实只有18周',
     theme: 'sunrise',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'pulse', bpm: 100, chords: ['A', 'E', 'F#m', 'D', 'A', 'E', 'D', 'E', 'A', 'F#m', 'D', 'E'] },
     cover: 'mid',
+    coverTitle: '新学期，其实只有18周',
     beats: [
       { id: 'hook', min: 2.8, cap: ['新学期，', '其实只有 {18} 周。'], voice: '新学期，其实只有十八周。', mood: 0.35 },
       { id: 'grid', min: 3.0, cap: ['每周 5 天课，', '一共大约 {90} 天。'], voice: '每周五天课，一共大约九十天。', mood: 0.45, sfx: [{ at: 0.3, type: 'ticks', n: 6, gap: 0.12 }] },

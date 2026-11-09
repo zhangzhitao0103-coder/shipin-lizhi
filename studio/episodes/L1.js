@@ -7,10 +7,12 @@
     id: 'L1',
     title: '期末前压力不是越小越好',
     theme: 'glass',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['F', 'Am', 'Bb', 'C', 'F', 'Am', 'Bb', 'C', 'Dm', 'Bb', 'F', 'C'] },
     cover: 'mid',
+    coverTitle: '期末前，压力不是越小越好',
     beats: [
       { id: 'hook', min: 3.0, cap: ['期末前很紧张？', '先别急着{让自己放松}。'], voice: '期末前很紧张？先别急着让自己放松。', mood: 0.3 },
       { id: 'who', min: 4.2, cap: ['心理学家耶克斯和多德森发现：', '压力和表现，是一条{倒 U 形}曲线。'], voice: '心理学家耶克斯和多德森发现，压力和表现，是一条先升后降的曲线。', mood: 0.45 },

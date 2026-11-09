@@ -6,10 +6,12 @@
     id: 'K6',
     title: '孩子每天该睡几个小时',
     theme: 'glass',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Bb', 'Gm', 'A', 'Dm', 'Bb', 'F', 'C'] },
     cover: 'debt',
+    coverTitle: '孩子每天，该睡几个小时',
     beats: [
       { id: 'hook', min: 2.8, cap: ['孩子每天睡几个小时，', '你{知道吗}？'], voice: '孩子每天睡几个小时，你知道吗？', mood: 0.3 },
       { id: 'rule', min: 3.6, cap: ['教育部要求：', '高中生每天睡眠应达到 {8 小时}。'], voice: '教育部要求，高中生每天睡眠应达到八小时。', mood: 0.4, sfx: [{ at: 0.4, type: 'ding' }] },

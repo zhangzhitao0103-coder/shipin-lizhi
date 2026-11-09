@@ -5,10 +5,12 @@
     id: 'I6',
     title: '开学前先把生物钟拨回来',
     theme: 'sunrise',
-    voice: { sid: 58 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 92, chords: ['D', 'A', 'Bm', 'G', 'D', 'A', 'G', 'A', 'D', 'Bm', 'G', 'A'] },
     cover: 'plan',
+    coverTitle: '开学前，先把生物钟拨回来',
     beats: [
       { id: 'hook', min: 3.0, cap: ['寒假天天熬夜，', '开学第一天{起不来}？'], voice: '寒假天天熬夜，开学第一天起不来？', mood: 0.3 },
       { id: 'gap', min: 5.0, cap: ['寒假：凌晨 1:30 睡，上午 9:30 起；', '上学：晚上 10:30 睡，早上 6:30 起。'], voice: '寒假，凌晨一点半睡，上午九点半起。上学，晚上十点半睡，早上六点半起。', mood: 0.4 },

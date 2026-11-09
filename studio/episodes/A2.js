@@ -9,10 +9,13 @@
     id: 'A2',
     title: '你的高中只有156个格子',
     theme: 'cinema',
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360,
     capSize: 66,
     music: { style: 'cinema', chords: ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'G'] },
     cover: 'n156',
+    coverTitle: '你的高中，只有156个格子',
     beats: [
       { id: 'hook', min: 3.6, cap: ['如果人生有 {80} 年，', '每一周，画一个格子——'], voice: '如果人生有八十年，每一周，画一个格子。', mood: 0.3 },
       { id: 'total', min: 2.4, cap: ['一共 {4160} 格。'], voice: '一共四千一百六十格。', mood: 0.35 },

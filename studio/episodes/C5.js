@@ -8,10 +8,12 @@
     id: 'C5',
     title: '养成一个习惯要多少天',
     theme: 'magazine',
-    voice: { sid: 40 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 380, capSize: 62,
     music: { style: 'cinema', chords: ['C', 'Am', 'F', 'G', 'C', 'Am', 'Dm', 'G', 'C', 'F', 'G', 'C'] },
     cover: 'study',
+    coverTitle: '养成一个习惯，要多少天',
     beats: [
       { id: 'hook', min: 3.0, cap: ['都说 21 天，', '就能{养成一个习惯}？'], voice: '都说二十一天，就能养成一个习惯？', mood: 0.3 },
       { id: 'study', min: 3.6, cap: ['伦敦大学学院的一项研究发现：', '平均要 {66} 天。'], voice: '伦敦大学学院的一项研究发现，平均要六十六天。', mood: 0.6, sfx: [{ at: 0.3, type: 'boom' }] },

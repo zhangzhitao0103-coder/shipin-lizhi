@@ -13,10 +13,12 @@
     id: 'B4',
     title: '化学反应为什么需要点火',
     theme: 'chalk',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'B', 'Em', 'C', 'G', 'D'] },
     cover: 'cat',
+    coverTitle: '化学反应，为什么需要点火',
     beats: [
       { id: 'hook', min: 3.4, cap: ['氢气和氧气混在一起，', '常温下{几乎不反应}。'], voice: '氢气和氧气混在一起，常温下，几乎不反应。', mood: 0.3 },
       { id: 'spark', min: 2.6, cap: ['可一个火花，', '它就[爆鸣]了。'], voice: '可一个火花，它就爆鸣了。', mood: 0.9, sfx: [{ at: 0.5, type: 'boom' }] },

@@ -9,10 +9,12 @@
     id: 'M4',
     title: '考场卡住了先跳过',
     theme: 'exampaper',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 380, capSize: 62,
     music: { style: 'pulse', bpm: 104, chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Bb', 'Gm', 'A', 'Dm', 'Bb', 'F', 'C'] },
     cover: 'stuck',
+    coverTitle: '考场卡住了，先跳过',
     beats: [
       { id: 'hook', min: 3.4, cap: ['考场上，一道选择题{卡住了}，', '你会死磕吗？'], voice: '考场上，一道选择题卡住了，你会死磕吗？', mood: 0.3 },
       { id: 'rate', min: 4.4, cap: ['数学卷 150 分、120 分钟：', '平均每分钟，值 {1.25 分}。'], voice: '数学卷一百五十分，一百二十分钟，平均每分钟，值一点二五分。', mood: 0.45 },

@@ -6,10 +6,12 @@
     id: 'E3',
     title: '图钉为什么能扎进墙',
     theme: 'newsprint',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 380, capSize: 62,
     music: { style: 'pulse', bpm: 100, chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Bb', 'Gm', 'A', 'Dm', 'Bb', 'F', 'C'] },
     cover: 'calc',
+    coverTitle: '图钉，为什么能扎进墙',
     beats: [
       { id: 'hook', min: 3.4, cap: ['同样 20 牛的力，', '手指按墙，墙{纹丝不动}；'], voice: '同样二十牛的力，手指按墙，墙纹丝不动。', mood: 0.3 },
       { id: 'pin', min: 3.0, cap: ['隔着一枚图钉按，', '钉尖就[扎进去了]。'], voice: '隔着一枚图钉按，钉尖就扎进去了。', mood: 0.6, sfx: [{ at: 0.9, type: 'boom' }] },

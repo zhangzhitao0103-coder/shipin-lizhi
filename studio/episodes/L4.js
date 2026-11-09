@@ -7,10 +7,12 @@
     id: 'L4',
     title: '慌的时候先把呼吸找回来',
     theme: 'ink',
-    voice: { sid: 50, speed: 0.95 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.15 },
+    tempo: 1.0,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G', 'C', 'Am', 'F', 'G'] },
     cover: 'how',
+    coverTitle: '慌的时候，先把呼吸找回来',
     beats: [
       { id: 'hook', min: 3.4, cap: ['考试时突然脑子一片空白，', '手心{冒汗}？'], voice: '考试时，突然脑子一片空白，手心冒汗？', mood: 0.35 },
       { id: 'why', min: 4.0, cap: ['那是身体进入了{紧张模式}：', '心跳变快，呼吸变浅。'], voice: '那是身体进入了紧张模式，心跳变快，呼吸变浅。', mood: 0.4 },

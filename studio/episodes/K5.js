@@ -7,10 +7,12 @@
     id: 'K5',
     title: '帮对比帮多更重要',
     theme: 'warm',
-    voice: { sid: 50 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['F', 'Dm', 'Bb', 'C', 'F', 'Dm', 'Gm', 'C', 'F', 'Am', 'Bb', 'C'] },
     cover: 'side',
+    coverTitle: '帮对，比帮多更重要',
     beats: [
       { id: 'hook', min: 3.4, cap: ['你在帮孩子使劲，', '孩子为什么{越走越慢}？'], voice: '你在帮孩子使劲，孩子为什么越走越慢？', mood: 0.3 },
       { id: 'same', min: 4.0, cap: ['力是有方向的：', '方向一致，{10 + 10 = 20}。'], voice: '力是有方向的。方向一致，十加十，等于二十。', mood: 0.6, sfx: [{ at: 2.4, type: 'ding' }] },

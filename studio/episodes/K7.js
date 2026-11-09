@@ -6,10 +6,12 @@
     id: 'K7',
     title: '夸孩子聪明还是夸努力',
     theme: 'paper',
-    voice: { sid: 30 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 370, capSize: 62,
     music: { style: 'cinema', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Em', 'F', 'G'] },
     cover: 'choose2',
+    coverTitle: '夸孩子聪明，还是夸努力',
     beats: [
       { id: 'hook', min: 2.8, cap: ['孩子考好了，', '你会{怎么夸}？'], voice: '孩子考好了，你会怎么夸？', mood: 0.3 },
       { id: 'study', min: 4.0, cap: ['心理学家德韦克做过一个实验：', '让孩子们先做同一套题。'], voice: '心理学家德韦克做过一个实验，让孩子们先做同一套题。', mood: 0.4 },

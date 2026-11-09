@@ -6,10 +6,12 @@
     id: 'N5',
     title: '寒假预习先做题再看书',
     theme: 'sunrise',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['C', 'G', 'Am', 'F', 'C', 'G', 'F', 'G', 'C', 'Em', 'F', 'G'] },
     cover: 'claim',
+    coverTitle: '寒假预习，先做题再看书',
     beats: [
       { id: 'hook', min: 3.4, cap: ['寒假预习新课，', '先看书，还是{先做题}？'], voice: '寒假预习新课，先看书，还是先做题？', mood: 0.3 },
       { id: 'claim', min: 4.8, cap: ['研究发现：学之前{先试着做几道题}，', '哪怕[大多做错]，后面也学得更好。'], voice: '研究发现，学之前先试着做几道题，哪怕大多做错，后面也学得更好。', mood: 0.55, sfx: [{ at: 1.4, type: 'ticks', n: 3, gap: 0.4 }] },

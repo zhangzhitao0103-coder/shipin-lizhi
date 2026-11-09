@@ -5,10 +5,12 @@
     id: 'D3',
     title: '3000个单词其实只要一年',
     theme: 'notebook',
-    voice: { sid: 50 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 92, chords: ['F', 'C', 'Dm', 'Bb', 'F', 'C', 'Bb', 'C', 'F', 'Dm', 'Bb', 'C'] },
     cover: 'split',
+    coverTitle: '3000个单词，其实只要一年',
     beats: [
       { id: 'hook', min: 3.0, cap: ['高中要背 {3000} 个单词，', '是不是很吓人？'], voice: '高中要背三千个单词，是不是很吓人？', mood: 0.3 },
       { id: 'split', min: 3.6, cap: ['每天背 10 个，', '{300 天}就够了。'], voice: '每天背十个，三百天就够了。', mood: 0.55, sfx: [{ at: 0.4, type: 'riser', dur: 2.4 }] },

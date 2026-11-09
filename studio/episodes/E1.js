@@ -5,10 +5,12 @@
     id: 'E1',
     title: '同样的阳光为什么能点燃纸',
     theme: 'cinema',
-    voice: { sid: 50 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'cinema', chords: ['Am', 'F', 'C', 'G', 'Am', 'F', 'Dm', 'E', 'Am', 'F', 'C', 'G'] },
     cover: 'burn',
+    coverTitle: '同样的阳光，为什么能点燃纸',
     beats: [
       { id: 'hook', min: 3.2, cap: ['同样的阳光，晒在纸上，', '纸只是{有点热}。'], voice: '同样的阳光，晒在纸上，纸只是有点热。', mood: 0.3 },
       { id: 'lens', min: 3.0, cap: ['放一块放大镜，', '把光{聚到一个点}——'], voice: '放一块放大镜，把光聚到一个点。', mood: 0.6, sfx: [{ at: 0.3, type: 'riser', dur: 2.6 }] },

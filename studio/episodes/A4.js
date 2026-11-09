@@ -6,10 +6,12 @@
     id: 'A4',
     title: '每天刷2小时手机三年是多少',
     theme: 'glass',
-    voice: { sid: 30 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'lofi', bpm: 78, chords: ['Fm', 'Db', 'Ab', 'Eb', 'Fm', 'Db', 'Bb', 'C', 'Fm', 'Db', 'Ab', 'Eb'] },
     cover: 'three',
+    coverTitle: '每天刷2小时手机，三年是多少',
     beats: [
       { id: 'hook', min: 3.0, cap: ['每天刷 2 小时手机，', '{好像也不多}？'], voice: '每天刷两个小时手机，好像也不多？', mood: 0.3 },
       { id: 'year', min: 3.4, cap: ['一年 365 天：', '就是 {730 小时}。'], voice: '一年三百六十五天，就是七百三十个小时。', mood: 0.45, sfx: [{ at: 0.4, type: 'ticks', n: 12, gap: 0.1 }] },

@@ -6,10 +6,12 @@
     id: 'E4',
     title: '边写作业边回消息代价有多大',
     theme: 'blueprint',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 62,
     music: { style: 'pulse', bpm: 100, chords: ['Em', 'C', 'G', 'D', 'Em', 'C', 'Am', 'B', 'Em', 'C', 'G', 'D'] },
     cover: 'calc',
+    coverTitle: '边写作业边回消息，代价有多大',
     beats: [
       { id: 'hook', min: 3.0, cap: ['边写作业边回消息，', '是不是{效率更高}？'], voice: '边写作业边回消息，是不是效率更高？', mood: 0.35 },
       { id: 'study', min: 4.4, cap: ['美国心理学会引用的研究发现：', '来回切换任务，最多会损失 {40%} 的有效时间。'], voice: '美国心理学会引用的研究发现，来回切换任务，最多会损失百分之四十的有效时间。', mood: 0.5 },

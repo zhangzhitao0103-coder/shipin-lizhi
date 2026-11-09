@@ -7,6 +7,8 @@
     id: 'C1',
     title: '99℃和100℃',
     theme: 'cinema',
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 380,
     capSize: 66,
     music: { style: 'cinema', key: 'D', chords: ['Dm', 'Bb', 'F', 'C', 'Dm', 'Gm', 'Bb', 'A', 'Dm', 'Bb', 'F', 'C', 'Bb', 'F'] },

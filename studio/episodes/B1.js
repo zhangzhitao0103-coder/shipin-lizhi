@@ -7,10 +7,12 @@
     id: 'B1',
     title: '寒假第一天就停下',
     theme: 'blueprint',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'pulse', bpm: 96, chords: ['G', 'D', 'Em', 'C', 'G', 'D', 'C', 'D', 'G', 'Em', 'C', 'D'] },
     cover: 'max',
+    coverTitle: '寒假第一天，就停下',
     beats: [
       { id: 'hook', min: 3.0, cap: ['寒假第一天，', '你打算{先休息一下}？'], voice: '寒假第一天，你打算先休息一下？', mood: 0.3 },
       { id: 'push', min: 3.6, cap: ['推一个静止的箱子：', '推力从 0 开始，慢慢加大——'], voice: '推一个静止的箱子，推力从零开始，慢慢加大。', mood: 0.45, sfx: [{ at: 0.3, type: 'riser', dur: 3.0 }] },
@@ -19,7 +21,7 @@
       { id: 'why', min: 3.2, cap: ['因为：最大静摩擦力，', '比滑动摩擦力{更大}。'], voice: '因为，最大静摩擦力，比滑动摩擦力更大。', mood: 0.5 },
       { id: 'flip', min: 3.0, cap: ['学习也一样：', '停下来再启动，[最费力]。'], voice: '学习也一样，停下来再启动，最费力。', mood: 0.55 },
       { id: 'tip', min: 3.6, cap: ['寒假每天哪怕只学 {1 小时}，', '也别让自己{完全停下来}。'], voice: '寒假每天哪怕只学一小时，也别让自己完全停下来。', mood: 0.75 },
-      { id: 'action', min: 2.8, cap: null, voice: '别停，动着最省力。', mood: 1.0, sfx: [{ at: 0.1, type: 'swell' }] },
+      { id: 'action', min: 2.8, cap: null, voice: '不要停下来，动着最省力。', mood: 1.0, sfx: [{ at: 0.1, type: 'swell' }] },
     ],
     texts: '推力摩擦力静滑动最大时间示意数值略大于NFf=箱子图号比例别停动着最省力0123456789',
   };

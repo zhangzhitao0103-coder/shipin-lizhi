@@ -7,10 +7,12 @@
     id: 'J1',
     title: '截距是起点斜率是成长',
     theme: 'chalk',
-    voice: { sid: 90 },
+    voice: { engine: 'zipvoice', prompt: 'aishell', speed: 1.4 },
+    tempo: 1.4,
     capY: 360, capSize: 64,
     music: { style: 'pulse', bpm: 92, chords: ['C', 'Am', 'F', 'G', 'C', 'Am', 'Dm', 'G', 'C', 'F', 'G', 'C'] },
     cover: 'cross',
+    coverTitle: '截距是起点，斜率是成长',
     beats: [
       { id: 'hook', min: 3.4, cap: ['数学课上的一次函数，', '藏着一个{道理}。'], voice: '数学课上的一次函数，藏着一个道理。', mood: 0.35 },
       { id: 'b', min: 2.8, cap: ['{b} 是截距：', '你现在的起点。'], voice: '截距，是你现在的起点。', mood: 0.4 },
