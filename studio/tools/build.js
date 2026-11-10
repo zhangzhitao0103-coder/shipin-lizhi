@@ -85,8 +85,15 @@ async function render(times, outName) {
   await Promise.all(pages.map(async page => {
     while (next < times.length) {
       const i = next++; const [tt, f] = times[i];
-      await page.evaluate(([a, b]) => window.__render(a, b), [tt, f]);
-      const buf = await page.screenshot({ type: 'jpeg', quality: 94 });
+      // 偶发的截图超时（浏览器短暂卡住）自动重试，避免整条失败
+      let buf;
+      for (let k = 0; ; k++) {
+        try {
+          await page.evaluate(([a, b]) => window.__render(a, b), [tt, f]);
+          buf = await page.screenshot({ type: 'jpeg', quality: 94, timeout: 60000 });
+          break;
+        } catch (e) { if (k >= 2) throw e; console.error(`  第 ${i} 帧截图失败，重试 ${k + 1}`); }
+      }
       fs.writeFileSync(outName(i, tt), buf);
       if (++done % 150 === 0) console.log(`  ${done}/${times.length} 帧  ${((Date.now() - t0) / 1000).toFixed(0)}s`);
     }

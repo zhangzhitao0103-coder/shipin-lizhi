@@ -21,6 +21,8 @@
 - 配音引擎：剧集 `voice: { engine: 'zipvoice', prompt: 'male' | 'female' }` 改用 ZipVoice（k2-fsa 开源零样本模型，韵律更自然；参考音色由开源模型合成）。语速 >1 时先按 1.0 生成再用 ffmpeg atempo 不变调加速（直接加速会丢字）。模型：`sherpa-onnx-zipvoice-distill-int8-zh-en-emilia` + `vocos_24khz.onnx`（sherpa-onnx GitHub releases）
 - 整体提速：剧集 `tempo: 1.5`，画面按设计时长绘制、再按每节拍实际时长等比压缩播放；音效 `atFrac` 按节拍比例定位（与配音同步），节拍 `pad` 在配音后额外留白
 - 画面通用增强（所有剧集自动生效）：镜头缓慢呼吸式推拉；boom / crack / taiko 音效处自动推镜加震屏（剧集设 `camera: false` 关闭）；{金色}/[红色] 重音字从 1.5 倍大小砸下；剧集设 `hook: '58%'` 会在第一句里把这几个字作为大字砸进画面中央
+- 转场与质感（自动生效）：boom / crack 处短暂模糊、推镜加白闪；flip 节拍和最后一句开场时斜向扫光；深色主题叠一层柔光（剧集 `bloom: false` 关闭）
+- 人物剪影：`E.person(ctx, x, y, h, { pose: 'sit' | 'stand' | 'walk', t, color, rim, facing })`
 - 统一封面：分类标签（按编号首字母）+ 两行大标题（`coverTitle`，缺省用 `title`）+ logo
 - 配音参考音色 `prompt: 'aishell'`：AISHELL-1 开源语料中的匿名真人女声（Apache 2.0，见 `assets/voice/README.md`），音色最接近真人
 - 节拍级参数：`sid` / `speed` / `prompt` 单独指定这一句的音色和语速；`musicGain` 设这一段配乐音量；`hush` 让这一段末尾静音若干秒（停一拍再爆发）

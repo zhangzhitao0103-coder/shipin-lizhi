@@ -69,7 +69,12 @@ window.__render = function (tReal, frame) {
     }
   }
   ctx.save(); ctx.translate(540 + dx, 1000 + dy); ctx.scale(zoom, zoom); ctx.translate(-540, -1000);
+  // 冲击处的转场：径向模糊感（短暂模糊 + 推镜）
+  let blur = 0;
+  for (const s of TLR.sfx || []) { const dt = tReal - s.at; if ((s.type === 'boom' || s.type === 'crack') && dt >= 0 && dt < 0.3) blur = Math.max(blur, 7 * (1 - dt / 0.3)); }
+  if (blur > 0.3) ctx.filter = `blur(${blur.toFixed(1)}px)`;
   EP.draw(ctx, t, TL, TH, E);
+  ctx.filter = 'none';
   if (EP.hook) {
     const b0 = TL.beats[TL.order[0]], k = E.seg(t, 0.12, 0.42), a = k * (1 - E.seg(t, b0.e - 0.35, b0.e));
     if (a > 0) {
@@ -81,6 +86,25 @@ window.__render = function (tReal, frame) {
     }
   }
   ctx.restore();
+  // 柔光：深色主题把亮部晕开一层，更有电影感
+  if (!TH.light && EP.bloom !== false && !TH.pixel) {
+    ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = 0.32; ctx.filter = 'brightness(0.7) contrast(2.2) blur(18px)';
+    ctx.drawImage(ctx.canvas, 0, 0); ctx.restore();
+  }
+  // 转场光：冲击音效处一次白闪；转折句（flip）和最后一句开场时一道斜向扫光
+  for (const s of TLR.sfx || []) {
+    const dt = tReal - s.at;
+    if ((s.type === 'boom' || s.type === 'crack') && dt >= 0 && dt < 0.35) { ctx.save(); ctx.fillStyle = `rgba(255,248,235,${(0.18 * (1 - dt / 0.35)).toFixed(3)})`; ctx.fillRect(0, 0, 1080, 1920); ctx.restore(); }
+  }
+  for (const id of ['flip', TL.order[TL.order.length - 1]]) {
+    const rb = TLR.beats[id]; if (!rb) continue;
+    const k = (tReal - rb.s) / 0.7; if (k < 0 || k > 1) continue;
+    ctx.save(); ctx.globalCompositeOperation = TH.light ? 'multiply' : 'screen';
+    const cx = -600 + k * 2400, g = ctx.createLinearGradient(cx - 260, 0, cx + 260, 0);
+    const c = TH.light ? '255,236,200' : '255,236,200';
+    g.addColorStop(0, `rgba(${c},0)`); g.addColorStop(0.5, `rgba(${c},${TH.light ? 0.5 : 0.22})`); g.addColorStop(1, `rgba(${c},0)`);
+    ctx.translate(540, 960); ctx.rotate(-0.35); ctx.translate(-540, -960); ctx.fillStyle = g; ctx.fillRect(-800, -800, 2700, 3500); ctx.restore();
+  }
   for (const id of TL.order) {
     const b = TL.beats[id], def = EP.beats.find(x => x.id === id);
     if (!def.cap || t < b.s || t >= b.e) continue;

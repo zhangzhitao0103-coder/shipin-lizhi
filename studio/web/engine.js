@@ -556,6 +556,44 @@
     ctx.restore();
   };
 
+  // ---------- 人物剪影：stand 站 / sit 坐（只画桌面以上）/ walk 走；y 为脚底（坐姿为桌面）----------
+  E.person = function (ctx, x, y, h, o = {}) {
+    const col = o.color || '#1A1220', rim = o.rim, f = o.facing || 1, t = o.t || 0, pose = o.pose || 'stand';
+    ctx.save(); ctx.fillStyle = col; ctx.strokeStyle = col; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if (rim) { ctx.shadowColor = rim; ctx.shadowBlur = h * 0.06; }
+    const limb = (pts, w) => { ctx.lineWidth = w; ctx.beginPath(); pts.forEach(([a, b], i) => (i ? ctx.lineTo(a, b) : ctx.moveTo(a, b))); ctx.stroke(); };
+    if (pose === 'walk') {
+      // 侧面走路：腿一前一后、膝盖弯曲，手臂反向摆动，身体随步伐轻微起伏
+      const ph = t * 4.2, bob = Math.abs(Math.sin(ph)) * h * 0.012, L = h * 0.48, hipY = y - L - bob, sh = hipY - h * 0.3, hr = h * 0.075;
+      [1, -1].forEach(k => {   // 先画远侧的腿和手臂（略淡）
+        ctx.globalAlpha = k === 1 ? 0.75 : 1;
+        const a = 0.42 * Math.sin(ph) * k, kneeBend = Math.max(0, -Math.sin(ph) * k) * 0.4;
+        const kx = x + f * Math.sin(a) * L * 0.5, ky = hipY + Math.cos(a) * L * 0.5;
+        limb([[x, hipY], [kx, ky], [kx + f * Math.sin(a - kneeBend) * L * 0.5, ky + Math.cos(a - kneeBend) * L * 0.5]], h * 0.07);
+        const b = -0.5 * Math.sin(ph) * k;
+        limb([[x, sh + h * 0.03], [x + f * Math.sin(b) * h * 0.16, sh + h * 0.18], [x + f * (Math.sin(b) * h * 0.16 + h * 0.06), sh + h * 0.31]], h * 0.05);
+      });
+      ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.ellipse(x + f * h * 0.01, (sh + hipY) / 2, h * 0.075, (hipY - sh) / 2 + h * 0.02, f * 0.06, 0, Math.PI * 2); ctx.fill();
+      limb([[x + f * h * 0.01, sh], [x + f * h * 0.02, sh - h * 0.05]], h * 0.05);
+      ctx.beginPath(); ctx.arc(x + f * h * 0.025, sh - h * 0.05 - hr, hr, 0, Math.PI * 2); ctx.fill();
+      ctx.restore(); return;
+    }
+    const hr = h * 0.075, sh = h * 0.13, hipY = pose === 'sit' ? y + h * 0.04 : y - h * 0.47, top = pose === 'sit' ? y - h * 0.52 : y - h;
+    const neck = top + hr * 2.1, torsoW = h * 0.2;
+    ctx.beginPath(); ctx.arc(x, top + hr, hr, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - torsoW / 2 - sh * 0.15, neck + h * 0.02);
+    ctx.quadraticCurveTo(x, neck - h * 0.02, x + torsoW / 2 + sh * 0.15, neck + h * 0.02);
+    ctx.lineTo(x + torsoW * 0.38, hipY); ctx.lineTo(x - torsoW * 0.38, hipY); ctx.closePath(); ctx.fill();
+    [-1, 1].forEach(s => {
+      const sx = x + s * (torsoW / 2 + sh * 0.05), sy = neck + h * 0.05;
+      if (pose === 'sit') limb([[sx, sy], [sx + s * h * 0.04, y - h * 0.08], [x + s * h * 0.06 + f * h * 0.08, y - h * 0.02]], h * 0.055);
+      else limb([[sx, sy], [sx + s * h * 0.03, sy + h * 0.3]], h * 0.055);
+    });
+    if (pose !== 'sit') [-1, 1].forEach(s => limb([[x + s * torsoW * 0.18, hipY], [x + s * torsoW * 0.22, y]], h * 0.07));
+    ctx.restore();
+  };
+
   // ---------- 统一封面：分类标签 + 两行大标题 + logo ----------
   E.CATS = { A: '时间的力量', B: '迈出第一步', C: '坚持到临界点', D: '每天一点点', E: '集中力量', F: '方法与借力', G: '差距与竞争', H: '短板决定上限',
     I: '关键窗口期', J: '你也可以', K: '家长专属', L: '心态与抗压', M: '期末冲刺', N: '寒假规划', W: '致高三' };

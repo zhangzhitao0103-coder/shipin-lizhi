@@ -41,7 +41,7 @@
     const b = id => TL.b(id);
     E.paint(ctx, th, t);
     const warm = th.gold;
-    const endDim = (1 - 0.7 * E.seg(t, b('flip').s, b('flip').s + 0.5)) * (1 - 0.8 * E.seg(t, b('quote').s - 0.2, b('quote').s + 0.4));
+    const endDim = (1 - 0.7 * E.seg(t, b('flip').s, b('flip').s + 0.5)) * (1 - E.seg(t, b('quote').s - 0.2, b('quote').s + 0.4));
 
     // 开场：吊灯与饭桌
     const lampA = E.seg(t, 0.1, 0.8) * (1 - E.seg(t, b('calc').s, b('calc').s + 0.5));
@@ -52,6 +52,9 @@
       ctx.fillStyle = cone; ctx.beginPath(); ctx.moveTo(470, 810); ctx.lineTo(610, 810); ctx.lineTo(860, 1300); ctx.lineTo(220, 1300); ctx.closePath(); ctx.fill();
       ctx.fillStyle = '#FFD9A0'; ctx.beginPath(); ctx.moveTo(540, 760); ctx.lineTo(620, 815); ctx.lineTo(460, 815); ctx.closePath(); ctx.fill();
       ctx.shadowColor = '#FFC27A'; ctx.shadowBlur = 40; ctx.fillStyle = '#FFF1D6'; ctx.beginPath(); ctx.arc(540, 822, 12, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+      // 饭桌边的家长和孩子（剪影）
+      E.person(ctx, 300, 1300, 420, { pose: 'sit', color: '#2A1726', rim: 'rgba(255,190,120,0.9)', facing: 1 });
+      E.person(ctx, 780, 1300, 330, { pose: 'sit', color: '#2A1726', rim: 'rgba(255,190,120,0.9)', facing: -1 });
       ctx.strokeStyle = 'rgba(255,226,184,0.7)'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(200, 1300); ctx.lineTo(880, 1300); ctx.stroke();
       [400, 540, 680].forEach((x, i) => { ctx.globalAlpha = lampA * E.seg(t, 0.5 + i * 0.25, 0.9 + i * 0.25); ctx.strokeStyle = th.goldHi; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, 1262, 36, 0, Math.PI); ctx.stroke(); ctx.beginPath(); ctx.moveTo(x - 44, 1262); ctx.lineTo(x + 44, 1262); ctx.stroke(); });
       ctx.restore();
@@ -125,6 +128,17 @@
     ctx.fillText('估算（走读）：上学期间每周在家晚饭 5 顿、每年假期约 12 周；', 540, 1676);
     ctx.fillText('大学每年在家约 60 天；工作后每年约 10 天', 540, 1708); ctx.restore();
 
+    // "陪孩子把高中走好"：并肩往前走的两个剪影
+    const qb = b('quote'), wkA = E.seg(t, qb.s + 0.1, qb.s + 0.6) * (1 - E.seg(t, b('action').s - 0.1, b('action').s + 0.3));
+    if (wkA > 0) {
+      ctx.save(); ctx.globalAlpha = wkA;
+      const gl = ctx.createRadialGradient(540, 1500, 20, 540, 1500, 520); gl.addColorStop(0, 'rgba(255,200,130,0.35)'); gl.addColorStop(1, 'rgba(255,200,130,0)'); ctx.fillStyle = gl; ctx.fillRect(0, 1000, 1080, 920);
+      ctx.strokeStyle = 'rgba(255,226,184,0.5)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(120, 1600); ctx.lineTo(960, 1600); ctx.stroke();
+      const dx = (t - qb.s) * 30;
+      E.person(ctx, 470 + dx, 1600, 360, { pose: 'walk', t: t, color: '#2A1726', rim: 'rgba(255,190,120,0.9)' });
+      E.person(ctx, 600 + dx, 1600, 280, { pose: 'walk', t: t + 0.4, color: '#2A1726', rim: 'rgba(255,190,120,0.9)' });
+      ctx.restore();
+    }
     const ac = b('action');
     if (t > ac.s) {
       E.rich(ctx, '今晚的饭桌上，', 540, 880, { theme: th, size: 84, tt: t - ac.s - 0.1 });
