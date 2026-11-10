@@ -72,9 +72,13 @@ window.__render = function (tReal, frame) {
   // 冲击处的转场：径向模糊感（短暂模糊 + 推镜）
   let blur = 0;
   for (const s of TLR.sfx || []) { const dt = tReal - s.at; if ((s.type === 'boom' || s.type === 'crack') && dt >= 0 && dt < 0.3) blur = Math.max(blur, 7 * (1 - dt / 0.3)); }
-  if (blur > 0.3) ctx.filter = `blur(${blur.toFixed(1)}px)`;
   EP.draw(ctx, t, TL, TH, E);
-  ctx.filter = 'none';
+  if (blur > 0.3) {
+    // 整帧做一次模糊（若在绘制时设 filter，每个图形都要单独模糊，复杂画面会卡住）
+    if (!window.__post) { window.__post = document.createElement('canvas'); window.__post.width = 1080; window.__post.height = 1920; }
+    const pc = window.__post.getContext('2d'); pc.setTransform(1, 0, 0, 1, 0, 0); pc.clearRect(0, 0, 1080, 1920); pc.drawImage(ctx.canvas, 0, 0);
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.filter = `blur(${blur.toFixed(1)}px)`; ctx.drawImage(window.__post, 0, 0); ctx.restore();
+  }
   if (EP.hook) {
     const b0 = TL.beats[TL.order[0]], k = E.seg(t, 0.12, 0.42), a = k * (1 - E.seg(t, b0.e - 0.35, b0.e));
     if (a > 0) {
