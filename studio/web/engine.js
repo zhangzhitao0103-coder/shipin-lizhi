@@ -606,6 +606,27 @@
     for (const p of ['，', '：', '？']) { const i = s.indexOf(p); if (i > 2 && Math.abs(i + 1 - s.length / 2) < 4) best = i + 1; }
     return [s.slice(0, best).replace(/[，：]$/, ''), s.slice(best)];
   }
+  // 视频号 3:4 封面模板：顶部分类标签 + logo，底部两行大标题（第二行高亮）
+  E.coverOverlay34 = function (ctx, ep) {
+    const k = ep.id[0], col = CAT_COLOR(k), lines = splitTitle(ep.coverTitle || ep.title), CW = 1080, CH = 1440;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';
+    let g = ctx.createLinearGradient(0, 760, 0, CH); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(0.4, 'rgba(0,0,0,0.7)'); g.addColorStop(1, 'rgba(0,0,0,0.92)');
+    ctx.fillStyle = g; ctx.fillRect(0, 760, CW, CH - 760);
+    g = ctx.createLinearGradient(0, 0, 0, 280); g.addColorStop(0, 'rgba(0,0,0,0.6)'); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, CW, 280);
+    ctx.font = `900 46px "Noto Sans SC"`; const tw = ctx.measureText(E.CATS[k] || '').width;
+    ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(64, 70, tw + 60, 82, 41); ctx.fill();
+    ctx.fillStyle = '#FFFFFF'; ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.fillText(E.CATS[k] || '', 94, 127);
+    if (logoImg) { ctx.fillStyle = 'rgba(255,255,255,0.92)'; ctx.beginPath(); ctx.roundRect(CW - 64 - 300, 70, 300, 82, 41); ctx.fill(); ctx.drawImage(logoImg, CW - 64 - 280, 81, 260, 260 * 108 / 533); }
+    const size = Math.min(140, Math.floor(930 / Math.max(...lines.map(l => l.length))));
+    ctx.font = `900 ${size}px "Noto Sans SC"`; ctx.lineJoin = 'round';
+    lines.forEach((l, i) => {
+      const y = CH - 130 - (lines.length - 1 - i) * size * 1.2;
+      ctx.lineWidth = size * 0.12; ctx.strokeStyle = 'rgba(0,0,0,0.85)'; ctx.strokeText(l, 70, y);
+      ctx.fillStyle = i === lines.length - 1 ? '#FFE08A' : '#FFFFFF'; ctx.fillText(l, 70, y);
+    });
+    ctx.fillStyle = col; ctx.fillRect(72, CH - 84, 180, 14);
+    ctx.restore();
+  };
   E.coverOverlay = function (ctx, ep) {
     const k = ep.id[0], col = CAT_COLOR(k), lines = splitTitle(ep.coverTitle || ep.title);
     ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.filter = 'none';

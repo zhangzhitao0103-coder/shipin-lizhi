@@ -46,6 +46,14 @@ window.__setup = async function (epSrcUrl, timeline) {
 };
 const realTL = () => TL;   // 实际播放时间轴（音效时间点在这里）
 window.__cover = function (tReal) { window.__render(tReal, 0); E.coverOverlay(ctx, EP); };
+// 视频号封面（3:4，1080×1440）：取同一时刻的画面（不含字幕），裁中段，叠统一模板
+window.__cover34 = function (tReal, y0) {
+  window.__noCap = true; window.__render(tReal, 0); window.__noCap = false;
+  const src = document.createElement('canvas'); src.width = 1080; src.height = 1920; src.getContext('2d').drawImage(ctx.canvas, 0, 0);
+  ctx.canvas.height = 1440; ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.drawImage(src, 0, y0, 1080, 1440, 0, 0, 1080, 1440);
+  E.coverOverlay34(ctx, EP);
+};
 function designTime(t) {
   if (TLD === TL) return t;
   if (t >= TL.endcard.s) return TLD.endcard.s + (t - TL.endcard.s);
@@ -111,7 +119,7 @@ window.__render = function (tReal, frame) {
   }
   for (const id of TL.order) {
     const b = TL.beats[id], def = EP.beats.find(x => x.id === id);
-    if (!def.cap || t < b.s || t >= b.e) continue;
+    if (!def.cap || t < b.s || t >= b.e || window.__noCap) continue;
     const isLast = id === TL.order[TL.order.length - 1];
     const alpha = isLast ? 1 : E.clamp((b.e - t) / 0.3);
     const draw = g => E.caption(g, def.cap, { theme: TH, y: def.capY || EP.capY || 380, size: def.capSize || EP.capSize || 60, tt: t - b.s - 0.08, alpha });
