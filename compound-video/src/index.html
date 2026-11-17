@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>复利的力量</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-serif-sc/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-serif-sc/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-serif-sc/900.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/400-italic.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/600-italic.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/playfair-display/900-italic.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <div class="paper"></div>
+
+  <!-- masthead (persistent) -->
+  <header id="mast">
+    <div class="mast-row">
+      <span class="mast-cn">数 学 思 想</span>
+      <span class="mast-bar"></span>
+      <span class="mast-en">MATHEMATICAL&nbsp;&nbsp;THINKING</span>
+      <span class="mast-vol">Vol.07</span>
+    </div>
+    <div class="mast-rule"></div>
+  </header>
+
+  <!-- 0–4 s : title -->
+  <section id="s-intro" class="scene">
+    <div class="kicker"><span class="kicker-line"></span><span class="kicker-en">THE POWER OF COMPOUND GROWTH</span></div>
+    <h1 class="t1" id="t1"></h1>
+    <h1 class="t2" id="t2"></h1>
+    <div class="t2-under" id="t2u"></div>
+    <p class="t3" id="t3">坚持稳定增长，时间会给出答案</p>
+  </section>
+
+  <!-- 4–9 s : 1^n = 1 -->
+  <section id="s-one" class="scene">
+    <div class="sec"><span class="sec-no">01</span><span class="sec-slash">/</span><span class="sec-cn">没有增长，始终不变</span></div>
+    <div class="sec-rule"></div>
+    <div class="formula" id="f-one">
+      <span class="base ink">1</span><span class="sup green" id="one-exp">n</span><span class="op ink">=</span><span class="res ink" id="one-res">1</span>
+    </div>
+    <div class="nline" id="one-n">n = —</div>
+    <p class="caption" id="one-cap">每天不增不减</p>
+    <div class="chart" id="one-chart"></div>
+  </section>
+
+  <!-- 9–17 s : 1.01^d -->
+  <section id="s-up" class="scene">
+    <div class="sec"><span class="sec-no">02</span><span class="sec-slash">/</span><span class="sec-cn">每天进步 1%</span></div>
+    <div class="sec-rule"></div>
+    <div class="formula" id="f-up">
+      <span class="base ink">1.01</span><span class="sup green" id="up-exp">d</span><span class="op ink" id="up-op">=</span><span class="res orange" id="up-res">1</span>
+    </div>
+    <div class="nline" id="up-n">d = 0 天</div>
+    <div class="chart" id="up-chart"></div>
+  </section>
+
+  <!-- 17–23 s : 0.99^d -->
+  <section id="s-down" class="scene">
+    <div class="sec"><span class="sec-no">03</span><span class="sec-slash">/</span><span class="sec-cn">每天退步 1%</span></div>
+    <div class="sec-rule"></div>
+    <div class="formula" id="f-down">
+      <span class="base ink">0.99</span><span class="sup green" id="down-exp">d</span><span class="op ink" id="down-op">=</span><span class="res red" id="down-res">1</span>
+    </div>
+    <div class="nline" id="down-n">d = 0 天</div>
+    <div class="chart" id="down-chart"></div>
+  </section>
+
+  <!-- 23–30 s : summary + ending -->
+  <section id="s-outro" class="scene">
+    <div class="cols" id="cols">
+      <div class="col" id="c1">
+        <div class="col-f"><span class="ink">1</span><sup class="green">n</sup></div>
+        <div class="col-v ink" id="c1v"></div>
+        <div class="col-c">不增不减</div>
+      </div>
+      <div class="col" id="c2">
+        <div class="col-f"><span class="ink">1.01</span><sup class="green">365</sup></div>
+        <div class="col-v orange" id="c2v"></div>
+        <div class="col-c">每天进步 1%</div>
+      </div>
+      <div class="col" id="c3">
+        <div class="col-f"><span class="ink">0.99</span><sup class="green">365</sup></div>
+        <div class="col-v red" id="c3v"></div>
+        <div class="col-c">每天退步 1%</div>
+      </div>
+    </div>
+    <div class="end" id="end">
+      <div class="end-rule" id="end-rule"></div>
+      <p class="end-1" id="end1">复利不是奇迹，</p>
+      <p class="end-2" id="end2">而是持续做对的事</p>
+    </div>
+    <p class="disclaimer" id="disc">注：复利模型用于说明积累效应，不代表学习成绩按固定比例增长。</p>
+  </section>
+
+  <!-- subtitles (persistent) -->
+  <div id="subs"><span id="sub-text"></span></div>
+</div>
+
+<script src="scene.js"></script>
+</body>
+</html>
