@@ -7,7 +7,7 @@
   // ------------------------------------------------------------------ helpers
   const $ = (id) => document.getElementById(id);
   const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
-  const seg = (t, a, b) => clamp((t - a) / (b - a));
+  const seg = (t, a, b) => (!isFinite(a) ? (t >= a ? 1 : 0) : clamp((t - a) / (b - a)));
   const lerp = (a, b, k) => a + (b - a) * k;
   const easeOut = (k) => 1 - Math.pow(1 - k, 3);
   const easeInOut = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
@@ -94,13 +94,13 @@
     svg('line', { x1: L, x2: R, y1: B, y2: B, stroke: '#6F6558', 'stroke-width': 2.5 }, root);
     for (const d of [0, 100, 200, 300, 365]) {
       svg('line', { x1: X(d), x2: X(d), y1: B, y2: B + 10, stroke: '#6F6558', 'stroke-width': 2 }, root);
-      const lb = svg('text', { x: X(d), y: B + 44, 'text-anchor': d === 0 ? 'start' : d === 365 ? 'end' : 'middle', class: 'axis-num' }, root);
-      lb.textContent = String(d);
+      if (d === 0 || d === 365) {
+        const lb = svg('text', { x: X(d), y: B + 44, 'text-anchor': d === 0 ? 'start' : 'end', class: 'axis-num' }, root);
+        lb.textContent = d === 0 ? '第 0 天' : '第 365 天';
+      }
     }
     const xt = svg('text', { x: (L + R) / 2, y: B + 44, 'text-anchor': 'middle', class: 'axis-label' }, root);
-    xt.textContent = '';
-    const xTitle = svg('text', { x: R, y: B - 16, 'text-anchor': 'end', class: 'axis-label' }, root);
-    xTitle.textContent = '天数 →';
+    xt.textContent = '天数 d →';
 
     const area = svg('path', { fill: o.color, 'fill-opacity': 0.1, stroke: 'none' }, root);
     const path = svg('path', { fill: 'none', stroke: o.color, 'stroke-width': 7, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, root);
@@ -110,7 +110,7 @@
 
     let extra = null;
     if (o.note) {
-      extra = svg('text', { x: R, y: B - 56, 'text-anchor': 'end', class: 'axis-label', fill: o.color, style: 'font-size:30px;font-weight:700' }, root);
+      extra = svg('text', { x: R, y: Y(0.3), 'text-anchor': 'end', class: 'axis-label', fill: o.color, style: 'font-size:30px;font-weight:700' }, root);
       extra.textContent = o.note;
     }
 
@@ -149,11 +149,19 @@
     return Math.ceil(w) + 2;
   }
   function fitFormula(id, expStrings, resStrings) {
+    // Width of the widest state (all parts measured at natural size).
     const f = $(id), exp = f.querySelector('.sup'), res = f.querySelector('.res');
-    exp.style.width = measure(exp, expStrings) + 'px';
-    res.style.width = measure(res, resStrings) + 'px';
-    const w = f.scrollWidth, max = 952;
-    f.dataset.scale = Math.min(1, max / w);
+    const parts = [...f.children];
+    const wExp = measure(exp, expStrings), wRes = measure(res, resStrings);
+    let w = 0;
+    for (const el of parts) {
+      const cs = getComputedStyle(el);
+      const m = parseFloat(cs.marginLeft) + parseFloat(cs.marginRight);
+      w += m + (el === exp ? wExp : el === res ? wRes : el.getBoundingClientRect().width);
+    }
+    const scale = Math.min(1, 940 / w);
+    f.dataset.scale = scale;
+    f.style.paddingLeft = ((1080 - w * scale) / 2 / scale).toFixed(1) + 'px';
   }
 
   // ------------------------------------------------------------------ init
@@ -233,6 +241,8 @@
     f.style.opacity = k;
     const s = parseFloat(f.dataset.scale || 1) * lerp(0.94, 1, k);
     f.style.transform = `scale(${s.toFixed(4)})`;
+    f.style.transformOrigin = '0 50%';
+    f.style.left = '0px';
   }
   function pop(el, t, tChange, amount = 0.22, dur = 0.3) {
     const k = seg(t, tChange, tChange + dur);
