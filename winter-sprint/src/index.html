@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>冬三月</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-sc/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-sc/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/noto-sans-sc/900.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/anton/400.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/ma-shan-zheng/400.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <canvas id="bg" width="1080" height="1920"></canvas>
+
+  <div id="world">
+    <!-- A · 0–3.3s  倒计时冲击 -->
+    <section id="A" class="shot">
+      <div class="c a-pre" id="a-pre">距离 2027 高考</div>
+      <div class="c a-num" id="a-num"><span id="a-n" class="ice-num">199</span><span id="a-day" class="a-day">天</span></div>
+      <div class="c a-tick" id="a-tick"><span id="a-h">4776</span> 小时 · <span id="a-m">286560</span> 分钟</div>
+    </section>
+
+    <!-- B · 冬三月 + 百天 = 全部 -->
+    <section id="B" class="shot">
+      <div class="b-tiles" id="b-tiles">
+        <div class="tile" id="b-t1"><i class="flake"></i><b>12</b><span>月</span></div>
+        <div class="tile" id="b-t2"><i class="flake"></i><b>1</b><span>月</span></div>
+        <div class="tile" id="b-t3"><i class="flake"></i><b>2</b><span>月</span></div>
+      </div>
+      <div class="b-bar" id="b-bar">
+        <div class="seg win" id="b-win"><span>冬三月 · 约 90 天</span></div>
+        <div class="seg spr" id="b-spr"><span>百日冲刺 · 100 天</span></div>
+      </div>
+      <div class="b-labels" id="b-labels"><span>现在</span><span>百日誓师</span><span>高考</span></div>
+      <div class="c b-eq" id="b-eq"><span class="b-eqs">=</span><span id="b-all" class="red-hot">全部</span></div>
+    </section>
+
+    <!-- C · 你在哪里 -->
+    <section id="C" class="shot">
+      <div class="c h-title" id="c-title">你在哪里？</div>
+      <svg id="c-route" class="c-route" width="1080" height="420" viewBox="0 0 1080 420"></svg>
+      <div class="c-pin" id="c-pin"><div class="pin-head">你在这里</div><div class="pin-tail"></div></div>
+      <div class="stamp" id="c-stamp">攻坚</div>
+    </section>
+
+    <!-- D · 一轮复习：全面 系统 回归教材 -->
+    <section id="D" class="shot">
+      <svg id="d-rays" class="d-rays" width="1080" height="1080" viewBox="-540 -540 1080 1080"></svg>
+      <div class="c h-title big" id="d-title">一轮复习</div>
+      <div class="c d-w" id="d-w1">全面</div>
+      <div class="c d-w" id="d-w2">系统</div>
+      <div class="c d-w gold-sweep" id="d-w3">回归教材</div>
+      <svg id="d-book" class="d-book" width="520" height="260" viewBox="0 0 520 260">
+        <path d="M260 40 C190 10 90 10 20 30 L20 230 C90 210 190 210 260 240 Z" fill="#E9F4FF" opacity=".92"/>
+        <path d="M260 40 C330 10 430 10 500 30 L500 230 C430 210 330 210 260 240 Z" fill="#D6E9FA" opacity=".92"/>
+        <g stroke="#7FA6C9" stroke-width="5" stroke-linecap="round" opacity=".7">
+          <path d="M60 70 C120 60 180 62 230 78"/><path d="M60 110 C120 100 180 102 230 118"/><path d="M60 150 C120 140 180 142 230 158"/>
+          <path d="M290 78 C340 62 400 60 460 70"/><path d="M290 118 C340 102 400 100 460 110"/><path d="M290 158 C340 142 400 140 460 150"/>
+        </g>
+      </svg>
+    </section>
+
+    <!-- E · 七八成分数 -->
+    <section id="E" class="shot">
+      <div class="c h-title" id="e-title">分数藏在哪里？</div>
+      <div class="c e-pct" id="e-pct"><span id="e-n">0</span><small>%</small></div>
+      <div class="e-bracket" id="e-bracket"><span>基础题 + 中档题</span></div>
+      <div class="e-bar" id="e-bar">
+        <div class="eseg s1" id="e-s1"><b>易</b><span>30%</span></div>
+        <div class="eseg s2" id="e-s2"><b>中</b><span>50%</span></div>
+        <div class="eseg s3" id="e-s3"><b>难</b><span>20%</span></div>
+      </div>
+      <div class="c e-note" id="e-note">常见试卷难度比例　易 : 中 : 难 ≈ 3 : 5 : 2</div>
+    </section>
+
+    <!-- F · 命题反套路 阅卷看步骤 -->
+    <section id="F" class="shot">
+      <div class="paper" id="f-paper">
+        <div class="p-head">解答题 · 阅卷细则</div>
+        <div class="p-row" id="f-r1"><span>① 写出已知，设定变量</span><b>+2</b></div>
+        <div class="p-row" id="f-r2"><span>② 关键公式 / 定理</span><b>+2</b></div>
+        <div class="p-row" id="f-r3"><span>③ 规范推导与计算</span><b>+3</b></div>
+        <div class="p-row" id="f-r4"><span>④ 结论完整表述</span><b>+1</b></div>
+      </div>
+      <div class="stamp red" id="f-stamp">反套路</div>
+      <div class="c f-pre" id="f-pre">拼的都是</div>
+      <div class="c f-big gold-sweep" id="f-big">基本功</div>
+    </section>
+
+    <!-- G · 地基与高楼 -->
+    <section id="G" class="shot">
+      <div class="c h-title" id="g-title"><span id="g-t1">一轮漏洞</span><span id="g-arrow">→</span><span id="g-t2" class="red-hot">二轮放大</span></div>
+      <div class="c h-title" id="g-title2">检验一轮<span class="gold-sweep">成色</span></div>
+      <svg id="g-svg" class="g-svg" width="1080" height="1100" viewBox="0 0 1080 1100"></svg>
+    </section>
+
+    <!-- H · 一轮定下限 二轮拉上限 -->
+    <section id="H" class="shot">
+      <div class="h-top" id="h-top"></div>
+      <div class="h-bot" id="h-bot"></div>
+      <div class="h-mid" id="h-mid"></div>
+      <svg id="h-arrow" class="h-arrow" width="200" height="700" viewBox="0 0 200 700">
+        <defs><linearGradient id="ga" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#F5B83D" stop-opacity="0"/><stop offset="1" stop-color="#FFE6A8"/></linearGradient></defs>
+        <rect x="80" y="120" width="40" height="580" fill="url(#ga)"/>
+        <path d="M100 0 L190 140 L120 120 L80 120 L10 140 Z" fill="#FFE6A8"/>
+      </svg>
+      <div class="c h-up" id="h-up"><small>二轮</small>拉上限</div>
+      <div class="h-slab" id="h-slab"></div>
+      <div class="c h-down" id="h-down"><small>一轮</small>定下限</div>
+    </section>
+
+    <!-- I · 冬三月作战图 -->
+    <section id="I" class="shot">
+      <div class="c h-title" id="i-title">冬三月 · 作战图</div>
+      <div class="i-line" id="i-line"><div class="i-fill" id="i-fill"></div></div>
+      <div class="row" id="i-r1"><div class="dot"></div><div class="mon"><b>12</b><span>月</span></div><div class="txt"><p id="i-r1a">攻坚薄弱</p><p id="i-r1b">错题回炉</p></div></div>
+      <div class="row" id="i-r2"><div class="dot"></div><div class="mon"><b>1</b><span>月</span></div><div class="txt"><p id="i-r2a">联考检验</p><p id="i-r2b">精准诊断</p></div></div>
+      <div class="row" id="i-r3"><div class="dot"></div><div class="mon cn"><b>寒假</b></div><div class="txt"><p id="i-r3a">作息不放假</p><p id="i-r3b">弯道超车</p></div></div>
+      <div class="row" id="i-r4"><div class="dot"></div><div class="mon"><b>2</b><span>月</span></div><div class="txt"><p id="i-r4a">一轮收官</p><p id="i-r4b" class="red-hot">冲向百日誓师</p></div></div>
+    </section>
+
+    <!-- J · 乾坤未定 你我皆是黑马 -->
+    <section id="J" class="shot">
+      <div class="board" id="j-board"></div>
+      <svg id="j-knight" class="j-knight" width="560" height="720"></svg>
+      <div class="c j-s1" id="j-s1">排名</div>
+      <div class="c j-s2" id="j-s2">只说明过去</div>
+      <div class="c j-s3" id="j-s3">不决定结局</div>
+      <svg id="j-crack" class="j-crack" width="1080" height="1920" viewBox="0 0 1080 1920"></svg>
+      <div class="c j-b1 brush" id="j-b1">乾坤未定</div>
+      <div class="c j-b2 brush gold-fill" id="j-b2">你我皆是黑马</div>
+    </section>
+
+    <!-- K · 口号 + 落版 -->
+    <section id="K" class="shot">
+      <div class="c k-l1 brush" id="k-l1"></div>
+      <div class="c k-l2 brush" id="k-l2"></div>
+      <div class="c k-end" id="k-end">高三 · 冬三月 · 从今天开始</div>
+      <div class="c k-cd" id="k-cd"><span>距 2027 高考</span><b id="k-days">199</b><span>天</span></div>
+    </section>
+  </div>
+
+  <canvas id="fx" width="1080" height="1920"></canvas>
+  <div id="vignette"></div>
+  <div id="flash"></div>
+  <div id="topbar"><span>距 2027 高考</span><b id="tb-days">199</b><span>天</span></div>
+  <div id="subs"><span id="sub"></span></div>
+</div>
+<script src="knight.js"></script>
+<script src="scene.js"></script>
+</body>
+</html>
