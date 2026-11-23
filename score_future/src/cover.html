@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>视频号封面</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=block" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1440px;overflow:hidden}
+  body{font-family:"Noto Sans SC","WenQuanYi Zen Hei",sans-serif;color:#fff;position:relative;
+    background:linear-gradient(165deg,#FF8A00 0%,#F2361D 48%,#A80C2A 100%)}
+  .rays{position:absolute;inset:-700px;background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,255,255,.08) 0 6deg,transparent 6deg 14deg);transform:translateY(-330px)}
+  .top{position:relative;text-align:center;padding-top:70px}
+  .kick{display:inline-block;font-size:42px;font-weight:900;letter-spacing:6px;padding:10px 40px;border-radius:60px;
+    background:#fff;color:#E2231A;box-shadow:0 8px 0 rgba(110,0,0,.25)}
+  .h1{font-size:220px;font-weight:900;line-height:1;margin-top:46px;color:#FFE45C;letter-spacing:6px;
+    text-shadow:0 10px 0 #9C0A1E,0 18px 40px rgba(0,0,0,.35)}
+  .h2{font-size:128px;font-weight:900;line-height:1.1;margin-top:26px;letter-spacing:6px;
+    text-shadow:0 8px 0 #9C0A1E,0 14px 30px rgba(0,0,0,.3)}
+
+  /* staircase */
+  .stairs{position:absolute;left:50px;right:50px;bottom:150px;height:620px}
+  .st{position:absolute;bottom:0;width:184px;border-radius:18px 18px 0 0;background:var(--c);
+    box-shadow:inset 0 6px 0 rgba(255,255,255,.35),0 -6px 30px rgba(0,0,0,.18);text-align:center;padding-top:16px}
+  .st .s{font-size:46px;font-weight:900;line-height:1;letter-spacing:-1px}
+  .st .s small{font-size:24px;margin-left:2px;letter-spacing:0}
+  .st .o{font-size:31px;font-weight:900;margin-top:10px;letter-spacing:2px}
+  .st.top1 .s{font-size:58px}
+  .st.top1 .o{font-size:36px}
+  .st.top1{box-shadow:inset 0 6px 0 rgba(255,255,255,.5),0 0 60px rgba(255,228,92,.85)}
+  .crown{position:absolute;right:66px;bottom:776px;font-size:32px;font-weight:900;color:#7A3B00;background:#FFE45C;
+    padding:8px 20px;border-radius:40px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  .crown::after{content:"";position:absolute;left:50%;bottom:-14px;margin-left:-12px;border:12px solid transparent;border-top-color:#FFE45C;border-bottom:0}
+  .arrow{position:absolute;left:70px;bottom:330px;width:700px;height:16px;transform-origin:left center;transform:rotate(-24deg);
+    background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75));border-radius:8px}
+  .arrow::after{content:"";position:absolute;right:-30px;top:-17px;border:25px solid transparent;border-left:36px solid rgba(255,255,255,.85);border-right:0}
+
+  .foot{position:absolute;left:0;right:0;bottom:0;height:150px;background:#1A1F2C;display:flex;align-items:center;justify-content:center;gap:24px}
+  .foot b{font-size:56px;font-weight:900;letter-spacing:4px}
+  .foot b em{font-style:normal;color:#FFD23F}
+  .foot i{font-style:normal;font-size:34px;font-weight:700;color:#1A1F2C;background:#FFD23F;padding:6px 20px;border-radius:12px}
+</style>
+</head>
+<body>
+  <div class="rays"></div>
+  <div class="top">
+    <div class="kick">高中生 & 家长必看</div>
+    <div class="h1">差几十分</div>
+    <div class="h2">人生差一辈子</div>
+  </div>
+
+  <div class="stairs">
+    <div class="st" style="--c:#4A5059;left:0;height:190px"><div class="s">360<small>↓</small></div><div class="o">底层打工</div></div>
+    <div class="st" style="--c:#6E7781;left:196px;height:290px"><div class="s">360<small>+</small></div><div class="o">学个手活</div></div>
+    <div class="st" style="--c:#7E57C2;left:392px;height:390px"><div class="s">460<small>+</small></div><div class="o">半生奔波</div></div>
+    <div class="st" style="--c:#E53935;left:588px;height:490px;border:4px solid rgba(255,255,255,.6);border-bottom:0"><div class="s">540<small>+</small></div><div class="o">衣食无忧</div></div>
+    <div class="st top1" style="--c:#E9A200;left:784px;height:600px;border:4px solid #FFE45C;border-bottom:0"><div class="s">620<small>+</small></div><div class="o">阶层跨越</div></div>
+  </div>
+  <div class="crown">985名校</div>
+
+  <div class="foot"><b>高考分数 × <em>人生高度</em></b><i>九层对照表</i></div>
+</body>
+</html>
