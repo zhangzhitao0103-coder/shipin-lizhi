@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>分数与人生</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=block" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:#0E1424}
+  body{font-family:"Noto Sans SC","WenQuanYi Zen Hei",sans-serif;color:#fff;position:relative}
+  .layer{position:absolute;inset:0;overflow:hidden;opacity:0}
+  .center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+
+  /* S1 hook */
+  #s1{background:radial-gradient(circle at 50% 40%,#22304F,#0B1020 70%)}
+  #s1 .ln{font-weight:900;opacity:0;letter-spacing:6px}
+  #s1 .a{font-size:84px;color:#C9D3E8}
+  #s1 .b{font-size:150px;color:#FFD23F;margin:40px 0;text-shadow:0 8px 30px rgba(255,190,0,.35)}
+  #s1 .c{font-size:92px}
+  #s1 .c em{font-style:normal;color:#FF5A3C}
+
+  /* S2 title */
+  #s2{background:linear-gradient(160deg,#FF8A00 0%,#F2361D 55%,#B70E2B 100%)}
+  #s2 .rays{position:absolute;inset:-600px;background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,255,255,.08) 0 6deg,transparent 6deg 14deg)}
+  #s2 .kick{position:relative;font-size:40px;font-weight:700;letter-spacing:8px;padding:12px 36px;border:3px solid rgba(255,255,255,.6);border-radius:60px;background:rgba(255,255,255,.15)}
+  #s2 .t1{position:relative;font-size:108px;font-weight:900;margin-top:60px;letter-spacing:4px;text-shadow:0 8px 0 rgba(110,0,0,.35)}
+  #s2 .t2{position:relative;font-size:118px;font-weight:900;color:#FFE45C;letter-spacing:2px;text-shadow:0 8px 0 rgba(110,0,0,.35)}
+
+  /* S3 ladder */
+  #s3{background:#111}
+  #strip{position:absolute;left:0;top:0;width:1080px}
+  .pnl{position:relative;width:1080px;height:1920px;overflow:hidden}
+  .pnl .bg{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(18px) saturate(1.1);transform:scale(1.1)}
+  .pnl .tint{position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--c) 88%,#000) 0%,color-mix(in srgb,var(--c) 70%,#000) 55%,color-mix(in srgb,var(--c) 45%,#000) 100%);opacity:.93}
+  .pnl .in{position:absolute;inset:0;padding:150px 70px 0}
+  .tag{display:inline-flex;align-items:center;gap:16px;font-size:40px;font-weight:900;letter-spacing:4px}
+  .tag b{background:#fff;color:var(--c);padding:6px 26px;border-radius:50px}
+  .tag span{opacity:.8;font-weight:700;font-size:34px}
+  .tiers{margin-top:30px}
+  .tr+.tr{margin-top:26px;padding-top:26px;border-top:3px dashed rgba(255,255,255,.35)}
+  .tr .n{font-size:70px;font-weight:900;line-height:1.15}
+  .tr .n em{font-style:normal;font-size:42px;color:#FFE45C;margin-left:14px}
+  .tr .d{font-size:34px;opacity:.85;margin-top:8px;font-weight:500}
+  .two .tr .n{font-size:60px}
+  .two .tr .d{font-size:30px}
+  .sc{margin-top:40px}
+  .sc .lb{font-size:34px;font-weight:700;opacity:.8;letter-spacing:6px}
+  .sc .v{font-size:160px;font-weight:900;line-height:1;color:#FFE45C;letter-spacing:-2px;text-shadow:0 8px 24px rgba(0,0,0,.3);transform-origin:left center}
+  .sc .v small{font-size:64px;margin-left:8px;letter-spacing:0;color:#fff}
+  .chips{display:flex;gap:14px;margin-top:18px}
+  .chips span{font-size:34px;font-weight:700;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.4);border-radius:14px;padding:4px 18px}
+  .ph{position:relative;margin:56px 0 0 auto;width:600px;height:346px;border:10px solid #fff;border-radius:10px;box-shadow:0 20px 50px rgba(0,0,0,.45);background-size:cover;background-position:center;transform:rotate(-3deg)}
+  .oc{margin-top:44px}
+  .oc .lb{font-size:34px;font-weight:700;opacity:.8;letter-spacing:6px}
+  .oc .v{font-size:120px;font-weight:900;letter-spacing:8px;line-height:1.15;text-shadow:0 8px 24px rgba(0,0,0,.35);transform-origin:left center}
+  .oc .v.sm{font-size:96px;letter-spacing:4px}
+  .ph + .oc .v{font-size:110px}
+  .ph + .oc .v.sm{font-size:84px}
+  .noph .oc{margin-top:150px}
+  .noph .oc .v{font-size:150px}
+  .noph .oc .v.sm{font-size:110px}
+
+  /* staircase indicator */
+  #stairs{position:absolute;left:70px;right:70px;bottom:70px;height:230px;opacity:0}
+  #stairs .st{position:absolute;bottom:40px;width:96px;border-radius:10px 10px 0 0;background:rgba(255,255,255,.18);transition:none}
+  #stairs .st i{position:absolute;left:0;right:0;bottom:-40px;text-align:center;font-style:normal;font-size:24px;font-weight:700;opacity:.7}
+  #stairs .st.on{background:#FFE45C;box-shadow:0 0 30px rgba(255,228,92,.7)}
+  #stairs .st.done{background:rgba(255,255,255,.55)}
+  #stairs .cap{position:absolute;left:0;top:-6px;font-size:30px;font-weight:900;letter-spacing:4px}
+  #stairs .cap em{font-style:normal;color:#FFE45C}
+
+  /* S4 poster */
+  #s4{background:#FFF7EC}
+  #s4 img{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:50% 0}
+  #s4 .ban{position:absolute;left:60px;right:60px;top:760px;padding:40px 0;border-radius:30px;text-align:center;
+    background:rgba(20,30,60,.88);box-shadow:0 20px 60px rgba(0,0,0,.4);opacity:0}
+  #s4 .ban .a{font-size:70px;font-weight:900;letter-spacing:4px}
+  #s4 .ban .a em{font-style:normal;color:#FFD23F}
+  #s4 .ban .b{font-size:40px;font-weight:700;margin-top:14px;opacity:.85;letter-spacing:4px}
+
+  /* S5 end */
+  #s5{background:linear-gradient(160deg,#0F2E8A,#1747C9 50%,#2E7BF0)}
+  #s5 .arrow{position:absolute;left:50%;bottom:-200px;width:220px;height:1400px;margin-left:-110px;
+    background:linear-gradient(to top,rgba(255,255,255,0),rgba(255,255,255,.16));clip-path:polygon(50% 0,100% 16%,68% 16%,68% 100%,32% 100%,32% 16%,0 16%)}
+  #s5 .e{position:relative;font-weight:900;opacity:0;letter-spacing:6px}
+  #s5 .e1{font-size:92px}
+  #s5 .e2{font-size:92px;margin-top:20px}
+  #s5 .e1 em,#s5 .e2 em{font-style:normal;color:#FFE45C}
+  #s5 .e3{margin-top:90px;font-size:50px;font-weight:700;padding:18px 50px;border-radius:80px;background:#FFE45C;color:#16307E;letter-spacing:4px}
+  #s5 .e4{margin-top:40px;font-size:38px;font-weight:700;opacity:0;letter-spacing:4px}
+</style>
+</head>
+<body>
+
+<div id="s1" class="layer center">
+  <div class="ln a">同样是三年高中</div>
+  <div class="ln b">差几十分</div>
+  <div class="ln c">人生可能<em>差一辈子</em></div>
+</div>
+
+<div id="s2" class="layer center">
+  <div class="rays"></div>
+  <div class="kick">高考分数 · 院校层次 · 未来人生</div>
+  <div class="t1">考上一个好大学</div>
+  <div class="t2">才能有一个好未来</div>
+</div>
+
+<div id="s3" class="layer">
+  <div id="strip"></div>
+  <div id="stairs"><div class="cap">分数每高一档 · <em>人生就高一层</em></div></div>
+</div>
+
+<div id="s4" class="layer">
+  <img src="poster.png" alt="">
+  <div class="ban"><div class="a">每多<em>1分</em>，就多一次选择</div><div class="b">截图保存 · 贴在书桌前</div></div>
+</div>
+
+<div id="s5" class="layer center">
+  <div class="arrow"></div>
+  <div class="e e1">努力才能有<em>更多的选择</em></div>
+  <div class="e e2">选择决定了<em>你的高度</em></div>
+  <div class="e e3">用成绩改变命运 · 实现人生跨越</div>
+  <div class="e4">现在开始努力，一切都还来得及</div>
+</div>
+
+<script>
+// ---------- data (top → bottom) ----------
+const G = [
+  {c:'#E9A200', step:[1], tiers:[['一流大学建设高校','42所','原985高校 + 郑州大学、云南大学等']], score:'620', unit:'分以上', subj:['语130','数130','外130','综230'], life:'阶层跨越', ph:'p1.png'},
+  {c:'#F57C00', step:[2,3], tiers:[['一流学科建设高校','105所','原211高校 + 南方科大、上海科大等'],['小211工程','123所','中西部能力基础建设高校']], score:'570-620', unit:'分', subj:['语120','数120','外120','综210'], life:'前途无量', ph:'p2.png'},
+  {c:'#E53935', step:[4], tiers:[['省属重点大学','130所','重点培养本省人才']], score:'540-570', unit:'分', subj:['语110','数110','外110','综210'], life:'衣食无忧', ph:'p3.png'},
+  {c:'#7E57C2', step:[5,6], tiers:[['一般公办本科','410所','如浙江万里学院、宁波工程学院'],['独立院校','267所','本科高校与民间资本联合办学']], score:'460-540', unit:'分', subj:['语100','数100','外100','综160'], life:'半生奔波', ph:null},
+  {c:'#5C6F82', step:[7], tiers:[['民办本科','158所','民间资本创办，学费高昂']], score:'420-460', unit:'分', subj:['语90','数90','外90','综150'], life:'耗光家里积蓄<br>工作难找', sm:1, ph:null},
+  {c:'#6E7781', step:[8], tiers:[['职业本科','21所','职业类本科院校']], score:'360-420', unit:'分', subj:[], life:'学个手活<br>直到退休', sm:1, ph:'p4.png'},
+  {c:'#454B53', step:[9], tiers:[['社会大学','','无缘本科，过早步入社会']], score:'360', unit:'分以下', subj:[], life:'底层打工<br>受尽磨难', sm:1, ph:'p5.png'},
+];
+const CN = ['','一','二','三','四','五','六','七','八','九'];
+
+const strip = document.getElementById('strip');
+G.forEach((g,i)=>{
+  const p = document.createElement('div');
+  p.className = 'pnl' + (g.ph?'':' noph');
+  p.style.setProperty('--c', g.c);
+  const tag = g.step.length>1 ? `第${CN[g.step[0]]}、${CN[g.step[1]]}层` : `第${CN[g.step[0]]}层`;
+  p.innerHTML = `
+    <div class="bg" style="${g.ph?`background-image:url(${g.ph})`:`background:${g.c}`}"></div>
+    <div class="tint"></div>
+    <div class="in">
+      <div class="tag a1"><b>${tag}</b><span>院校层次</span></div>
+      <div class="tiers a1 ${g.tiers.length>1?'two':''}">${g.tiers.map(t=>`<div class="tr"><div class="n">${t[0]}${t[1]?`<em>${t[1]}</em>`:''}</div><div class="d">${t[2]}</div></div>`).join('')}</div>
+      <div class="sc a2"><div class="lb">最低分数</div><div class="v">${g.score}<small>${g.unit}</small></div>
+        ${g.subj.length?`<div class="chips">${g.subj.map(s=>`<span>${s}</span>`).join('')}</div>`:''}</div>
+      ${g.ph?`<div class="ph a3" style="background-image:url(${g.ph})"></div>`:''}
+      <div class="oc a4"><div class="lb">未来人生</div><div class="v ${g.sm?'sm':''}">${g.life}</div></div>
+    </div>`;
+  strip.appendChild(p);
+});
+
+// staircase: 9 steps, step 9 on the left (lowest) → step 1 on the right (highest)
+const stairs = document.getElementById('stairs');
+const stEls = {};
+for (let s=9; s>=1; s--) {
+  const k = 9-s;                     // 0..8 left → right
+  const el = document.createElement('div');
+  el.className = 'st';
+  el.style.left = (k*105) + 'px';
+  el.style.height = (22 + k*16) + 'px';
+  el.innerHTML = `<i>${s}</i>`;
+  stairs.appendChild(el); stEls[s]=el;
+}
+
+// ---------- timeline ----------
+const T = {s1:[0,3.2], s2:[3.2,5.6], s3:[5.6,20.5], s4:[20.5,24.5], s5:[24.5,29]};
+const DUR = [3.2,1.95,1.95,1.95,1.95,1.95,1.95]; // by group index (0 = top tier)
+const START = []; { let acc=0; for (let k=G.length-1;k>=0;k--){ START[k]=acc; acc+=DUR[k]; } }
+const SEG = 2;
+const PAN = 0.55;
+
+const clamp = x => Math.max(0, Math.min(1, x));
+const pr = (t,a,b) => clamp((t-a)/(b-a));
+const eo = x => 1 - Math.pow(1-x, 3);
+const eio = x => x<.5 ? 4*x*x*x : 1 - Math.pow(-2*x+2, 3)/2;
+const back = x => { const c1=1.70158, c3=c1+1; return 1 + c3*Math.pow(x-1,3) + c1*Math.pow(x-1,2); };
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+function layerAlpha(t, [a,b], fin=.3, fout=.3) {
+  return Math.min(pr(t,a,a+fin), 1 - pr(t,b-fout,b));
+}
+function pop(el, t, a, d=.45, dy=40) {
+  const x = pr(t, a, a+d);
+  el.style.opacity = eo(x);
+  el.style.transform = `translateY(${(1-eo(x))*dy}px) scale(${0.85 + 0.15*back(x)})`;
+}
+
+function render(t) {
+  // S1
+  const s1 = $('#s1'); s1.style.opacity = layerAlpha(t, T.s1, .01, .35);
+  pop($('#s1 .a'), t, .15); pop($('#s1 .b'), t, .9, .5, 0); pop($('#s1 .c'), t, 1.7);
+
+  // S2
+  const s2 = $('#s2'); s2.style.opacity = layerAlpha(t, T.s2, .3, .3);
+  $('#s2 .rays').style.transform = `rotate(${t*6}deg)`;
+  pop($('#s2 .kick'), t, T.s2[0]+.2);
+  pop($('#s2 .t1'), t, T.s2[0]+.45, .5, 60);
+  pop($('#s2 .t2'), t, T.s2[0]+.8, .5, 60);
+
+  // S3 climb: start at bottom group (index 6) and go up to index 0
+  const s3 = $('#s3'); s3.style.opacity = layerAlpha(t, T.s3, .3, .3);
+  const lt = t - T.s3[0];
+  let cur = G.length-1;
+  for (let k=G.length-1;k>=0;k--) if (lt >= START[k]) cur = k;
+  const seg = G.length-1-cur;
+  const within = lt - START[cur];
+  let pos = cur;                                      // panel position (float)
+  if (seg>0) pos = (cur+1) - eio(pr(within, 0, PAN)); // pan up from previous
+  strip.style.transform = `translateY(${-pos*1920}px)`;
+  $$('.pnl').forEach((p,i)=>{
+    const local = (i===cur) ? within - (seg>0?PAN*.6:0) : (i===cur+1 ? 99 : -1);
+    const items = [['.a1',0],['.a2',.25],['.a3',.5],['.a4',.7]];
+    items.forEach(([sel,d])=>p.querySelectorAll(sel).forEach(el=>{
+      if (local<0) { el.style.opacity=0; return; }
+      const x = pr(local, d, d+.4);
+      el.style.opacity = eo(x);
+      const base = sel==='.a3' ? 'rotate(-3deg) ' : '';
+      el.style.transform = base + `translateY(${(1-eo(x))*50}px)`;
+    }));
+    const v = p.querySelector('.oc .v');
+    if (local>=0) { const x = pr(local,.7,1.05); v.style.transform = `scale(${1.6 - .6*eo(x)})`; v.style.opacity = eo(x); }
+    const sv = p.querySelector('.sc .v');
+    if (local>=0) { const x = pr(local,.25,.6); sv.style.transform = `scale(${0.7 + .3*back(x)})`; }
+    p.querySelector('.bg').style.transform = `scale(${1.1 + .05*pr(local,0,DUR[i])})`;
+  });
+  stairs.style.opacity = pr(lt, .2, .6);
+  const curSteps = G[cur].step;
+  for (let s=1; s<=9; s++) {
+    const el = stEls[s];
+    el.className = 'st' + (curSteps.includes(s) ? ' on' : (s > Math.max(...curSteps) ? ' done' : ''));
+  }
+
+  // S4 poster
+  const s4 = $('#s4'); s4.style.opacity = layerAlpha(t, T.s4, .4, .35);
+  const p4 = pr(t, T.s4[0], T.s4[1]);
+  $('#s4 img').style.transform = `scale(${1.08 - .08*eio(p4)})`;
+  pop($('#s4 .ban'), t, T.s4[0]+1.3, .5);
+
+  // S5
+  const s5 = $('#s5'); s5.style.opacity = layerAlpha(t, T.s5, .4, .01);
+  $('#s5 .arrow').style.transform = `translateY(${(1-eo(pr(t,T.s5[0],T.s5[0]+1.5)))*400}px)`;
+  pop($('#s5 .e1'), t, T.s5[0]+.3);
+  pop($('#s5 .e2'), t, T.s5[0]+.8);
+  pop($('#s5 .e3'), t, T.s5[0]+1.5, .5);
+  pop($('#s5 .e4'), t, T.s5[0]+2.1);
+}
+window.render = render;
+window.DURATION = T.s5[1];
+window.SEG = SEG; window.T = T; window.PAN = PAN;
+render(0);
+</script>
+</body>
+</html>

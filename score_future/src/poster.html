@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>分数决定人生高度</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&display=block" rel="stylesheet">
+<style>
+  :root{
+    --g1:#E9A200; --g2:#F57C00; --g3:#E53935; --g4:#7E57C2;
+    --g5:#5C6F82; --g6:#6E7781; --g7:#454B53;
+    --ink:#1E1F24; --muted:#6B6F78; --paper:#FFF7EC;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;background:var(--paper)}
+  body{font-family:"Noto Sans SC","WenQuanYi Zen Hei",sans-serif;color:var(--ink);overflow:hidden;position:relative}
+
+  /* ---------- header ---------- */
+  .head{
+    height:370px;position:relative;overflow:hidden;color:#fff;text-align:center;
+    background:linear-gradient(160deg,#FF8A00 0%,#F2361D 55%,#C8102E 100%);
+  }
+  .head::before{ /* rays */
+    content:"";position:absolute;inset:-200px;
+    background:repeating-conic-gradient(from 0deg at 50% 70%,rgba(255,255,255,.07) 0 6deg,transparent 6deg 14deg);
+  }
+  .head::after{
+    content:"";position:absolute;left:0;right:0;bottom:-1px;height:60px;
+    background:var(--paper);clip-path:polygon(0 100%,0 40%,50% 100%,100% 40%,100% 100%);
+  }
+  .kicker{position:relative;display:inline-block;margin-top:46px;padding:8px 26px;border-radius:40px;
+    background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.55);font-size:26px;font-weight:700;letter-spacing:6px}
+  .title{position:relative;font-weight:900;line-height:1.14;margin-top:18px;letter-spacing:4px;
+    text-shadow:0 6px 0 rgba(120,0,0,.35)}
+  .title .l1{font-size:78px}
+  .title .l2{font-size:96px;color:#FFE45C}
+
+  /* ---------- table ---------- */
+  .wrap{position:absolute;left:0;right:0;top:350px;padding:0 36px 0 30px;display:flex;gap:14px}
+  .axis{width:48px;flex:none;position:relative;margin-top:62px}
+  .axis .bar{position:absolute;left:18px;top:30px;bottom:0;width:12px;border-radius:6px;
+    background:linear-gradient(to bottom,var(--g1),var(--g3) 35%,var(--g5) 70%,var(--g7))}
+  .axis .tip{position:absolute;left:4px;top:0;width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:36px solid var(--g1)}
+  .axis .txt{position:absolute;left:0;top:120px;width:48px;writing-mode:vertical-rl;text-orientation:upright;
+    font-size:26px;font-weight:900;letter-spacing:10px;color:#fff;
+    background:linear-gradient(to bottom,var(--g2),var(--g4));padding:18px 0;border-radius:24px;text-align:center}
+
+  .table{flex:1}
+  .cols{display:grid;grid-template-columns:392px 238px 1fr;height:54px;border-radius:14px;
+    background:#23262D;color:#fff;font-size:26px;font-weight:900;letter-spacing:8px;align-items:center;text-align:center;margin-bottom:10px}
+  .cols span{position:relative}
+  .cols span+span::before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:2px;background:rgba(255,255,255,.3)}
+
+  .grp{display:grid;grid-template-columns:392px 238px 1fr;margin-bottom:10px;border-radius:16px;overflow:hidden;
+    background:#fff;box-shadow:0 4px 14px rgba(60,30,0,.10);border:2px solid var(--c)}
+  .tiers{display:flex;flex-direction:column}
+  .tier{height:126px;display:flex;align-items:center;gap:12px;padding:0 12px 0 0}
+  .tier+.tier{border-top:2px dashed #E6E1D8}
+  .badge{width:78px;align-self:stretch;flex:none;background:var(--c);color:#fff;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;font-weight:900;line-height:1.05}
+  .badge b{font-size:44px}
+  .badge i{font-style:normal;font-size:19px;letter-spacing:2px;opacity:.95}
+  .tier+.tier .badge{border-top:2px solid rgba(255,255,255,.35)}
+  .name{font-size:27px;font-weight:900;color:var(--ink);line-height:1.2}
+  .name em{font-style:normal;color:var(--c);font-size:23px;margin-left:4px}
+  .desc{font-size:18.5px;color:var(--muted);line-height:1.35;margin-top:5px;font-weight:500}
+
+  .score{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+    background:color-mix(in srgb,var(--c) 9%,#fff);border-left:2px solid color-mix(in srgb,var(--c) 25%,#fff)}
+  .score .big{font-size:44px;font-weight:900;color:var(--c);line-height:1;letter-spacing:-1px}
+  .score .big small{font-size:24px;margin-left:2px;letter-spacing:0}
+  .score .sub{display:flex;gap:4px;margin-top:12px;font-size:15.5px;white-space:nowrap;font-weight:700;color:#4A4D55}
+  .score .sub span{background:#fff;border:1.5px solid color-mix(in srgb,var(--c) 35%,#fff);border-radius:7px;padding:1px 4px;flex:none}
+
+  .life{position:relative;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;overflow:hidden;
+    background:var(--c)}
+  .life img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--pos,center)}
+  .life::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--c) 92%,transparent) 0%,color-mix(in srgb,var(--c) 55%,transparent) 100%)}
+  .life .t{position:relative;z-index:1;font-weight:900;font-size:44px;letter-spacing:4px;line-height:1.2;text-shadow:0 3px 8px rgba(0,0,0,.35)}
+  .life .t.sm{font-size:32px;letter-spacing:2px}
+  .life .stars{position:relative;z-index:1}
+
+  .g1{--c:var(--g1)} .g2{--c:var(--g2)} .g3{--c:var(--g3)} .g4{--c:var(--g4)}
+  .g5{--c:var(--g5)} .g6{--c:var(--g6)} .g7{--c:var(--g7)}
+  .g7 .life{background:linear-gradient(135deg,#3B4048,#565D66)}
+
+  /* ---------- footer ---------- */
+  .foot{position:absolute;left:0;right:0;bottom:0;height:178px;color:#fff;text-align:center;
+    background:linear-gradient(120deg,#1747C9,#2E7BF0);}
+  .foot::before{content:"";position:absolute;left:0;right:0;top:-1px;height:40px;background:var(--paper);
+    clip-path:polygon(0 0,100% 0,100% 0,50% 100%,0 0)}
+  .foot .s{position:relative;padding-top:44px;font-size:46px;font-weight:900;letter-spacing:4px;line-height:1.25}
+  .foot .s b{color:#FFE45C}
+  .note{position:absolute;left:0;right:0;bottom:186px;text-align:center;font-size:17px;color:#9A928A;font-weight:500}
+</style>
+</head>
+<body>
+
+<header class="head">
+  <div class="kicker">高考分数 · 院校层次 · 未来人生</div>
+  <div class="title">
+    <div class="l1">考上一个好大学</div>
+    <div class="l2">才能有一个好未来</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="axis">
+    <div class="tip"></div><div class="bar"></div>
+    <div class="txt">分数越高未来越好</div>
+  </div>
+
+  <div class="table">
+    <div class="cols"><span>院校层次</span><span>最低分数</span><span>未来人生</span></div>
+
+    <!-- G1 -->
+    <section class="grp g1">
+      <div class="tiers">
+        <div class="tier"><div class="badge"><b>1</b><i>第一层</i></div>
+          <div><div class="name">一流大学建设高校<em>42所</em></div>
+          <div class="desc">原985高校，另新增郑州大学、云南大学、新疆大学</div></div></div>
+      </div>
+      <div class="score"><div class="big">620<small>分以上</small></div>
+        <div class="sub"><span>语130</span><span>数130</span><span>外130</span><span>综230</span></div></div>
+      <div class="life" style="--pos:40% 30%"><img src="p1.png" alt=""><div class="t">阶层跨越</div></div>
+    </section>
+
+    <!-- G2 -->
+    <section class="grp g2">
+      <div class="tiers">
+        <div class="tier"><div class="badge"><b>2</b><i>第二层</i></div>
+          <div><div class="name">一流学科建设高校<em>105所</em></div>
+          <div class="desc">原211高校，另新增南方科技大学、上海科技大学等</div></div></div>
+        <div class="tier"><div class="badge"><b>3</b><i>第三层</i></div>
+          <div><div class="name">小211工程<em>123所</em></div>
+          <div class="desc">中西部能力基础建设高校，如西南政法大学、福建师范大学</div></div></div>
+      </div>
+      <div class="score"><div class="big">570-620<small>分</small></div>
+        <div class="sub"><span>语120</span><span>数120</span><span>外120</span><span>综210</span></div></div>
+      <div class="life" style="--pos:45% 30%"><img src="p2.png" alt=""><div class="t">前途无量</div></div>
+    </section>
+
+    <!-- G3 -->
+    <section class="grp g3">
+      <div class="tiers">
+        <div class="tier"><div class="badge"><b>4</b><i>第四层</i></div>
+          <div><div class="name">省属重点大学<em>130所</em></div>
+          <div class="desc">重点培养本省人才，如杭州师范大学、昆明医科大学</div></div></div>
+      </div>
+      <div class="score"><div class="big">540-570<small>分</small></div>
+        <div class="sub"><span>语110</span><span>数110</span><span>外110</span><span>综210</span></div></div>
+      <div class="life"><img src="p3.png" alt=""><div class="t">衣食无忧</div></div>
+    </section>
+
+    <!-- G4 -->
+    <section class="grp g4">
+      <div class="tiers">
+        <div class="tier"><div class="badge"><b>5</b><i>第五层</i></div>
+          <div><div class="name">一般公办本科<em>410所</em></div>
+          <div class="desc">如浙江万里学院、宁波工程学院、许昌学院等</div></div></div>
+        <div class="tier"><div class="badge"><b>6</b><i>第六层</i></div>
+          <div><div class="name">独立院校<em>267所</em></div>
+          <div class="desc">本科高校与民间资本联合办学，如同济大学浙江学院</div></div></div>
+      </div>
+      <div class="score"><div class="big">460-540<small>分</small></div>
+        <div class="sub"><span>语100</span><span>数100</span><span>外100</span><span>综160</span></div></div>
+      <div class="life"><div class="t">半生奔波</div></div>
+    </section>
+
+    <!-- G5 -->
+    <section class="grp g5">
+      <div class="tiers">
+        <div class="tier"><div class="badge"><b>7</b><i>第七层</i></div>
+          <div><div class="name">民办本科<em>158所</em></div>
+          <div class="desc">民间资本创办，如温州商学院、四川传媒学院</div></div></div>
+      </div>
+      <div class="score"><div class="big">420-460<small>分</small></div>
+        <div class="sub"><span>语90</span><span>数90</span><span>外90</span><span>综150</span></div></div>
+      <div class="life"><div class="t sm">耗光家里积蓄<br>工作难找</div></div>
+    </section>
+
+    <!-- G6 -->
+    <section class="grp g6">
+      <div class="tiers">
+        <div class="tier"><div class="badge"><b>8</b><i>第八层</i></div>
+          <div><div class="name">职业本科<em>21所</em></div>
+          <div class="desc">职业类本科院校，如广州科技职业大学</div></div></div>
+      </div>
+      <div class="score"><div class="big">360-420<small>分</small></div></div>
+      <div class="life" style="--pos:30% 40%"><img src="p4.png" alt=""><div class="t sm">学个手活<br>直到退休</div></div>
+    </section>
+
+    <!-- G7 -->
+    <section class="grp g7">
+      <div class="tiers">
+        <div class="tier"><div class="badge"><b>9</b><i>第九层</i></div>
+          <div><div class="name">社会大学</div>
+          <div class="desc">无缘本科，过早步入社会</div></div></div>
+      </div>
+      <div class="score"><div class="big">360<small>分以下</small></div></div>
+      <div class="life" style="--pos:70% 50%"><img src="p5.png" alt=""><div class="t sm">底层打工<br>受尽磨难</div></div>
+    </section>
+  </div>
+</div>
+
+<div class="note">注：分数为参考区间（满分750分），具体以各省历年录取线为准</div>
+<footer class="foot">
+  <div class="s">努力才能有<b>更多的选择</b><br>选择决定了<b>你的高度</b></div>
+</footer>
+
+</body>
+</html>
